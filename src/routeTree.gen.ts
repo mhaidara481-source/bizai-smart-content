@@ -13,7 +13,9 @@ import { Route as IndexRouteImport } from './routes/index'
 import { Route as AuthenticatedRouteRouteImport } from './routes/_authenticated/route'
 import { Route as ConnexionRouteImport } from './routes/connexion'
 import { Route as InscriptionRouteImport } from './routes/inscription'
+import { Route as AuthenticatedCreerUnPostRouteImport } from './routes/_authenticated/creer-un-post'
 import { Route as AuthenticatedDashboardRouteImport } from './routes/_authenticated/dashboard'
+import { Route as AuthenticatedRepondreAuxAvisRouteImport } from './routes/_authenticated/repondre-aux-avis'
 
 const IndexRoute = IndexRouteImport.update({
   id: '/',
@@ -34,23 +36,39 @@ const InscriptionRoute = InscriptionRouteImport.update({
   path: '/inscription',
   getParentRoute: () => rootRouteImport,
 } as any)
+const AuthenticatedCreerUnPostRoute =
+  AuthenticatedCreerUnPostRouteImport.update({
+    id: '/creer-un-post',
+    path: '/creer-un-post',
+    getParentRoute: () => AuthenticatedRouteRoute,
+  } as any)
 const AuthenticatedDashboardRoute = AuthenticatedDashboardRouteImport.update({
   id: '/dashboard',
   path: '/dashboard',
   getParentRoute: () => AuthenticatedRouteRoute,
 } as any)
+const AuthenticatedRepondreAuxAvisRoute =
+  AuthenticatedRepondreAuxAvisRouteImport.update({
+    id: '/repondre-aux-avis',
+    path: '/repondre-aux-avis',
+    getParentRoute: () => AuthenticatedRouteRoute,
+  } as any)
 
 export interface FileRoutesByFullPath {
   '/': typeof IndexRoute
   '/connexion': typeof ConnexionRoute
   '/inscription': typeof InscriptionRoute
+  '/creer-un-post': typeof AuthenticatedCreerUnPostRoute
   '/dashboard': typeof AuthenticatedDashboardRoute
+  '/repondre-aux-avis': typeof AuthenticatedRepondreAuxAvisRoute
 }
 export interface FileRoutesByTo {
   '/': typeof IndexRoute
   '/connexion': typeof ConnexionRoute
   '/inscription': typeof InscriptionRoute
+  '/creer-un-post': typeof AuthenticatedCreerUnPostRoute
   '/dashboard': typeof AuthenticatedDashboardRoute
+  '/repondre-aux-avis': typeof AuthenticatedRepondreAuxAvisRoute
 }
 export interface FileRoutesById {
   __root__: typeof rootRouteImport
@@ -58,20 +76,36 @@ export interface FileRoutesById {
   '/_authenticated': typeof AuthenticatedRouteRouteWithChildren
   '/connexion': typeof ConnexionRoute
   '/inscription': typeof InscriptionRoute
+  '/_authenticated/creer-un-post': typeof AuthenticatedCreerUnPostRoute
   '/_authenticated/dashboard': typeof AuthenticatedDashboardRoute
+  '/_authenticated/repondre-aux-avis': typeof AuthenticatedRepondreAuxAvisRoute
 }
 export interface FileRouteTypes {
   fileRoutesByFullPath: FileRoutesByFullPath
-  fullPaths: '/' | '/connexion' | '/inscription' | '/dashboard'
+  fullPaths:
+    | '/'
+    | '/connexion'
+    | '/inscription'
+    | '/creer-un-post'
+    | '/dashboard'
+    | '/repondre-aux-avis'
   fileRoutesByTo: FileRoutesByTo
-  to: '/' | '/connexion' | '/inscription' | '/dashboard'
+  to:
+    | '/'
+    | '/connexion'
+    | '/inscription'
+    | '/creer-un-post'
+    | '/dashboard'
+    | '/repondre-aux-avis'
   id:
     | '__root__'
     | '/'
     | '/_authenticated'
     | '/connexion'
     | '/inscription'
+    | '/_authenticated/creer-un-post'
     | '/_authenticated/dashboard'
+    | '/_authenticated/repondre-aux-avis'
   fileRoutesById: FileRoutesById
 }
 export interface RootRouteChildren {
@@ -111,6 +145,13 @@ declare module '@tanstack/react-router' {
       preLoaderRoute: typeof InscriptionRouteImport
       parentRoute: typeof rootRouteImport
     }
+    '/_authenticated/creer-un-post': {
+      id: '/_authenticated/creer-un-post'
+      path: '/creer-un-post'
+      fullPath: '/creer-un-post'
+      preLoaderRoute: typeof AuthenticatedCreerUnPostRouteImport
+      parentRoute: typeof AuthenticatedRouteRoute
+    }
     '/_authenticated/dashboard': {
       id: '/_authenticated/dashboard'
       path: '/dashboard'
@@ -118,15 +159,26 @@ declare module '@tanstack/react-router' {
       preLoaderRoute: typeof AuthenticatedDashboardRouteImport
       parentRoute: typeof AuthenticatedRouteRoute
     }
+    '/_authenticated/repondre-aux-avis': {
+      id: '/_authenticated/repondre-aux-avis'
+      path: '/repondre-aux-avis'
+      fullPath: '/repondre-aux-avis'
+      preLoaderRoute: typeof AuthenticatedRepondreAuxAvisRouteImport
+      parentRoute: typeof AuthenticatedRouteRoute
+    }
   }
 }
 
 interface AuthenticatedRouteRouteChildren {
+  AuthenticatedCreerUnPostRoute: typeof AuthenticatedCreerUnPostRoute
   AuthenticatedDashboardRoute: typeof AuthenticatedDashboardRoute
+  AuthenticatedRepondreAuxAvisRoute: typeof AuthenticatedRepondreAuxAvisRoute
 }
 
 const AuthenticatedRouteRouteChildren: AuthenticatedRouteRouteChildren = {
+  AuthenticatedCreerUnPostRoute: AuthenticatedCreerUnPostRoute,
   AuthenticatedDashboardRoute: AuthenticatedDashboardRoute,
+  AuthenticatedRepondreAuxAvisRoute: AuthenticatedRepondreAuxAvisRoute,
 }
 
 const AuthenticatedRouteRouteWithChildren =
