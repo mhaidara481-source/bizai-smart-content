@@ -13,7 +13,11 @@ import { Route as IndexRouteImport } from './routes/index'
 import { Route as AuthenticatedRouteRouteImport } from './routes/_authenticated/route'
 import { Route as ConnexionRouteImport } from './routes/connexion'
 import { Route as InscriptionRouteImport } from './routes/inscription'
+import { Route as AuthenticatedCalendrierRouteImport } from './routes/_authenticated/calendrier'
+import { Route as AuthenticatedCreerUnPostRouteImport } from './routes/_authenticated/creer-un-post'
 import { Route as AuthenticatedDashboardRouteImport } from './routes/_authenticated/dashboard'
+import { Route as AuthenticatedIdeesDeContenuRouteImport } from './routes/_authenticated/idees-de-contenu'
+import { Route as AuthenticatedRepondreAuxAvisRouteImport } from './routes/_authenticated/repondre-aux-avis'
 
 const IndexRoute = IndexRouteImport.update({
   id: '/',
@@ -34,23 +38,54 @@ const InscriptionRoute = InscriptionRouteImport.update({
   path: '/inscription',
   getParentRoute: () => rootRouteImport,
 } as any)
+const AuthenticatedCalendrierRoute = AuthenticatedCalendrierRouteImport.update({
+  id: '/calendrier',
+  path: '/calendrier',
+  getParentRoute: () => AuthenticatedRouteRoute,
+} as any)
+const AuthenticatedCreerUnPostRoute =
+  AuthenticatedCreerUnPostRouteImport.update({
+    id: '/creer-un-post',
+    path: '/creer-un-post',
+    getParentRoute: () => AuthenticatedRouteRoute,
+  } as any)
 const AuthenticatedDashboardRoute = AuthenticatedDashboardRouteImport.update({
   id: '/dashboard',
   path: '/dashboard',
   getParentRoute: () => AuthenticatedRouteRoute,
 } as any)
+const AuthenticatedIdeesDeContenuRoute =
+  AuthenticatedIdeesDeContenuRouteImport.update({
+    id: '/idees-de-contenu',
+    path: '/idees-de-contenu',
+    getParentRoute: () => AuthenticatedRouteRoute,
+  } as any)
+const AuthenticatedRepondreAuxAvisRoute =
+  AuthenticatedRepondreAuxAvisRouteImport.update({
+    id: '/repondre-aux-avis',
+    path: '/repondre-aux-avis',
+    getParentRoute: () => AuthenticatedRouteRoute,
+  } as any)
 
 export interface FileRoutesByFullPath {
   '/': typeof IndexRoute
   '/connexion': typeof ConnexionRoute
   '/inscription': typeof InscriptionRoute
+  '/calendrier': typeof AuthenticatedCalendrierRoute
+  '/creer-un-post': typeof AuthenticatedCreerUnPostRoute
   '/dashboard': typeof AuthenticatedDashboardRoute
+  '/idees-de-contenu': typeof AuthenticatedIdeesDeContenuRoute
+  '/repondre-aux-avis': typeof AuthenticatedRepondreAuxAvisRoute
 }
 export interface FileRoutesByTo {
   '/': typeof IndexRoute
   '/connexion': typeof ConnexionRoute
   '/inscription': typeof InscriptionRoute
+  '/calendrier': typeof AuthenticatedCalendrierRoute
+  '/creer-un-post': typeof AuthenticatedCreerUnPostRoute
   '/dashboard': typeof AuthenticatedDashboardRoute
+  '/idees-de-contenu': typeof AuthenticatedIdeesDeContenuRoute
+  '/repondre-aux-avis': typeof AuthenticatedRepondreAuxAvisRoute
 }
 export interface FileRoutesById {
   __root__: typeof rootRouteImport
@@ -58,20 +93,44 @@ export interface FileRoutesById {
   '/_authenticated': typeof AuthenticatedRouteRouteWithChildren
   '/connexion': typeof ConnexionRoute
   '/inscription': typeof InscriptionRoute
+  '/_authenticated/calendrier': typeof AuthenticatedCalendrierRoute
+  '/_authenticated/creer-un-post': typeof AuthenticatedCreerUnPostRoute
   '/_authenticated/dashboard': typeof AuthenticatedDashboardRoute
+  '/_authenticated/idees-de-contenu': typeof AuthenticatedIdeesDeContenuRoute
+  '/_authenticated/repondre-aux-avis': typeof AuthenticatedRepondreAuxAvisRoute
 }
 export interface FileRouteTypes {
   fileRoutesByFullPath: FileRoutesByFullPath
-  fullPaths: '/' | '/connexion' | '/inscription' | '/dashboard'
+  fullPaths:
+    | '/'
+    | '/connexion'
+    | '/inscription'
+    | '/calendrier'
+    | '/creer-un-post'
+    | '/dashboard'
+    | '/idees-de-contenu'
+    | '/repondre-aux-avis'
   fileRoutesByTo: FileRoutesByTo
-  to: '/' | '/connexion' | '/inscription' | '/dashboard'
+  to:
+    | '/'
+    | '/connexion'
+    | '/inscription'
+    | '/calendrier'
+    | '/creer-un-post'
+    | '/dashboard'
+    | '/idees-de-contenu'
+    | '/repondre-aux-avis'
   id:
     | '__root__'
     | '/'
     | '/_authenticated'
     | '/connexion'
     | '/inscription'
+    | '/_authenticated/calendrier'
+    | '/_authenticated/creer-un-post'
     | '/_authenticated/dashboard'
+    | '/_authenticated/idees-de-contenu'
+    | '/_authenticated/repondre-aux-avis'
   fileRoutesById: FileRoutesById
 }
 export interface RootRouteChildren {
@@ -111,6 +170,20 @@ declare module '@tanstack/react-router' {
       preLoaderRoute: typeof InscriptionRouteImport
       parentRoute: typeof rootRouteImport
     }
+    '/_authenticated/calendrier': {
+      id: '/_authenticated/calendrier'
+      path: '/calendrier'
+      fullPath: '/calendrier'
+      preLoaderRoute: typeof AuthenticatedCalendrierRouteImport
+      parentRoute: typeof AuthenticatedRouteRoute
+    }
+    '/_authenticated/creer-un-post': {
+      id: '/_authenticated/creer-un-post'
+      path: '/creer-un-post'
+      fullPath: '/creer-un-post'
+      preLoaderRoute: typeof AuthenticatedCreerUnPostRouteImport
+      parentRoute: typeof AuthenticatedRouteRoute
+    }
     '/_authenticated/dashboard': {
       id: '/_authenticated/dashboard'
       path: '/dashboard'
@@ -118,15 +191,37 @@ declare module '@tanstack/react-router' {
       preLoaderRoute: typeof AuthenticatedDashboardRouteImport
       parentRoute: typeof AuthenticatedRouteRoute
     }
+    '/_authenticated/idees-de-contenu': {
+      id: '/_authenticated/idees-de-contenu'
+      path: '/idees-de-contenu'
+      fullPath: '/idees-de-contenu'
+      preLoaderRoute: typeof AuthenticatedIdeesDeContenuRouteImport
+      parentRoute: typeof AuthenticatedRouteRoute
+    }
+    '/_authenticated/repondre-aux-avis': {
+      id: '/_authenticated/repondre-aux-avis'
+      path: '/repondre-aux-avis'
+      fullPath: '/repondre-aux-avis'
+      preLoaderRoute: typeof AuthenticatedRepondreAuxAvisRouteImport
+      parentRoute: typeof AuthenticatedRouteRoute
+    }
   }
 }
 
 interface AuthenticatedRouteRouteChildren {
+  AuthenticatedCalendrierRoute: typeof AuthenticatedCalendrierRoute
+  AuthenticatedCreerUnPostRoute: typeof AuthenticatedCreerUnPostRoute
   AuthenticatedDashboardRoute: typeof AuthenticatedDashboardRoute
+  AuthenticatedIdeesDeContenuRoute: typeof AuthenticatedIdeesDeContenuRoute
+  AuthenticatedRepondreAuxAvisRoute: typeof AuthenticatedRepondreAuxAvisRoute
 }
 
 const AuthenticatedRouteRouteChildren: AuthenticatedRouteRouteChildren = {
+  AuthenticatedCalendrierRoute: AuthenticatedCalendrierRoute,
+  AuthenticatedCreerUnPostRoute: AuthenticatedCreerUnPostRoute,
   AuthenticatedDashboardRoute: AuthenticatedDashboardRoute,
+  AuthenticatedIdeesDeContenuRoute: AuthenticatedIdeesDeContenuRoute,
+  AuthenticatedRepondreAuxAvisRoute: AuthenticatedRepondreAuxAvisRoute,
 }
 
 const AuthenticatedRouteRouteWithChildren =
