@@ -1,15 +1,17 @@
 import { createFileRoute } from "@tanstack/react-router";
 
+import type { PlanId } from "@/lib/plans";
+
 // Webhook Whop — prêt à recevoir les événements, sans paiement réel branché.
-// Configure WHOP_WEBHOOK_SECRET (et WHOP_API_KEY / WHOP_PRODUCT_ID) dans les
-// secrets du projet pour activer la vérification et le traitement réels.
+// TODO(whop): configurer WHOP_WEBHOOK_SECRET (+ WHOP_API_KEY, WHOP_PRODUCT_ID)
+// dans les secrets du projet pour activer le traitement réel.
 
 type WhopEvent = {
   action?: string;
   type?: string;
   data?: {
     user_id?: string;
-    metadata?: { user_id?: string; supabase_user_id?: string } | null;
+    metadata?: { user_id?: string; supabase_user_id?: string; plan?: string } | null;
     plan_id?: string;
     product_id?: string;
     status?: string;
@@ -19,9 +21,13 @@ type WhopEvent = {
   } | null;
 };
 
-function planFromEvent(event: WhopEvent): "starter" | "pro" {
-  const raw = `${event.data?.plan_id ?? ""} ${event.data?.product_id ?? ""}`.toLowerCase();
-  return raw.includes("pro") ? "pro" : "starter";
+function planFromEvent(event: WhopEvent): PlanId {
+  const raw = `${event.data?.metadata?.plan ?? ""} ${event.data?.plan_id ?? ""} ${
+    event.data?.product_id ?? ""
+  }`.toLowerCase();
+  if (raw.includes("business")) return "business";
+  if (raw.includes("pro")) return "pro";
+  return "starter";
 }
 
 function userIdFromEvent(event: WhopEvent): string | null {
@@ -39,110 +45,31 @@ function toIso(value: string | number | null | undefined): string | null {
   return Number.isNaN(date.getTime()) ? null : date.toISOString();
 }
 
-async function upsertSubscription(input: {
-  userId: string;
-  plan: "starter" | "pro" | "free";
-  status: string;
-  providerSubscriptionId?: string | null;
-  periodStart?: string | null;
-  periodEnd?: string | null;
-}) {
-  const { supabaseAdmin } = await import("@/integrations/supabase/client.server");
-
-  const payload = {
-    user_id: input.userId,
-    plan: input.plan,
-    status: input.status,
+async function applyStatus(event: WhopEvent, userId: string, status: string) {
+  const { upsertSubscription } = await import("@/lib/payments/subscriptions.server");
+  await upsertSubscription({
+    userId,
+    plan: planFromEvent(event),
+    status,
     provider: "whop",
-    ...(input.providerSubscriptionId
-      ? { provider_subscription_id: input.providerSubscriptionId }
-      : {}),
-    ...(input.periodStart ? { current_period_start: input.periodStart } : {}),
-    ...(input.periodEnd ? { current_period_end: input.periodEnd } : {}),
-  };
-
-  const { data: existing } = await supabaseAdmin
-    .from("subscriptions")
-    .select("id")
-    .eq("user_id", input.userId)
-    .maybeSingle();
-
-  if (existing?.id) {
-    const { error } = await supabaseAdmin.from("subscriptions").update(payload).eq("id", existing.id);
-    if (error) throw error;
-  } else {
-    const { error } = await supabaseAdmin.from("subscriptions").insert(payload);
-    if (error) throw error;
-  }
-
-  // Le plan reste la source de vérité côté serveur pour les limites de génération.
-  const { error: profileError } = await supabaseAdmin
-    .from("profiles")
-    .update({ plan: input.status === "active" ? input.plan : "free" })
-    .eq("id", input.userId);
-  if (profileError) throw profileError;
+    providerSubscriptionId: event.data?.id ?? null,
+    periodStart: toIso(event.data?.current_period_start),
+    periodEnd: toIso(event.data?.current_period_end),
+  });
 }
 
 // Handlers par type d'événement Whop.
 const handlers: Record<string, (event: WhopEvent, userId: string) => Promise<void>> = {
-  "payment.succeeded": async (event, userId) => {
-    await upsertSubscription({
-      userId,
-      plan: planFromEvent(event),
-      status: "active",
-      providerSubscriptionId: event.data?.id ?? null,
-      periodStart: toIso(event.data?.current_period_start),
-      periodEnd: toIso(event.data?.current_period_end),
-    });
-  },
-  "membership.went_valid": async (event, userId) => {
-    await upsertSubscription({
-      userId,
-      plan: planFromEvent(event),
-      status: "active",
-      providerSubscriptionId: event.data?.id ?? null,
-      periodStart: toIso(event.data?.current_period_start),
-      periodEnd: toIso(event.data?.current_period_end),
-    });
-  },
-  "membership.went_invalid": async (event, userId) => {
-    await upsertSubscription({
-      userId,
-      plan: planFromEvent(event),
-      status: "cancelled",
-      providerSubscriptionId: event.data?.id ?? null,
-    });
-  },
-  "membership.cancelled": async (event, userId) => {
-    await upsertSubscription({
-      userId,
-      plan: planFromEvent(event),
-      status: "cancelled",
-      providerSubscriptionId: event.data?.id ?? null,
-    });
-  },
-  "payment.failed": async (event, userId) => {
-    await upsertSubscription({
-      userId,
-      plan: planFromEvent(event),
-      status: "past_due",
-      providerSubscriptionId: event.data?.id ?? null,
-    });
-  },
+  // Paiement réussi
+  "payment.succeeded": (event, userId) => applyStatus(event, userId, "active"),
+  // Abonnement actif
+  "membership.went_valid": (event, userId) => applyStatus(event, userId, "active"),
+  // Annulation / fin d'accès
+  "membership.went_invalid": (event, userId) => applyStatus(event, userId, "cancelled"),
+  "membership.cancelled": (event, userId) => applyStatus(event, userId, "cancelled"),
+  // Échec de paiement
+  "payment.failed": (event, userId) => applyStatus(event, userId, "past_due"),
 };
-
-async function verifySignature(rawBody: string, signatureHeader: string | null) {
-  const secret = process.env["WHOP_WEBHOOK_SECRET"];
-  if (!secret) return { ok: false, configured: false as const };
-  if (!signatureHeader) return { ok: false, configured: true as const };
-
-  const { createHmac, timingSafeEqual } = await import("node:crypto");
-  const expected = createHmac("sha256", secret).update(rawBody, "utf8").digest("hex");
-  const provided = signatureHeader.replace(/^sha256=/, "");
-  const a = Buffer.from(provided, "utf8");
-  const b = Buffer.from(expected, "utf8");
-  return { ok: a.length === b.length && timingSafeEqual(a, b), configured: true as const };
-}
 
 export const Route = createFileRoute("/api/public/whop-webhook")({
   server: {
@@ -152,13 +79,10 @@ export const Route = createFileRoute("/api/public/whop-webhook")({
         const signature =
           request.headers.get("x-whop-signature") ?? request.headers.get("whop-signature");
 
-        const check = await verifySignature(rawBody, signature);
+        const { verifyWebhookSignature } = await import("@/lib/payments/whop.server");
+        const check = await verifyWebhookSignature(rawBody, signature);
         if (!check.configured) {
-          // Aucune clé configurée : l'intégration n'est pas encore active.
-          return Response.json(
-            { received: false, reason: "whop_not_configured" },
-            { status: 503 },
-          );
+          return Response.json({ received: false, reason: "whop_not_configured" }, { status: 503 });
         }
         if (!check.ok) {
           return new Response("Invalid signature", { status: 401 });
