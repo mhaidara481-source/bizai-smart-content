@@ -30,8 +30,10 @@ function StyledContent({ children }: { children: ReactNode }) {
 
     const styledChildren = Children.map(props.children, styleNode);
 
+    const element = node as React.ReactElement<ElementProps>;
+
     return cloneElement(
-      node,
+      element,
       merged ? { className: merged } : {},
       styledChildren ?? props.children,
     );
