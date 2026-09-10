@@ -11,6 +11,9 @@ import {
 
 const OPENAI_URL = "https://api.openai.com/v1/chat/completions";
 const MODEL = "gpt-4o-mini";
+// Secours automatique si la clé OpenAI est indisponible (quota épuisé, etc.).
+const LOVABLE_AI_URL = "https://ai.gateway.lovable.dev/v1/chat/completions";
+const LOVABLE_MODEL = "google/gemini-2.5-flash";
 
 export { PLAN_LIMITS } from "./plans";
 import { PLAN_LIMITS } from "./plans";
@@ -214,18 +217,56 @@ function parseJson(text: string): unknown {
 export async function generateContent(
   input: GenerateInput,
 ): Promise<{ data: unknown; demo: boolean }> {
-  const apiKey = process.env["OPENAI_API_KEY"];
-  if (!apiKey) return { data: demoResult(input), demo: true };
-
   const { system, user } = buildPrompt(input);
-  const response = await fetch(OPENAI_URL, {
+  const providers = listProviders();
+  if (providers.length === 0) return { data: demoResult(input), demo: true };
+
+  let lastError: Error | null = null;
+  for (const provider of providers) {
+    try {
+      const content = await callProvider(provider, system, user);
+      return { data: parseJson(content), demo: false };
+    } catch (error) {
+      lastError = error instanceof Error ? error : new Error(String(error));
+      // On tente le fournisseur suivant (ex: quota OpenAI épuisé).
+    }
+  }
+  throw lastError ?? new Error("La génération a échoué. Réessaie dans un instant.");
+}
+
+type Provider = { name: string; url: string; key: string; model: string };
+
+function listProviders(): Provider[] {
+  const providers: Provider[] = [];
+  const openaiKey = process.env["OPENAI_API_KEY"];
+  if (openaiKey) {
+    providers.push({ name: "openai", url: OPENAI_URL, key: openaiKey, model: MODEL });
+  }
+  const lovableKey = process.env["LOVABLE_API_KEY"];
+  if (lovableKey) {
+    providers.push({
+      name: "lovable",
+      url: LOVABLE_AI_URL,
+      key: lovableKey,
+      model: LOVABLE_MODEL,
+    });
+  }
+  return providers;
+}
+
+async function callProvider(
+  provider: Provider,
+  system: string,
+  user: string,
+): Promise<string> {
+  const response = await fetch(provider.url, {
     method: "POST",
     headers: {
       "Content-Type": "application/json",
-      Authorization: `Bearer ${apiKey}`,
+      Authorization: `Bearer ${provider.key}`,
     },
     body: JSON.stringify({
-      model: MODEL,
+      model: provider.model,
       messages: [
         { role: "system", content: system },
         { role: "user", content: user },
@@ -236,6 +277,7 @@ export async function generateContent(
 
   if (!response.ok) {
     const body = await response.text();
+    console.error("[AI] provider error", provider.name, response.status, body);
     if (response.status === 429) {
       throw new Error("L'IA est très demandée en ce moment. Réessaie dans quelques secondes.");
     }
@@ -244,7 +286,6 @@ export async function generateContent(
         "Le service IA est momentanément indisponible (crédits ou accès). Réessaie plus tard.",
       );
     }
-    console.error("[AI] gateway error", response.status, body);
     throw new Error("La génération a échoué. Réessaie dans un instant.");
   }
 
@@ -253,5 +294,5 @@ export async function generateContent(
   };
   const content = payload.choices?.[0]?.message?.content;
   if (!content) throw new Error("L'IA n'a renvoyé aucun contenu. Réessaie.");
-  return { data: parseJson(content), demo: false };
+  return content;
 }
