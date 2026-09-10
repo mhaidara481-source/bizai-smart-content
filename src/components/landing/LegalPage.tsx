@@ -1,12 +1,11 @@
 import { SiteHeader } from "./SiteHeader";
 import { LegalLinks } from "./LegalLinks";
-import {
-  ReactNode,
-  isValidElement,
-  cloneElement,
-  Children,
-  ReactElement,
-} from "react";
+import { ReactNode, isValidElement, cloneElement, Children } from "react";
+
+type ElementProps = {
+  className?: string;
+  children?: ReactNode;
+};
 
 const contentStyles: Record<string, string> = {
   section: "space-y-3",
@@ -21,26 +20,20 @@ function StyledContent({ children }: { children: ReactNode }) {
   function styleNode(node: ReactNode): ReactNode {
     if (!isValidElement(node)) return node;
 
-    const element = node as ReactElement<Record<string, unknown>>;
     const typeName =
-      typeof element.type === "function"
-        ? element.type.name
-        : String(element.type);
+      typeof node.type === "function" ? node.type.name : String(node.type);
     const className = contentStyles[typeName] ?? "";
 
-    const existing =
-      typeof element.props.className === "string"
-        ? element.props.className
-        : "";
-
+    const props = node.props as ElementProps;
+    const existing = props.className ?? "";
     const merged = [className, existing].filter(Boolean).join(" ").trim();
 
-    const styledChildren = Children.map(element.props.children, styleNode);
+    const styledChildren = Children.map(props.children, styleNode);
 
     return cloneElement(
-      element,
+      node,
       merged ? { className: merged } : {},
-      styledChildren ?? element.props.children,
+      styledChildren ?? props.children,
     );
   }
 
