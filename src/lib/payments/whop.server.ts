@@ -102,6 +102,8 @@ export async function createCheckoutSession(input: {
     throw new Error(`Aucun Product ID Whop configuré pour le plan ${input.plan}.`);
   }
 
+  const planId = await resolvePlanId(productId, config.apiKey!);
+
   const response = await fetch("https://api.whop.com/api/v2/checkout_sessions", {
     method: "POST",
     headers: {
@@ -109,7 +111,7 @@ export async function createCheckoutSession(input: {
       "Content-Type": "application/json",
     },
     body: JSON.stringify({
-      product_id: productId,
+      plan_id: planId,
       metadata: { supabase_user_id: input.userId, plan: input.plan },
     }),
   });
@@ -119,8 +121,8 @@ export async function createCheckoutSession(input: {
     throw new Error(`Whop a retourné une erreur (${response.status}) : ${text}`);
   }
 
-  const data = (await response.json()) as { url?: string; checkout_url?: string };
-  const url = data.url ?? data.checkout_url ?? null;
+  const data = (await response.json()) as { purchase_url?: string; url?: string; checkout_url?: string };
+  const url = data.purchase_url ?? data.url ?? data.checkout_url ?? null;
   if (!url) {
     throw new Error("Whop n'a pas renvoyé d'URL de paiement.");
   }
