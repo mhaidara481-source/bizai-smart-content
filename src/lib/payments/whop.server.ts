@@ -46,6 +46,41 @@ function productIdForPlan(plan: PlanId): string | null {
   return whopConfig().productIds[plan];
 }
 
+type WhopPlan = { id: string; product?: string; access_pass?: string; visibility?: string };
+
+// Cache mémoire : évite un appel API à chaque checkout.
+const planIdCache = new Map<string, string>();
+
+/**
+ * Récupère automatiquement le plan_id (formule de prix) associé à un product_id
+ * via l'API Whop. Whop exige plan_id (ou price) pour créer une session.
+ */
+export async function resolvePlanId(productId: string, apiKey: string): Promise<string> {
+  const cached = planIdCache.get(productId);
+  if (cached) return cached;
+
+  const response = await fetch("https://api.whop.com/api/v2/plans?per=50", {
+    headers: { Authorization: `Bearer ${apiKey}` },
+  });
+  if (!response.ok) {
+    const text = await response.text().catch(() => "erreur inconnue");
+    throw new Error(`Impossible de récupérer les formules Whop (${response.status}) : ${text}`);
+  }
+
+  const payload = (await response.json()) as { data?: WhopPlan[] };
+  const plans = payload.data ?? [];
+  const match =
+    plans.find((p) => (p.product === productId || p.access_pass === productId) && p.visibility !== "archived") ??
+    plans.find((p) => p.product === productId || p.access_pass === productId);
+
+  if (!match?.id) {
+    throw new Error(`Aucune formule de prix Whop trouvée pour le produit ${productId}.`);
+  }
+
+  planIdCache.set(productId, match.id);
+  return match.id;
+}
+
 /**
  * Crée une session de paiement Whop pour le plan demandé.
  *
@@ -67,6 +102,8 @@ export async function createCheckoutSession(input: {
     throw new Error(`Aucun Product ID Whop configuré pour le plan ${input.plan}.`);
   }
 
+  const planId = await resolvePlanId(productId, config.apiKey!);
+
   const response = await fetch("https://api.whop.com/api/v2/checkout_sessions", {
     method: "POST",
     headers: {
@@ -74,7 +111,7 @@ export async function createCheckoutSession(input: {
       "Content-Type": "application/json",
     },
     body: JSON.stringify({
-      product_id: productId,
+      plan_id: planId,
       metadata: { supabase_user_id: input.userId, plan: input.plan },
     }),
   });
@@ -84,8 +121,8 @@ export async function createCheckoutSession(input: {
     throw new Error(`Whop a retourné une erreur (${response.status}) : ${text}`);
   }
 
-  const data = (await response.json()) as { url?: string; checkout_url?: string };
-  const url = data.url ?? data.checkout_url ?? null;
+  const data = (await response.json()) as { purchase_url?: string; url?: string; checkout_url?: string };
+  const url = data.purchase_url ?? data.url ?? data.checkout_url ?? null;
   if (!url) {
     throw new Error("Whop n'a pas renvoyé d'URL de paiement.");
   }
