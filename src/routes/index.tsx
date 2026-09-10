@@ -176,6 +176,13 @@ function Landing() {
           <p className="mt-4 text-xs text-muted-foreground">
             Sans engagement · Prêt à utiliser en 2 minutes
           </p>
+          <img
+            src={heroImage}
+            alt="Deux gérants de salon de coiffure préparant leur communication sur une tablette"
+            width={1600}
+            height={1104}
+            className="mt-14 aspect-[16/10] w-full rounded-3xl object-cover shadow-lift"
+          />
         </div>
       </section>
 
