@@ -264,7 +264,7 @@ function Landing() {
               loading="lazy"
               width={1200}
               height={912}
-              className="h-64 w-full rounded-3xl object-cover shadow-soft sm:h-80 md:order-1"
+              className="h-64 w-full rounded-3xl object-cover shadow-soft sm:h-80"
             />
             <img
               src={featureCalendarImage}
@@ -272,7 +272,7 @@ function Landing() {
               loading="lazy"
               width={1200}
               height={912}
-              className="h-64 w-full rounded-3xl object-cover shadow-soft sm:h-80 md:order-4"
+              className="h-64 w-full rounded-3xl object-cover shadow-soft sm:h-80"
             />
           </div>
           <div className="mt-6 grid gap-5 md:grid-cols-2">
