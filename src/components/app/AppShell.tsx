@@ -8,6 +8,7 @@ import { supabase } from "@/integrations/supabase/client";
 import { useAuth } from "@/hooks/useAuth";
 import { useProfile, PLAN_LABELS } from "@/hooks/useProfile";
 import { BizAILogo } from "@/components/landing/SiteHeader";
+import { LegalLinks } from "@/components/landing/LegalLinks";
 import { Button } from "@/components/ui/button";
 import { Sheet, SheetContent, SheetTrigger } from "@/components/ui/sheet";
 import { Separator } from "@/components/ui/separator";
