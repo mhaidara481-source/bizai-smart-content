@@ -107,15 +107,45 @@ function Dashboard() {
 
       <h2 className="mb-4 mt-10 text-lg font-semibold">Activité récente</h2>
       <Card className="rounded-2xl border-border/70 shadow-soft">
-        <CardContent className="flex flex-col items-center py-14 text-center">
-          <span className="flex size-12 items-center justify-center rounded-2xl bg-primary-soft">
-            <Sparkles className="size-5 text-primary" />
-          </span>
-          <p className="mt-4 font-semibold">Aucune activité pour l'instant</p>
-          <p className="mt-1 max-w-sm text-sm text-muted-foreground">
-            Tes contenus générés apparaîtront ici dès que tu commenceras à utiliser les outils.
-          </p>
-        </CardContent>
+        {recent.length === 0 ? (
+          <CardContent className="flex flex-col items-center py-14 text-center">
+            <span className="flex size-12 items-center justify-center rounded-2xl bg-primary-soft">
+              <Sparkles className="size-5 text-primary" />
+            </span>
+            <p className="mt-4 font-semibold">Aucune activité pour l'instant</p>
+            <p className="mt-1 max-w-sm text-sm text-muted-foreground">
+              Tes contenus générés apparaîtront ici dès que tu commenceras à utiliser les outils.
+            </p>
+          </CardContent>
+        ) : (
+          <CardContent className="divide-y divide-border/70 py-2">
+            {recent.map((item) => (
+              <div
+                key={item.id}
+                className="flex flex-wrap items-center justify-between gap-2 py-3"
+              >
+                <div className="min-w-0">
+                  <p className="truncate text-sm font-medium">
+                    {TOOL_LABELS[item.tool] ?? "Génération"}
+                  </p>
+                  <p className="text-xs text-muted-foreground">
+                    {new Date(item.created_at).toLocaleDateString("fr-FR", {
+                      day: "numeric",
+                      month: "long",
+                      hour: "2-digit",
+                      minute: "2-digit",
+                    })}
+                  </p>
+                </div>
+                {item.demo && (
+                  <span className="rounded-full bg-primary-soft px-2.5 py-1 text-xs font-semibold text-primary">
+                    Mode démo
+                  </span>
+                )}
+              </div>
+            ))}
+          </CardContent>
+        )}
       </Card>
     </div>
   );
