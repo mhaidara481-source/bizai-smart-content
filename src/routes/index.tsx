@@ -13,6 +13,7 @@ import {
 } from "lucide-react";
 
 import { SiteHeader, BizAILogo } from "@/components/landing/SiteHeader";
+import { LegalLinks } from "@/components/landing/LegalLinks";
 import { Button } from "@/components/ui/button";
 import { Card, CardContent, CardHeader, CardTitle } from "@/components/ui/card";
 import { Badge } from "@/components/ui/badge";
@@ -393,13 +394,14 @@ function Landing() {
           <p className="text-sm text-muted-foreground">
             © {new Date().getFullYear()} BizAI. Tous droits réservés.
           </p>
-          <div className="flex gap-5 text-sm text-muted-foreground">
+          <div className="flex flex-wrap items-center justify-center gap-5 text-sm text-muted-foreground">
             <a href="#tarifs" className="transition-colors hover:text-foreground">
               Tarifs
             </a>
             <a href="#faq" className="transition-colors hover:text-foreground">
               FAQ
             </a>
+            <LegalLinks />
             <Link to="/connexion" className="transition-colors hover:text-foreground">
               Connexion
             </Link>

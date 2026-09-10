@@ -1,6 +1,43 @@
 import { SiteHeader } from "./SiteHeader";
 import { LegalLinks } from "./LegalLinks";
-import { ReactNode } from "react";
+import { ReactNode, isValidElement, cloneElement, Children } from "react";
+
+const contentStyles: Record<string, string> = {
+  section: "space-y-3",
+  h2: "text-lg font-bold tracking-tight text-foreground sm:text-xl",
+  p: "leading-relaxed text-foreground/90",
+  ul: "list-disc space-y-2 pl-5 text-foreground/90",
+  li: "leading-relaxed",
+  a: "text-primary underline underline-offset-2 transition-colors hover:text-primary/80",
+};
+
+function StyledContent({ children }: { children: ReactNode }) {
+  function styleNode(node: ReactNode): ReactNode {
+    if (!isValidElement(node)) return node;
+
+    const type = typeof node.type === "function" ? node.type.name : node.type;
+    const className = contentStyles[String(type)] ?? "";
+
+    const existing =
+      typeof node.props.className === "string" ? node.props.className : "";
+
+    const merged = [className, existing].filter(Boolean).join(" ");
+
+    const styledChildren = Children.map(node.props.children, styleNode);
+
+    return cloneElement(
+      node,
+      merged ? { className: merged } : {},
+      styledChildren ?? node.props.children,
+    );
+  }
+
+  return (
+    <div className="space-y-10">
+      {Children.map(children, styleNode)}
+    </div>
+  );
+}
 
 export function LegalPage({
   title,
@@ -23,9 +60,7 @@ export function LegalPage({
             <p className="mt-4 text-base text-muted-foreground">{intro}</p>
           ) : null}
         </div>
-        <div className="prose prose-sm max-w-none text-foreground">
-          {children}
-        </div>
+        <StyledContent>{children}</StyledContent>
       </main>
       <footer className="border-t border-border/70 py-8">
         <div className="mx-auto flex w-full max-w-3xl flex-col items-center justify-between gap-4 px-5 text-sm text-muted-foreground sm:flex-row">
