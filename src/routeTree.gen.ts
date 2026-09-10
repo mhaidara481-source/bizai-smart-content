@@ -20,6 +20,7 @@ import { Route as AuthenticatedDashboardRouteImport } from './routes/_authentica
 import { Route as AuthenticatedIdeesDeContenuRouteImport } from './routes/_authenticated/idees-de-contenu'
 import { Route as AuthenticatedParametresRouteImport } from './routes/_authenticated/parametres'
 import { Route as AuthenticatedRepondreAuxAvisRouteImport } from './routes/_authenticated/repondre-aux-avis'
+import { Route as ApiPublicWhopWebhookRouteImport } from './routes/api/public/whop-webhook'
 
 const IndexRoute = IndexRouteImport.update({
   id: '/',
@@ -78,6 +79,11 @@ const AuthenticatedRepondreAuxAvisRoute =
     path: '/repondre-aux-avis',
     getParentRoute: () => AuthenticatedRouteRoute,
   } as any)
+const ApiPublicWhopWebhookRoute = ApiPublicWhopWebhookRouteImport.update({
+  id: '/api/public/whop-webhook',
+  path: '/api/public/whop-webhook',
+  getParentRoute: () => rootRouteImport,
+} as any)
 
 export interface FileRoutesByFullPath {
   '/': typeof IndexRoute
@@ -90,6 +96,7 @@ export interface FileRoutesByFullPath {
   '/idees-de-contenu': typeof AuthenticatedIdeesDeContenuRoute
   '/parametres': typeof AuthenticatedParametresRoute
   '/repondre-aux-avis': typeof AuthenticatedRepondreAuxAvisRoute
+  '/api/public/whop-webhook': typeof ApiPublicWhopWebhookRoute
 }
 export interface FileRoutesByTo {
   '/': typeof IndexRoute
@@ -102,6 +109,7 @@ export interface FileRoutesByTo {
   '/idees-de-contenu': typeof AuthenticatedIdeesDeContenuRoute
   '/parametres': typeof AuthenticatedParametresRoute
   '/repondre-aux-avis': typeof AuthenticatedRepondreAuxAvisRoute
+  '/api/public/whop-webhook': typeof ApiPublicWhopWebhookRoute
 }
 export interface FileRoutesById {
   __root__: typeof rootRouteImport
@@ -116,6 +124,7 @@ export interface FileRoutesById {
   '/_authenticated/idees-de-contenu': typeof AuthenticatedIdeesDeContenuRoute
   '/_authenticated/parametres': typeof AuthenticatedParametresRoute
   '/_authenticated/repondre-aux-avis': typeof AuthenticatedRepondreAuxAvisRoute
+  '/api/public/whop-webhook': typeof ApiPublicWhopWebhookRoute
 }
 export interface FileRouteTypes {
   fileRoutesByFullPath: FileRoutesByFullPath
@@ -130,6 +139,7 @@ export interface FileRouteTypes {
     | '/idees-de-contenu'
     | '/parametres'
     | '/repondre-aux-avis'
+    | '/api/public/whop-webhook'
   fileRoutesByTo: FileRoutesByTo
   to:
     | '/'
@@ -142,6 +152,7 @@ export interface FileRouteTypes {
     | '/idees-de-contenu'
     | '/parametres'
     | '/repondre-aux-avis'
+    | '/api/public/whop-webhook'
   id:
     | '__root__'
     | '/'
@@ -155,6 +166,7 @@ export interface FileRouteTypes {
     | '/_authenticated/idees-de-contenu'
     | '/_authenticated/parametres'
     | '/_authenticated/repondre-aux-avis'
+    | '/api/public/whop-webhook'
   fileRoutesById: FileRoutesById
 }
 export interface RootRouteChildren {
@@ -162,6 +174,7 @@ export interface RootRouteChildren {
   AuthenticatedRouteRoute: typeof AuthenticatedRouteRouteWithChildren
   ConnexionRoute: typeof ConnexionRoute
   InscriptionRoute: typeof InscriptionRoute
+  ApiPublicWhopWebhookRoute: typeof ApiPublicWhopWebhookRoute
 }
 
 declare module '@tanstack/react-router' {
@@ -243,6 +256,13 @@ declare module '@tanstack/react-router' {
       preLoaderRoute: typeof AuthenticatedRepondreAuxAvisRouteImport
       parentRoute: typeof AuthenticatedRouteRoute
     }
+    '/api/public/whop-webhook': {
+      id: '/api/public/whop-webhook'
+      path: '/api/public/whop-webhook'
+      fullPath: '/api/public/whop-webhook'
+      preLoaderRoute: typeof ApiPublicWhopWebhookRouteImport
+      parentRoute: typeof rootRouteImport
+    }
   }
 }
 
@@ -274,6 +294,7 @@ const rootRouteChildren: RootRouteChildren = {
   AuthenticatedRouteRoute: AuthenticatedRouteRouteWithChildren,
   ConnexionRoute: ConnexionRoute,
   InscriptionRoute: InscriptionRoute,
+  ApiPublicWhopWebhookRoute: ApiPublicWhopWebhookRoute,
 }
 export const routeTree = rootRouteImport
   ._addFileChildren(rootRouteChildren)

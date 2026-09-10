@@ -49,15 +49,17 @@ async function upsertSubscription(input: {
 }) {
   const { supabaseAdmin } = await import("@/integrations/supabase/client.server");
 
-  const payload: Record<string, unknown> = {
+  const payload = {
     user_id: input.userId,
     plan: input.plan,
     status: input.status,
     provider: "whop",
+    ...(input.providerSubscriptionId
+      ? { provider_subscription_id: input.providerSubscriptionId }
+      : {}),
+    ...(input.periodStart ? { current_period_start: input.periodStart } : {}),
+    ...(input.periodEnd ? { current_period_end: input.periodEnd } : {}),
   };
-  if (input.providerSubscriptionId) payload["provider_subscription_id"] = input.providerSubscriptionId;
-  if (input.periodStart) payload["current_period_start"] = input.periodStart;
-  if (input.periodEnd) payload["current_period_end"] = input.periodEnd;
 
   const { data: existing } = await supabaseAdmin
     .from("subscriptions")
@@ -69,7 +71,7 @@ async function upsertSubscription(input: {
     const { error } = await supabaseAdmin.from("subscriptions").update(payload).eq("id", existing.id);
     if (error) throw error;
   } else {
-    const { error } = await supabaseAdmin.from("subscriptions").insert(payload as never);
+    const { error } = await supabaseAdmin.from("subscriptions").insert(payload);
     if (error) throw error;
   }
 

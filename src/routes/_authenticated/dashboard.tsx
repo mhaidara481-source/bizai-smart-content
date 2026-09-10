@@ -4,6 +4,12 @@ import { ArrowRight, Sparkles } from "lucide-react";
 import { PageHeader } from "@/components/app/PageHeader";
 import { toolItems } from "@/lib/nav";
 import { useProfile, PLAN_LABELS, PLAN_LIMITS } from "@/hooks/useProfile";
+import {
+  TOOL_LABELS,
+  useRecentGenerations,
+  useSubscription,
+  useUsage,
+} from "@/hooks/useUsage";
 import { Card, CardContent, CardHeader, CardTitle } from "@/components/ui/card";
 import { Button } from "@/components/ui/button";
 import { Progress } from "@/components/ui/progress";
