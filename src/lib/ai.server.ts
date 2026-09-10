@@ -9,7 +9,7 @@ import {
   type ReviewResult,
 } from "./ai-types";
 
-const GATEWAY_URL = "https://ai.gateway.lovable.dev/v1/chat/completions";
+const OPENAI_URL = "https://api.openai.com/v1/chat/completions";
 const MODEL = "gpt-4o-mini";
 
 export { PLAN_LIMITS } from "./plans";
