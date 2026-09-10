@@ -218,12 +218,11 @@ export async function generateContent(
   if (!apiKey) return { data: demoResult(input), demo: true };
 
   const { system, user } = buildPrompt(input);
-  const response = await fetch(GATEWAY_URL, {
+  const response = await fetch(OPENAI_URL, {
     method: "POST",
     headers: {
       "Content-Type": "application/json",
-      "Lovable-API-Key": apiKey,
-      "X-Lovable-AIG-SDK": "fetch",
+      Authorization: `Bearer ${apiKey}`,
     },
     body: JSON.stringify({
       model: MODEL,
