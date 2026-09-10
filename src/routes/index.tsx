@@ -111,32 +111,13 @@ const features = [
   },
 ];
 
-const plans = [
-  {
-    name: "STARTER",
-    price: "19€",
-    generations: "100 générations par mois",
-    highlight: false,
-    perks: [
-      "Générateur de posts",
-      "Réponses aux avis",
-      "Idées de contenu",
-      "Historique de tes contenus",
-    ],
-  },
-  {
-    name: "PRO",
-    price: "39€",
-    generations: "500 générations par mois",
-    highlight: true,
-    perks: [
-      "Tout le plan Starter",
-      "Calendrier marketing complet",
-      "Ton de voix personnalisé",
-      "Support prioritaire",
-    ],
-  },
-];
+const plans = PLANS.map((plan) => ({
+  name: plan.name.toUpperCase(),
+  price: plan.priceLabel,
+  generations: `${plan.generations.toLocaleString("fr-FR")} générations par mois`,
+  highlight: Boolean(plan.highlight),
+  perks: plan.features,
+}));
 
 const faq = [
   {
