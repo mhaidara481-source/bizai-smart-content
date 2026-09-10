@@ -18,6 +18,7 @@ import { Route as AuthenticatedCalendrierRouteImport } from './routes/_authentic
 import { Route as AuthenticatedCreerUnPostRouteImport } from './routes/_authenticated/creer-un-post'
 import { Route as AuthenticatedDashboardRouteImport } from './routes/_authenticated/dashboard'
 import { Route as AuthenticatedIdeesDeContenuRouteImport } from './routes/_authenticated/idees-de-contenu'
+import { Route as AuthenticatedParametresRouteImport } from './routes/_authenticated/parametres'
 import { Route as AuthenticatedRepondreAuxAvisRouteImport } from './routes/_authenticated/repondre-aux-avis'
 
 const IndexRoute = IndexRouteImport.update({
@@ -66,6 +67,11 @@ const AuthenticatedIdeesDeContenuRoute =
     path: '/idees-de-contenu',
     getParentRoute: () => AuthenticatedRouteRoute,
   } as any)
+const AuthenticatedParametresRoute = AuthenticatedParametresRouteImport.update({
+  id: '/parametres',
+  path: '/parametres',
+  getParentRoute: () => AuthenticatedRouteRoute,
+} as any)
 const AuthenticatedRepondreAuxAvisRoute =
   AuthenticatedRepondreAuxAvisRouteImport.update({
     id: '/repondre-aux-avis',
@@ -82,6 +88,7 @@ export interface FileRoutesByFullPath {
   '/creer-un-post': typeof AuthenticatedCreerUnPostRoute
   '/dashboard': typeof AuthenticatedDashboardRoute
   '/idees-de-contenu': typeof AuthenticatedIdeesDeContenuRoute
+  '/parametres': typeof AuthenticatedParametresRoute
   '/repondre-aux-avis': typeof AuthenticatedRepondreAuxAvisRoute
 }
 export interface FileRoutesByTo {
@@ -93,6 +100,7 @@ export interface FileRoutesByTo {
   '/creer-un-post': typeof AuthenticatedCreerUnPostRoute
   '/dashboard': typeof AuthenticatedDashboardRoute
   '/idees-de-contenu': typeof AuthenticatedIdeesDeContenuRoute
+  '/parametres': typeof AuthenticatedParametresRoute
   '/repondre-aux-avis': typeof AuthenticatedRepondreAuxAvisRoute
 }
 export interface FileRoutesById {
@@ -106,6 +114,7 @@ export interface FileRoutesById {
   '/_authenticated/creer-un-post': typeof AuthenticatedCreerUnPostRoute
   '/_authenticated/dashboard': typeof AuthenticatedDashboardRoute
   '/_authenticated/idees-de-contenu': typeof AuthenticatedIdeesDeContenuRoute
+  '/_authenticated/parametres': typeof AuthenticatedParametresRoute
   '/_authenticated/repondre-aux-avis': typeof AuthenticatedRepondreAuxAvisRoute
 }
 export interface FileRouteTypes {
@@ -119,6 +128,7 @@ export interface FileRouteTypes {
     | '/creer-un-post'
     | '/dashboard'
     | '/idees-de-contenu'
+    | '/parametres'
     | '/repondre-aux-avis'
   fileRoutesByTo: FileRoutesByTo
   to:
@@ -130,6 +140,7 @@ export interface FileRouteTypes {
     | '/creer-un-post'
     | '/dashboard'
     | '/idees-de-contenu'
+    | '/parametres'
     | '/repondre-aux-avis'
   id:
     | '__root__'
@@ -142,6 +153,7 @@ export interface FileRouteTypes {
     | '/_authenticated/creer-un-post'
     | '/_authenticated/dashboard'
     | '/_authenticated/idees-de-contenu'
+    | '/_authenticated/parametres'
     | '/_authenticated/repondre-aux-avis'
   fileRoutesById: FileRoutesById
 }
@@ -217,6 +229,13 @@ declare module '@tanstack/react-router' {
       preLoaderRoute: typeof AuthenticatedIdeesDeContenuRouteImport
       parentRoute: typeof AuthenticatedRouteRoute
     }
+    '/_authenticated/parametres': {
+      id: '/_authenticated/parametres'
+      path: '/parametres'
+      fullPath: '/parametres'
+      preLoaderRoute: typeof AuthenticatedParametresRouteImport
+      parentRoute: typeof AuthenticatedRouteRoute
+    }
     '/_authenticated/repondre-aux-avis': {
       id: '/_authenticated/repondre-aux-avis'
       path: '/repondre-aux-avis'
@@ -233,6 +252,7 @@ interface AuthenticatedRouteRouteChildren {
   AuthenticatedCreerUnPostRoute: typeof AuthenticatedCreerUnPostRoute
   AuthenticatedDashboardRoute: typeof AuthenticatedDashboardRoute
   AuthenticatedIdeesDeContenuRoute: typeof AuthenticatedIdeesDeContenuRoute
+  AuthenticatedParametresRoute: typeof AuthenticatedParametresRoute
   AuthenticatedRepondreAuxAvisRoute: typeof AuthenticatedRepondreAuxAvisRoute
 }
 
@@ -242,6 +262,7 @@ const AuthenticatedRouteRouteChildren: AuthenticatedRouteRouteChildren = {
   AuthenticatedCreerUnPostRoute: AuthenticatedCreerUnPostRoute,
   AuthenticatedDashboardRoute: AuthenticatedDashboardRoute,
   AuthenticatedIdeesDeContenuRoute: AuthenticatedIdeesDeContenuRoute,
+  AuthenticatedParametresRoute: AuthenticatedParametresRoute,
   AuthenticatedRepondreAuxAvisRoute: AuthenticatedRepondreAuxAvisRoute,
 }
 
