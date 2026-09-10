@@ -10,7 +10,7 @@ import {
 } from "./ai-types";
 
 const GATEWAY_URL = "https://ai.gateway.lovable.dev/v1/chat/completions";
-const MODEL = "openai/gpt-6-astra";
+const MODEL = "gpt-4o-mini";
 
 export { PLAN_LIMITS } from "./plans";
 import { PLAN_LIMITS } from "./plans";
@@ -214,7 +214,7 @@ function parseJson(text: string): unknown {
 export async function generateContent(
   input: GenerateInput,
 ): Promise<{ data: unknown; demo: boolean }> {
-  const apiKey = process.env["LOVABLE_API_KEY"];
+  const apiKey = process.env["OPENAI_API_KEY"];
   if (!apiKey) return { data: demoResult(input), demo: true };
 
   const { system, user } = buildPrompt(input);
