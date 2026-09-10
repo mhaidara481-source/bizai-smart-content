@@ -22,6 +22,10 @@ import {
   AccordionItem,
   AccordionTrigger,
 } from "@/components/ui/accordion";
+import { PLANS } from "@/lib/plans";
+import heroImage from "@/assets/hero-bizai.jpg";
+import featurePostsImage from "@/assets/feature-posts.jpg";
+import featureCalendarImage from "@/assets/feature-calendrier.jpg";
 
 export const Route = createFileRoute("/")({
   head: () => ({
