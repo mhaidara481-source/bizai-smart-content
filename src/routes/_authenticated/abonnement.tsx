@@ -1,22 +1,42 @@
+import { useState } from "react";
 import { createFileRoute } from "@tanstack/react-router";
-import { ArrowUpRight, Check, Settings2, Sparkles } from "lucide-react";
+import { useQueryClient } from "@tanstack/react-query";
+import { useServerFn } from "@tanstack/react-start";
+import { ArrowUpRight, Check, Loader2, Settings2, Sparkles } from "lucide-react";
 import { toast } from "sonner";
 
 import { PageHeader } from "@/components/app/PageHeader";
+import { Badge } from "@/components/ui/badge";
 import { Button } from "@/components/ui/button";
 import { Card, CardContent, CardHeader, CardTitle } from "@/components/ui/card";
 import { Progress } from "@/components/ui/progress";
 import { Skeleton } from "@/components/ui/skeleton";
-import { PLAN_LABELS, useProfile } from "@/hooks/useProfile";
-import { planLimit, useSubscription, useUsage } from "@/hooks/useUsage";
+import { useProfile } from "@/hooks/useProfile";
+import { useSubscription, useUsage } from "@/hooks/useUsage";
+import { startCheckout } from "@/lib/payments/checkout.functions";
+import {
+  PLANS,
+  PLAN_COMPARISON,
+  PLAN_LABELS,
+  TEAM_MEMBERS,
+  isPaidPlan,
+  planLimitFor,
+  type PlanId,
+} from "@/lib/plans";
 
 export const Route = createFileRoute("/_authenticated/abonnement")({
   head: () => ({
     meta: [
       { title: "Abonnement — BizAI" },
-      { name: "description", content: "Gère ton offre BizAI et suis tes générations mensuelles." },
+      {
+        name: "description",
+        content: "Compare les offres Starter, Pro et Business et suis tes générations mensuelles.",
+      },
       { property: "og:title", content: "Abonnement — BizAI" },
-      { property: "og:description", content: "Starter 19€/mois ou Pro 39€/mois." },
+      {
+        property: "og:description",
+        content: "Starter 19€, Pro 39€ ou Business 79€ par mois.",
+      },
       { property: "og:type", content: "website" },
       { name: "twitter:card", content: "summary_large_image" },
     ],
@@ -24,51 +44,61 @@ export const Route = createFileRoute("/_authenticated/abonnement")({
   component: SubscriptionPage,
 });
 
-const PLANS = [
-  {
-    id: "starter",
-    name: "Starter",
-    price: "19€",
-    quota: "100 générations par mois",
-    features: ["100 générations par mois", "Les 4 outils IA", "Calendrier 30 jours", "Support email"],
-  },
-  {
-    id: "pro",
-    name: "Pro",
-    price: "39€",
-    quota: "500 générations par mois",
-    features: [
-      "500 générations par mois",
-      "Les 4 outils IA",
-      "Calendrier 30 jours",
-      "Support prioritaire",
-    ],
-  },
-] as const;
-
-const PAYMENT_SOON = "L'intégration des paiements arrive bientôt.";
-
-function notifyPaymentSoon() {
-  toast.info(PAYMENT_SOON, {
-    description: "Tu pourras régler ton abonnement en ligne dès que ce sera ouvert.",
-  });
-}
-
 function SubscriptionPage() {
   const { data: profile, isLoading: profileLoading } = useProfile();
   const { data: subscription, isLoading: subLoading } = useSubscription();
   const { data: used = 0, isLoading: usageLoading } = useUsage();
+  const queryClient = useQueryClient();
+  const checkout = useServerFn(startCheckout);
+  const [pending, setPending] = useState<PlanId | null>(null);
 
   const loading = profileLoading || subLoading || usageLoading;
 
   const activePlan =
     subscription?.status === "active" ? subscription.plan : (profile?.plan ?? "free");
-  const hasPaidPlan = activePlan === "starter" || activePlan === "pro";
-  const limit = planLimit(activePlan);
+  const hasPaidPlan = isPaidPlan(activePlan);
+  const limit = planLimitFor(activePlan);
   const percent = limit > 0 ? Math.min((used / limit) * 100, 100) : 0;
 
-  const upgradeLabel =
-    activePlan === "pro" ? "Tu es déjà sur Pro" : hasPaidPlan ? "Passer à Pro" : "Choisir Starter";
+  const nextPlan: PlanId | null =
+    activePlan === "business" ? null : activePlan === "pro" ? "business" : hasPaidPlan ? "pro" : "starter";
+
+  const primaryLabel =
+    nextPlan === null
+      ? "Tu es sur l'offre maximale"
+      : hasPaidPlan
+        ? `Passer à ${PLAN_LABELS[nextPlan]}`
+        : "Choisir Starter";
+
+  async function handleCheckout(plan: PlanId) {
+    setPending(plan);
+    try {
+      // Mode démo : simule un abonnement actif, sans paiement réel.
+      const result = await checkout({ data: { plan, simulate: true } });
+      if (result.url) {
+        window.location.href = result.url;
+        return;
+      }
+      if (result.upgraded) {
+        await queryClient.invalidateQueries();
+        toast.success(`Offre ${PLAN_LABELS[plan]} activée`, { description: result.message });
+      } else {
+        toast.info(result.message);
+      }
+    } catch (error) {
+      toast.error("Le changement d'offre a échoué", {
+        description: error instanceof Error ? error.message : "Réessaie dans un instant.",
+      });
+    } finally {
+      setPending(null);
+    }
+  }
+
+  function handleManage() {
+    toast.info("L'intégration des paiements arrive bientôt.", {
+      description: "La gestion de l'abonnement en ligne sera disponible dès l'ouverture.",
+    });
+  }
 
   return (
     <div>
@@ -90,10 +120,12 @@ function SubscriptionPage() {
               <div className="flex flex-wrap items-end justify-between gap-4">
                 <div>
                   <p className="text-3xl font-extrabold">
-                    {hasPaidPlan ? (PLAN_LABELS[activePlan] ?? "Découverte") : "Aucun abonnement"}
+                    {hasPaidPlan ? PLAN_LABELS[activePlan] : "Aucun abonnement"}
                   </p>
                   <p className="mt-1 text-sm text-muted-foreground">
-                    {used} / {limit} générations utilisées ce mois-ci
+                    {used} / {limit} générations utilisées ce mois-ci ·{" "}
+                    {TEAM_MEMBERS[activePlan] ?? 1} utilisateur
+                    {(TEAM_MEMBERS[activePlan] ?? 1) > 1 ? "s" : ""}
                   </p>
                 </div>
                 <span className="rounded-full bg-primary-soft px-3 py-1 text-xs font-semibold text-primary">
@@ -105,13 +137,16 @@ function SubscriptionPage() {
               <div className="mt-6 flex flex-col gap-3 sm:flex-row">
                 <Button
                   className="rounded-full"
-                  disabled={activePlan === "pro"}
-                  onClick={notifyPaymentSoon}
+                  disabled={nextPlan === null || pending !== null}
+                  onClick={() => nextPlan && handleCheckout(nextPlan)}
                 >
-                  {upgradeLabel}
-                  {activePlan !== "pro" && <ArrowUpRight className="size-4" />}
+                  {pending && pending === nextPlan ? (
+                    <Loader2 className="size-4 animate-spin" />
+                  ) : null}
+                  {primaryLabel}
+                  {nextPlan !== null && !pending ? <ArrowUpRight className="size-4" /> : null}
                 </Button>
-                <Button variant="outline" className="rounded-full" onClick={notifyPaymentSoon}>
+                <Button variant="outline" className="rounded-full" onClick={handleManage}>
                   <Settings2 className="size-4" />
                   Gérer mon abonnement
                 </Button>
@@ -121,11 +156,21 @@ function SubscriptionPage() {
         </CardContent>
       </Card>
 
-      <div className="grid gap-5 sm:grid-cols-2">
+      <div className="grid gap-5 lg:grid-cols-3">
         {PLANS.map((plan) => {
           const current = activePlan === plan.id;
           return (
-            <Card key={plan.id} className="rounded-2xl border-border/70 shadow-soft">
+            <Card
+              key={plan.id}
+              className={
+                plan.highlight
+                  ? "relative rounded-2xl border-primary/40 shadow-lift"
+                  : "rounded-2xl border-border/70 shadow-soft"
+              }
+            >
+              {plan.highlight ? (
+                <Badge className="absolute -top-3 left-6 rounded-full">Le plus choisi</Badge>
+              ) : null}
               <CardContent className="pt-6">
                 <div className="flex items-center justify-between">
                   <h3 className="text-lg font-semibold">{plan.name}</h3>
@@ -135,25 +180,26 @@ function SubscriptionPage() {
                     </span>
                   )}
                 </div>
+                <p className="mt-1 text-sm text-muted-foreground">{plan.tagline}</p>
                 <p className="mt-3 text-3xl font-extrabold">
-                  {plan.price}
+                  {plan.priceLabel}
                   <span className="text-base font-medium text-muted-foreground">/mois</span>
                 </p>
-                <p className="mt-1 text-sm text-muted-foreground">{plan.quota}</p>
                 <ul className="mt-5 space-y-2 text-sm">
                   {plan.features.map((feature) => (
-                    <li key={feature} className="flex items-center gap-2">
-                      <Check className="size-4 text-primary" />
-                      {feature}
+                    <li key={feature} className="flex items-start gap-2">
+                      <Check className="mt-0.5 size-4 shrink-0 text-primary" />
+                      <span className="text-muted-foreground">{feature}</span>
                     </li>
                   ))}
                 </ul>
                 <Button
                   className="mt-6 w-full rounded-full"
-                  variant={current ? "outline" : "default"}
-                  disabled={current || loading}
-                  onClick={notifyPaymentSoon}
+                  variant={current ? "outline" : plan.highlight ? "default" : "secondary"}
+                  disabled={current || loading || pending !== null}
+                  onClick={() => handleCheckout(plan.id)}
                 >
+                  {pending === plan.id ? <Loader2 className="size-4 animate-spin" /> : null}
                   {current ? "Offre active" : `Choisir ${plan.name}`}
                 </Button>
               </CardContent>
@@ -162,16 +208,47 @@ function SubscriptionPage() {
         })}
       </div>
 
+      <h2 className="mb-4 mt-10 text-lg font-semibold">Comparer les offres</h2>
+      <Card className="rounded-2xl border-border/70 shadow-soft">
+        <CardContent className="overflow-x-auto pt-6">
+          <table className="w-full min-w-[34rem] text-sm">
+            <thead>
+              <tr className="text-left">
+                <th className="pb-3 font-medium text-muted-foreground">Inclus</th>
+                {PLANS.map((plan) => (
+                  <th key={plan.id} className="pb-3 font-semibold">
+                    {plan.name}
+                  </th>
+                ))}
+              </tr>
+            </thead>
+            <tbody>
+              {PLAN_COMPARISON.map((row) => (
+                <tr key={row.label} className="border-t border-border/70">
+                  <td className="py-3 pr-4 text-muted-foreground">{row.label}</td>
+                  {PLANS.map((plan) => (
+                    <td key={plan.id} className="py-3 pr-4">
+                      {row.values[plan.id] ?? "—"}
+                    </td>
+                  ))}
+                </tr>
+              ))}
+            </tbody>
+          </table>
+        </CardContent>
+      </Card>
+
       <Card className="mt-8 rounded-2xl border-border/70 bg-primary-soft/50 shadow-soft">
         <CardContent className="flex items-start gap-4 pt-6">
           <span className="flex size-11 shrink-0 items-center justify-center rounded-xl bg-background">
             <Sparkles className="size-5 text-primary" />
           </span>
           <div>
-            <p className="font-semibold">{PAYMENT_SOON}</p>
+            <p className="font-semibold">Mode démo — paiement bientôt disponible</p>
             <p className="mt-1 text-sm text-muted-foreground">
-              Le règlement en ligne n'est pas encore ouvert. Ton compte reste utilisable avec ton
-              quota actuel en attendant, et tes limites sont toujours vérifiées côté serveur.
+              Aucun paiement réel n'est encore possible : changer d'offre ici active simplement le
+              plan pour tester l'application. Tes limites de génération restent toujours vérifiées
+              côté serveur.
             </p>
           </div>
         </CardContent>
