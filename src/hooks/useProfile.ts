@@ -3,6 +3,8 @@ import { useQuery } from "@tanstack/react-query";
 import { supabase } from "@/integrations/supabase/client";
 import { useAuth } from "@/hooks/useAuth";
 
+export { PLAN_LIMITS, PLAN_LABELS } from "@/lib/plans";
+
 export type Profile = {
   id: string;
   full_name: string | null;
@@ -10,18 +12,6 @@ export type Profile = {
   business_type: string | null;
   plan: string;
   generations_used: number;
-};
-
-export const PLAN_LIMITS: Record<string, number> = {
-  free: 5,
-  starter: 100,
-  pro: 500,
-};
-
-export const PLAN_LABELS: Record<string, string> = {
-  free: "Découverte",
-  starter: "Starter",
-  pro: "Pro",
 };
 
 export function useProfile() {

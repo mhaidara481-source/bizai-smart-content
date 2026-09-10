@@ -22,6 +22,10 @@ import {
   AccordionItem,
   AccordionTrigger,
 } from "@/components/ui/accordion";
+import { PLANS } from "@/lib/plans";
+import heroImage from "@/assets/hero-bizai.jpg";
+import featurePostsImage from "@/assets/feature-posts.jpg";
+import featureCalendarImage from "@/assets/feature-calendrier.jpg";
 
 export const Route = createFileRoute("/")({
   head: () => ({
@@ -107,32 +111,13 @@ const features = [
   },
 ];
 
-const plans = [
-  {
-    name: "STARTER",
-    price: "19€",
-    generations: "100 générations par mois",
-    highlight: false,
-    perks: [
-      "Générateur de posts",
-      "Réponses aux avis",
-      "Idées de contenu",
-      "Historique de tes contenus",
-    ],
-  },
-  {
-    name: "PRO",
-    price: "39€",
-    generations: "500 générations par mois",
-    highlight: true,
-    perks: [
-      "Tout le plan Starter",
-      "Calendrier marketing complet",
-      "Ton de voix personnalisé",
-      "Support prioritaire",
-    ],
-  },
-];
+const plans = PLANS.map((plan) => ({
+  name: plan.name.toUpperCase(),
+  price: plan.priceLabel,
+  generations: `${plan.generations.toLocaleString("fr-FR")} générations par mois`,
+  highlight: Boolean(plan.highlight),
+  perks: plan.features,
+}));
 
 const faq = [
   {
@@ -191,6 +176,13 @@ function Landing() {
           <p className="mt-4 text-xs text-muted-foreground">
             Sans engagement · Prêt à utiliser en 2 minutes
           </p>
+          <img
+            src={heroImage}
+            alt="Deux gérants de salon de coiffure préparant leur communication sur une tablette"
+            width={1600}
+            height={1104}
+            className="mt-14 aspect-[16/10] w-full rounded-3xl object-cover shadow-lift"
+          />
         </div>
       </section>
 
@@ -272,7 +264,25 @@ function Landing() {
       <section id="fonctionnalites" className="py-20">
         <div className="mx-auto w-full max-w-6xl px-5">
           <h2 className="text-center text-3xl font-bold sm:text-4xl">Quatre outils, un seul espace</h2>
-          <div className="mt-12 grid gap-5 md:grid-cols-2">
+          <div className="mt-12 grid gap-6 md:grid-cols-2">
+            <img
+              src={featurePostsImage}
+              alt="Commerçant qui rédige une publication depuis son téléphone"
+              loading="lazy"
+              width={1200}
+              height={912}
+              className="h-64 w-full rounded-3xl object-cover shadow-soft sm:h-80"
+            />
+            <img
+              src={featureCalendarImage}
+              alt="Gérante de boutique qui planifie son mois de publications"
+              loading="lazy"
+              width={1200}
+              height={912}
+              className="h-64 w-full rounded-3xl object-cover shadow-soft sm:h-80"
+            />
+          </div>
+          <div className="mt-6 grid gap-5 md:grid-cols-2">
             {features.map((feature) => (
               <Card key={feature.title} className="rounded-2xl border-border/70 shadow-soft">
                 <CardContent className="flex gap-4 pt-6">
@@ -292,12 +302,12 @@ function Landing() {
 
       {/* Tarifs */}
       <section id="tarifs" className="border-y border-border/70 bg-muted/40 py-20">
-        <div className="mx-auto w-full max-w-4xl px-5">
+        <div className="mx-auto w-full max-w-6xl px-5">
           <h2 className="text-center text-3xl font-bold sm:text-4xl">Des tarifs simples</h2>
           <p className="mx-auto mt-4 max-w-xl text-center text-muted-foreground">
             Choisis le volume qui correspond à ton rythme de publication.
           </p>
-          <div className="mt-12 grid gap-6 md:grid-cols-2">
+          <div className="mt-12 grid gap-6 md:grid-cols-2 lg:grid-cols-3">
             {plans.map((plan) => (
               <Card
                 key={plan.name}

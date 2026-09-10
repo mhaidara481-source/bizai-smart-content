@@ -10,9 +10,10 @@ import {
 } from "./ai-types";
 
 const GATEWAY_URL = "https://ai.gateway.lovable.dev/v1/chat/completions";
-const MODEL = "google/gemini-3.8-flash";
+const MODEL = "openai/gpt-6-astra";
 
-export const PLAN_LIMITS: Record<string, number> = { free: 5, starter: 100, pro: 500 };
+export { PLAN_LIMITS } from "./plans";
+import { PLAN_LIMITS } from "./plans";
 
 export type ToolName = "post" | "review" | "ideas" | "calendar";
 
