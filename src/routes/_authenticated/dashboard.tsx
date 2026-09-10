@@ -22,8 +22,12 @@ export const Route = createFileRoute("/_authenticated/dashboard")({
 
 function Dashboard() {
   const { data: profile } = useProfile();
-  const plan = profile?.plan ?? "free";
-  const used = profile?.generations_used ?? 0;
+  const { data: subscription } = useSubscription();
+  const { data: usedThisMonth = 0 } = useUsage();
+  const { data: recent = [] } = useRecentGenerations();
+  const plan =
+    subscription?.status === "active" ? subscription.plan : (profile?.plan ?? "free");
+  const used = usedThisMonth;
   const limit = PLAN_LIMITS[plan] ?? 5;
   const remaining = Math.max(limit - used, 0);
   const percent = limit > 0 ? Math.min((used / limit) * 100, 100) : 0;

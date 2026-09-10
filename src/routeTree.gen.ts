@@ -13,10 +13,12 @@ import { Route as IndexRouteImport } from './routes/index'
 import { Route as AuthenticatedRouteRouteImport } from './routes/_authenticated/route'
 import { Route as ConnexionRouteImport } from './routes/connexion'
 import { Route as InscriptionRouteImport } from './routes/inscription'
+import { Route as AuthenticatedAbonnementRouteImport } from './routes/_authenticated/abonnement'
 import { Route as AuthenticatedCalendrierRouteImport } from './routes/_authenticated/calendrier'
 import { Route as AuthenticatedCreerUnPostRouteImport } from './routes/_authenticated/creer-un-post'
 import { Route as AuthenticatedDashboardRouteImport } from './routes/_authenticated/dashboard'
 import { Route as AuthenticatedIdeesDeContenuRouteImport } from './routes/_authenticated/idees-de-contenu'
+import { Route as AuthenticatedParametresRouteImport } from './routes/_authenticated/parametres'
 import { Route as AuthenticatedRepondreAuxAvisRouteImport } from './routes/_authenticated/repondre-aux-avis'
 
 const IndexRoute = IndexRouteImport.update({
@@ -37,6 +39,11 @@ const InscriptionRoute = InscriptionRouteImport.update({
   id: '/inscription',
   path: '/inscription',
   getParentRoute: () => rootRouteImport,
+} as any)
+const AuthenticatedAbonnementRoute = AuthenticatedAbonnementRouteImport.update({
+  id: '/abonnement',
+  path: '/abonnement',
+  getParentRoute: () => AuthenticatedRouteRoute,
 } as any)
 const AuthenticatedCalendrierRoute = AuthenticatedCalendrierRouteImport.update({
   id: '/calendrier',
@@ -60,6 +67,11 @@ const AuthenticatedIdeesDeContenuRoute =
     path: '/idees-de-contenu',
     getParentRoute: () => AuthenticatedRouteRoute,
   } as any)
+const AuthenticatedParametresRoute = AuthenticatedParametresRouteImport.update({
+  id: '/parametres',
+  path: '/parametres',
+  getParentRoute: () => AuthenticatedRouteRoute,
+} as any)
 const AuthenticatedRepondreAuxAvisRoute =
   AuthenticatedRepondreAuxAvisRouteImport.update({
     id: '/repondre-aux-avis',
@@ -71,20 +83,24 @@ export interface FileRoutesByFullPath {
   '/': typeof IndexRoute
   '/connexion': typeof ConnexionRoute
   '/inscription': typeof InscriptionRoute
+  '/abonnement': typeof AuthenticatedAbonnementRoute
   '/calendrier': typeof AuthenticatedCalendrierRoute
   '/creer-un-post': typeof AuthenticatedCreerUnPostRoute
   '/dashboard': typeof AuthenticatedDashboardRoute
   '/idees-de-contenu': typeof AuthenticatedIdeesDeContenuRoute
+  '/parametres': typeof AuthenticatedParametresRoute
   '/repondre-aux-avis': typeof AuthenticatedRepondreAuxAvisRoute
 }
 export interface FileRoutesByTo {
   '/': typeof IndexRoute
   '/connexion': typeof ConnexionRoute
   '/inscription': typeof InscriptionRoute
+  '/abonnement': typeof AuthenticatedAbonnementRoute
   '/calendrier': typeof AuthenticatedCalendrierRoute
   '/creer-un-post': typeof AuthenticatedCreerUnPostRoute
   '/dashboard': typeof AuthenticatedDashboardRoute
   '/idees-de-contenu': typeof AuthenticatedIdeesDeContenuRoute
+  '/parametres': typeof AuthenticatedParametresRoute
   '/repondre-aux-avis': typeof AuthenticatedRepondreAuxAvisRoute
 }
 export interface FileRoutesById {
@@ -93,10 +109,12 @@ export interface FileRoutesById {
   '/_authenticated': typeof AuthenticatedRouteRouteWithChildren
   '/connexion': typeof ConnexionRoute
   '/inscription': typeof InscriptionRoute
+  '/_authenticated/abonnement': typeof AuthenticatedAbonnementRoute
   '/_authenticated/calendrier': typeof AuthenticatedCalendrierRoute
   '/_authenticated/creer-un-post': typeof AuthenticatedCreerUnPostRoute
   '/_authenticated/dashboard': typeof AuthenticatedDashboardRoute
   '/_authenticated/idees-de-contenu': typeof AuthenticatedIdeesDeContenuRoute
+  '/_authenticated/parametres': typeof AuthenticatedParametresRoute
   '/_authenticated/repondre-aux-avis': typeof AuthenticatedRepondreAuxAvisRoute
 }
 export interface FileRouteTypes {
@@ -105,20 +123,24 @@ export interface FileRouteTypes {
     | '/'
     | '/connexion'
     | '/inscription'
+    | '/abonnement'
     | '/calendrier'
     | '/creer-un-post'
     | '/dashboard'
     | '/idees-de-contenu'
+    | '/parametres'
     | '/repondre-aux-avis'
   fileRoutesByTo: FileRoutesByTo
   to:
     | '/'
     | '/connexion'
     | '/inscription'
+    | '/abonnement'
     | '/calendrier'
     | '/creer-un-post'
     | '/dashboard'
     | '/idees-de-contenu'
+    | '/parametres'
     | '/repondre-aux-avis'
   id:
     | '__root__'
@@ -126,10 +148,12 @@ export interface FileRouteTypes {
     | '/_authenticated'
     | '/connexion'
     | '/inscription'
+    | '/_authenticated/abonnement'
     | '/_authenticated/calendrier'
     | '/_authenticated/creer-un-post'
     | '/_authenticated/dashboard'
     | '/_authenticated/idees-de-contenu'
+    | '/_authenticated/parametres'
     | '/_authenticated/repondre-aux-avis'
   fileRoutesById: FileRoutesById
 }
@@ -170,6 +194,13 @@ declare module '@tanstack/react-router' {
       preLoaderRoute: typeof InscriptionRouteImport
       parentRoute: typeof rootRouteImport
     }
+    '/_authenticated/abonnement': {
+      id: '/_authenticated/abonnement'
+      path: '/abonnement'
+      fullPath: '/abonnement'
+      preLoaderRoute: typeof AuthenticatedAbonnementRouteImport
+      parentRoute: typeof AuthenticatedRouteRoute
+    }
     '/_authenticated/calendrier': {
       id: '/_authenticated/calendrier'
       path: '/calendrier'
@@ -198,6 +229,13 @@ declare module '@tanstack/react-router' {
       preLoaderRoute: typeof AuthenticatedIdeesDeContenuRouteImport
       parentRoute: typeof AuthenticatedRouteRoute
     }
+    '/_authenticated/parametres': {
+      id: '/_authenticated/parametres'
+      path: '/parametres'
+      fullPath: '/parametres'
+      preLoaderRoute: typeof AuthenticatedParametresRouteImport
+      parentRoute: typeof AuthenticatedRouteRoute
+    }
     '/_authenticated/repondre-aux-avis': {
       id: '/_authenticated/repondre-aux-avis'
       path: '/repondre-aux-avis'
@@ -209,18 +247,22 @@ declare module '@tanstack/react-router' {
 }
 
 interface AuthenticatedRouteRouteChildren {
+  AuthenticatedAbonnementRoute: typeof AuthenticatedAbonnementRoute
   AuthenticatedCalendrierRoute: typeof AuthenticatedCalendrierRoute
   AuthenticatedCreerUnPostRoute: typeof AuthenticatedCreerUnPostRoute
   AuthenticatedDashboardRoute: typeof AuthenticatedDashboardRoute
   AuthenticatedIdeesDeContenuRoute: typeof AuthenticatedIdeesDeContenuRoute
+  AuthenticatedParametresRoute: typeof AuthenticatedParametresRoute
   AuthenticatedRepondreAuxAvisRoute: typeof AuthenticatedRepondreAuxAvisRoute
 }
 
 const AuthenticatedRouteRouteChildren: AuthenticatedRouteRouteChildren = {
+  AuthenticatedAbonnementRoute: AuthenticatedAbonnementRoute,
   AuthenticatedCalendrierRoute: AuthenticatedCalendrierRoute,
   AuthenticatedCreerUnPostRoute: AuthenticatedCreerUnPostRoute,
   AuthenticatedDashboardRoute: AuthenticatedDashboardRoute,
   AuthenticatedIdeesDeContenuRoute: AuthenticatedIdeesDeContenuRoute,
+  AuthenticatedParametresRoute: AuthenticatedParametresRoute,
   AuthenticatedRepondreAuxAvisRoute: AuthenticatedRepondreAuxAvisRoute,
 }
 
