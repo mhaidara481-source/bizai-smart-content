@@ -8,6 +8,7 @@ import { supabase } from "@/integrations/supabase/client";
 import { useAuth } from "@/hooks/useAuth";
 import { useProfile, PLAN_LABELS } from "@/hooks/useProfile";
 import { BizAILogo } from "@/components/landing/SiteHeader";
+import { LegalLinks } from "@/components/landing/LegalLinks";
 import { Button } from "@/components/ui/button";
 import { Sheet, SheetContent, SheetTrigger } from "@/components/ui/sheet";
 import { Separator } from "@/components/ui/separator";
@@ -107,6 +108,13 @@ export function AppShell({ children }: { children: ReactNode }) {
       <main className="lg:pl-64">
         <div className="mx-auto w-full max-w-5xl px-5 py-8 sm:py-10">{children}</div>
       </main>
+
+      <footer className="border-t border-border/70 py-6 lg:pl-64">
+        <div className="mx-auto flex w-full max-w-5xl flex-col items-center justify-between gap-3 px-5 text-sm text-muted-foreground sm:flex-row">
+          <span>© {new Date().getFullYear()} BizAI</span>
+          <LegalLinks className="flex flex-wrap justify-center gap-4" />
+        </div>
+      </footer>
     </div>
   );
 }
