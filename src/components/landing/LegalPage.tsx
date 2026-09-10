@@ -1,6 +1,6 @@
 import { SiteHeader } from "./SiteHeader";
 import { LegalLinks } from "./LegalLinks";
-import { ReactNode, isValidElement, cloneElement, Children } from "react";
+import { ReactNode, ReactElement, isValidElement, cloneElement, Children } from "react";
 
 type ElementProps = {
   className?: string;
