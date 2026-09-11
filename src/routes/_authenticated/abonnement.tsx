@@ -164,43 +164,47 @@ function SubscriptionPage() {
               key={plan.id}
               className={
                 plan.highlight
-                  ? "relative rounded-2xl border-primary/40 shadow-lift"
-                  : "rounded-2xl border-border/70 shadow-soft"
+                  ? "relative rounded-3xl border-primary/40 shadow-lift"
+                  : "rounded-3xl border-border/70 shadow-soft"
               }
             >
               {plan.highlight ? (
                 <Badge className="absolute -top-3 left-6 rounded-full">Le plus choisi</Badge>
               ) : null}
-              <CardContent className="pt-6">
+              <CardContent className="flex flex-col pt-8 pb-8">
                 <div className="flex items-center justify-between">
-                  <h3 className="text-lg font-semibold">{plan.name}</h3>
+                  <p className="text-xs font-semibold uppercase tracking-wide text-muted-foreground">
+                    {plan.name}
+                  </p>
                   {current && (
                     <span className="rounded-full bg-primary-soft px-3 py-1 text-xs font-semibold text-primary">
                       Ton offre
                     </span>
                   )}
                 </div>
-                <p className="mt-1 text-sm text-muted-foreground">{plan.tagline}</p>
-                <p className="mt-3 text-3xl font-extrabold">
+                <p className="mt-1 text-3xl font-extrabold tracking-tight">
                   {plan.priceLabel}
-                  <span className="text-base font-medium text-muted-foreground">/mois</span>
+                  <span className="ml-1 text-base font-medium text-muted-foreground">/mois</span>
                 </p>
-                <ul className="mt-5 space-y-2 text-sm">
+                <p className="mt-2 text-sm font-medium text-primary">
+                  {plan.generations.toLocaleString("fr-FR")} générations par mois
+                </p>
+                <ul className="mt-6 flex-1 space-y-3 text-sm">
                   {plan.features.map((feature) => (
-                    <li key={feature} className="flex items-start gap-2">
+                    <li key={feature} className="flex items-start gap-3">
                       <Check className="mt-0.5 size-4 shrink-0 text-primary" />
                       <span className="text-muted-foreground">{feature}</span>
                     </li>
                   ))}
                 </ul>
                 <Button
-                  className="mt-6 w-full rounded-full"
-                  variant={current ? "outline" : plan.highlight ? "default" : "secondary"}
+                  className="mt-8 w-full rounded-full"
+                  variant={current ? "outline" : "secondary"}
                   disabled={current || loading || pending !== null}
                   onClick={() => handleCheckout(plan.id)}
                 >
-                  {pending === plan.id ? <Loader2 className="size-4 animate-spin" /> : null}
-                  {current ? "Offre active" : `Choisir ${plan.name}`}
+                  {pending === plan.id ? <Loader2 className="mr-2 size-4 animate-spin" /> : null}
+                  {current ? "Offre active" : "Choisir ce plan"}
                 </Button>
               </CardContent>
             </Card>
