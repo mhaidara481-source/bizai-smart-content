@@ -1,6 +1,7 @@
 import {
   LayoutDashboard,
   PenLine,
+  Image as ImageIcon,
   MessageSquareQuote,
   Lightbulb,
   CalendarDays,
@@ -12,6 +13,7 @@ export type NavItem = {
   to:
     | "/dashboard"
     | "/creer-un-post"
+    | "/creer-un-visuel"
     | "/repondre-aux-avis"
     | "/idees-de-contenu"
     | "/calendrier"
