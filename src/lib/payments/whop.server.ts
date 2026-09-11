@@ -6,31 +6,22 @@
 //   - WHOP_API_KEY
 //   - WHOP_PRODUCT_ID_STARTER
 //   - WHOP_PRODUCT_ID_PRO
+//   - WHOP_PRODUCT_ID_BUSINESS (optionnel tant que le plan Business n'est pas vendu)
 //   - WHOP_WEBHOOK_SECRET
-//
-// Aucune valeur factice n'est écrite dans le code : tant que WHOP_API_KEY est
-// absente, l'application reste en mode démo.
-import type { PlanId } from "@/lib/plans";
-
-export type PaymentMode = "live" | "demo";
-
-const PAID_PLANS: PlanId[] = ["starter", "pro", "business"];
-
-export function whopConfig() {
-  const apiKey = process.env["WHOP_API_KEY"] ?? null;
-  const webhookSecret = process.env["WHOP_WEBHOOK_SECRET"] ?? null;
+...
   const productIds: Record<Exclude<PlanId, "free">, string | null> = {
     starter: process.env["WHOP_PRODUCT_ID_STARTER"] ?? null,
     pro: process.env["WHOP_PRODUCT_ID_PRO"] ?? null,
     business: process.env["WHOP_PRODUCT_ID_BUSINESS"] ?? null,
   };
 
-  const hasAllProducts = PAID_PLANS.every((plan) => plan === "free" || productIds[plan as Exclude<PlanId, "free">]);
   return {
     apiKey,
     productIds,
     webhookSecret,
-    mode: (apiKey && hasAllProducts ? "live" : "demo") as PaymentMode,
+    // Le mode démo ne dépend que de l'absence de clé API : un Product ID
+    // manquant pour un plan précis bloque ce plan, pas les autres.
+    mode: (apiKey ? "live" : "demo") as PaymentMode,
   };
 }
 
