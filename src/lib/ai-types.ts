@@ -54,3 +54,15 @@ export const LIMIT_REACHED_MESSAGE =
   "Tu as atteint ta limite mensuelle. Passe à Pro pour continuer.";
 
 export const CALENDAR_STATUSES = { a_publier: "À publier", publie: "Publié" } as const;
+
+export const VISUAL_STYLES = [
+  "Photo réaliste",
+  "Minimaliste",
+  "Premium / luxe",
+  "Coloré et fun",
+  "Ambiance chaleureuse",
+] as const;
+
+export const VISUAL_FORMATS = ["Carré (post)", "Portrait (story)", "Paysage (bannière)"] as const;
+
+export type VisualResult = { url: string; prompt: string; path?: string };

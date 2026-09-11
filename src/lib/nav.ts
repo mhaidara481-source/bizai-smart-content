@@ -1,6 +1,7 @@
 import {
   LayoutDashboard,
   PenLine,
+  Image as ImageIcon,
   MessageSquareQuote,
   Lightbulb,
   CalendarDays,
@@ -12,6 +13,7 @@ export type NavItem = {
   to:
     | "/dashboard"
     | "/creer-un-post"
+    | "/creer-un-visuel"
     | "/repondre-aux-avis"
     | "/idees-de-contenu"
     | "/calendrier"
@@ -36,6 +38,12 @@ export const navItems: NavItem[] = [
     description: "Génère des publications prêtes à publier",
   },
   {
+    to: "/creer-un-visuel",
+    label: "Créer un visuel",
+    icon: ImageIcon,
+    description: "Génère des images marketing avec l'IA",
+  },
+  {
     to: "/repondre-aux-avis",
     label: "Répondre aux avis",
     icon: MessageSquareQuote,
@@ -57,4 +65,4 @@ export const navItems: NavItem[] = [
   { to: "/parametres", label: "Paramètres", icon: Settings, description: "Ton profil et ton entreprise" },
 ];
 
-export const toolItems = navItems.slice(1, 5);
+export const toolItems = navItems.slice(1, 6);
