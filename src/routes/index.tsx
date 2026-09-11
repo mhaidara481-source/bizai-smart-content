@@ -27,6 +27,7 @@ import { PLANS } from "@/lib/plans";
 import heroImage from "@/assets/hero-bizai.jpg";
 import featurePostsImage from "@/assets/feature-posts.jpg";
 import featureCalendarImage from "@/assets/feature-calendrier.jpg";
+import featureReviewsImage from "@/assets/feature-avis.jpg";
 
 export const Route = createFileRoute("/")({
   head: () => ({
@@ -177,13 +178,24 @@ function Landing() {
           <p className="mt-4 text-xs text-muted-foreground">
             Sans engagement · Prêt à utiliser en 2 minutes
           </p>
-          <img
-            src={heroImage}
-            alt="Deux gérants de salon de coiffure préparant leur communication sur une tablette"
-            width={1600}
-            height={1104}
-            className="mt-14 aspect-[16/10] w-full rounded-3xl object-cover shadow-lift"
-          />
+          <div className="relative mt-14">
+            <div className="overflow-hidden rounded-3xl border border-border/70 bg-card p-2 shadow-lift">
+              <img
+                src={heroImage}
+                alt="Restauratrice montrant une publication générée par BizAI sur son téléphone"
+                width={1600}
+                height={1008}
+                className="aspect-[16/10] w-full rounded-[1.25rem] object-cover"
+              />
+            </div>
+            <div className="mx-auto -mt-8 flex w-fit flex-wrap items-center justify-center gap-x-6 gap-y-2 rounded-full border border-border/70 bg-background/95 px-6 py-3 text-xs font-medium text-muted-foreground shadow-soft backdrop-blur sm:text-sm">
+              <span>Restaurants</span>
+              <span>Coiffeurs & barbiers</span>
+              <span>Garages</span>
+              <span>Boutiques</span>
+              <span className="hidden sm:inline">Artisans</span>
+            </div>
+          </div>
         </div>
       </section>
 
@@ -265,23 +277,42 @@ function Landing() {
       <section id="fonctionnalites" className="py-20">
         <div className="mx-auto w-full max-w-6xl px-5">
           <h2 className="text-center text-3xl font-bold sm:text-4xl">Quatre outils, un seul espace</h2>
-          <div className="mt-12 grid gap-6 md:grid-cols-2">
-            <img
-              src={featurePostsImage}
-              alt="Commerçant qui rédige une publication depuis son téléphone"
-              loading="lazy"
-              width={1200}
-              height={912}
-              className="h-64 w-full rounded-3xl object-cover shadow-soft sm:h-80"
-            />
-            <img
-              src={featureCalendarImage}
-              alt="Gérante de boutique qui planifie son mois de publications"
-              loading="lazy"
-              width={1200}
-              height={912}
-              className="h-64 w-full rounded-3xl object-cover shadow-soft sm:h-80"
-            />
+          <p className="mx-auto mt-4 max-w-xl text-center text-muted-foreground">
+            Tout ce qu'il te faut pour publier, répondre et planifier.
+          </p>
+          <div className="mt-12 grid gap-6 sm:grid-cols-2 lg:grid-cols-3">
+            {[
+              {
+                src: featurePostsImage,
+                alt: "Barbier qui rédige une publication depuis son téléphone",
+                caption: "Des posts prêts à publier",
+              },
+              {
+                src: featureReviewsImage,
+                alt: "Garagiste qui consulte les avis de ses clients sur une tablette",
+                caption: "Des réponses aux avis en un clic",
+              },
+              {
+                src: featureCalendarImage,
+                alt: "Gérante de boutique qui planifie son mois de publications",
+                caption: "Un mois de contenu planifié",
+              },
+            ].map((image) => (
+              <figure
+                key={image.caption}
+                className="overflow-hidden rounded-3xl border border-border/70 bg-card shadow-soft"
+              >
+                <img
+                  src={image.src}
+                  alt={image.alt}
+                  loading="lazy"
+                  width={1200}
+                  height={912}
+                  className="h-56 w-full object-cover sm:h-64"
+                />
+                <figcaption className="px-5 py-4 text-sm font-medium">{image.caption}</figcaption>
+              </figure>
+            ))}
           </div>
           <div className="mt-6 grid gap-5 md:grid-cols-2">
             {features.map((feature) => (
