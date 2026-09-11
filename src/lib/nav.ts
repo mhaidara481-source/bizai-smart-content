@@ -38,6 +38,12 @@ export const navItems: NavItem[] = [
     description: "Génère des publications prêtes à publier",
   },
   {
+    to: "/creer-un-visuel",
+    label: "Créer un visuel",
+    icon: ImageIcon,
+    description: "Génère des images marketing avec l'IA",
+  },
+  {
     to: "/repondre-aux-avis",
     label: "Répondre aux avis",
     icon: MessageSquareQuote,
