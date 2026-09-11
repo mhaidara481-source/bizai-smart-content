@@ -22,7 +22,7 @@ export function whopConfig() {
   const productIds: Record<Exclude<PlanId, "free">, string | null> = {
     starter: process.env["WHOP_PRODUCT_ID_STARTER"] ?? null,
     pro: process.env["WHOP_PRODUCT_ID_PRO"] ?? null,
-    business: process.env["WHOP_PRODUCT_ID_PRO"] ?? null,
+    business: process.env["WHOP_PRODUCT_ID_BUSINESS"] ?? null,
   };
 
   const hasAllProducts = PAID_PLANS.every((plan) => plan === "free" || productIds[plan as Exclude<PlanId, "free">]);
