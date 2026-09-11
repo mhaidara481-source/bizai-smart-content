@@ -277,23 +277,42 @@ function Landing() {
       <section id="fonctionnalites" className="py-20">
         <div className="mx-auto w-full max-w-6xl px-5">
           <h2 className="text-center text-3xl font-bold sm:text-4xl">Quatre outils, un seul espace</h2>
-          <div className="mt-12 grid gap-6 md:grid-cols-2">
-            <img
-              src={featurePostsImage}
-              alt="Commerçant qui rédige une publication depuis son téléphone"
-              loading="lazy"
-              width={1200}
-              height={912}
-              className="h-64 w-full rounded-3xl object-cover shadow-soft sm:h-80"
-            />
-            <img
-              src={featureCalendarImage}
-              alt="Gérante de boutique qui planifie son mois de publications"
-              loading="lazy"
-              width={1200}
-              height={912}
-              className="h-64 w-full rounded-3xl object-cover shadow-soft sm:h-80"
-            />
+          <p className="mx-auto mt-4 max-w-xl text-center text-muted-foreground">
+            Tout ce qu'il te faut pour publier, répondre et planifier.
+          </p>
+          <div className="mt-12 grid gap-6 sm:grid-cols-2 lg:grid-cols-3">
+            {[
+              {
+                src: featurePostsImage,
+                alt: "Barbier qui rédige une publication depuis son téléphone",
+                caption: "Des posts prêts à publier",
+              },
+              {
+                src: featureReviewsImage,
+                alt: "Garagiste qui consulte les avis de ses clients sur une tablette",
+                caption: "Des réponses aux avis en un clic",
+              },
+              {
+                src: featureCalendarImage,
+                alt: "Gérante de boutique qui planifie son mois de publications",
+                caption: "Un mois de contenu planifié",
+              },
+            ].map((image) => (
+              <figure
+                key={image.caption}
+                className="overflow-hidden rounded-3xl border border-border/70 bg-card shadow-soft"
+              >
+                <img
+                  src={image.src}
+                  alt={image.alt}
+                  loading="lazy"
+                  width={1200}
+                  height={912}
+                  className="h-56 w-full object-cover sm:h-64"
+                />
+                <figcaption className="px-5 py-4 text-sm font-medium">{image.caption}</figcaption>
+              </figure>
+            ))}
           </div>
           <div className="mt-6 grid gap-5 md:grid-cols-2">
             {features.map((feature) => (
