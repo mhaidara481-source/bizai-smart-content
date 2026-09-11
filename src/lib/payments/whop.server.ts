@@ -8,7 +8,16 @@
 //   - WHOP_PRODUCT_ID_PRO
 //   - WHOP_PRODUCT_ID_BUSINESS (optionnel tant que le plan Business n'est pas vendu)
 //   - WHOP_WEBHOOK_SECRET
-...
+//
+// Aucune valeur factice n'est écrite dans le code : tant que WHOP_API_KEY est
+// absente, l'application reste en mode démo.
+import type { PlanId } from "@/lib/plans";
+
+export type PaymentMode = "live" | "demo";
+
+export function whopConfig() {
+  const apiKey = process.env["WHOP_API_KEY"] ?? null;
+  const webhookSecret = process.env["WHOP_WEBHOOK_SECRET"] ?? null;
   const productIds: Record<Exclude<PlanId, "free">, string | null> = {
     starter: process.env["WHOP_PRODUCT_ID_STARTER"] ?? null,
     pro: process.env["WHOP_PRODUCT_ID_PRO"] ?? null,
