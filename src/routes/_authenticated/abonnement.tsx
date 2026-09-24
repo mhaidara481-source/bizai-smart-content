@@ -95,9 +95,14 @@ function SubscriptionPage() {
   }
 
   function handleManage() {
-    toast.info("L'intégration des paiements arrive bientôt.", {
-      description: "La gestion de l'abonnement en ligne sera disponible dès l'ouverture.",
-    });
+    if (!hasPaidPlan) {
+      toast.info("Tu n'as pas encore d'abonnement actif.", {
+        description: "Choisis une offre ci-dessous pour commencer.",
+      });
+      return;
+    }
+    toast.info("Connecte-toi à Whop avec l'email utilisé lors du paiement.");
+    window.open("https://whop.com/@me/settings/memberships/", "_blank", "noopener,noreferrer");
   }
 
   return (
