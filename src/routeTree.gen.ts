@@ -17,6 +17,8 @@ import { Route as ConfidentialiteRouteImport } from './routes/confidentialite'
 import { Route as ConnexionRouteImport } from './routes/connexion'
 import { Route as InscriptionRouteImport } from './routes/inscription'
 import { Route as MentionsLegalesRouteImport } from './routes/mentions-legales'
+import { Route as MotDePasseOublieRouteImport } from './routes/mot-de-passe-oublie'
+import { Route as ReinitialisationMotDePasseRouteImport } from './routes/reinitialisation-mot-de-passe'
 import { Route as AuthenticatedAbonnementRouteImport } from './routes/_authenticated/abonnement'
 import { Route as AuthenticatedCalendrierRouteImport } from './routes/_authenticated/calendrier'
 import { Route as AuthenticatedCreerUnPostRouteImport } from './routes/_authenticated/creer-un-post'
@@ -25,6 +27,7 @@ import { Route as AuthenticatedDashboardRouteImport } from './routes/_authentica
 import { Route as AuthenticatedIdeesDeContenuRouteImport } from './routes/_authenticated/idees-de-contenu'
 import { Route as AuthenticatedParametresRouteImport } from './routes/_authenticated/parametres'
 import { Route as AuthenticatedRepondreAuxAvisRouteImport } from './routes/_authenticated/repondre-aux-avis'
+import { Route as AuthCallbackRouteImport } from './routes/auth/callback'
 import { Route as ApiPublicWhopWebhookRouteImport } from './routes/api/public/whop-webhook'
 
 const IndexRoute = IndexRouteImport.update({
@@ -66,6 +69,17 @@ const MentionsLegalesRoute = MentionsLegalesRouteImport.update({
   path: '/mentions-legales',
   getParentRoute: () => rootRouteImport,
 } as any)
+const MotDePasseOublieRoute = MotDePasseOublieRouteImport.update({
+  id: '/mot-de-passe-oublie',
+  path: '/mot-de-passe-oublie',
+  getParentRoute: () => rootRouteImport,
+} as any)
+const ReinitialisationMotDePasseRoute =
+  ReinitialisationMotDePasseRouteImport.update({
+    id: '/reinitialisation-mot-de-passe',
+    path: '/reinitialisation-mot-de-passe',
+    getParentRoute: () => rootRouteImport,
+  } as any)
 const AuthenticatedAbonnementRoute = AuthenticatedAbonnementRouteImport.update({
   id: '/abonnement',
   path: '/abonnement',
@@ -110,6 +124,11 @@ const AuthenticatedRepondreAuxAvisRoute =
     path: '/repondre-aux-avis',
     getParentRoute: () => AuthenticatedRouteRoute,
   } as any)
+const AuthCallbackRoute = AuthCallbackRouteImport.update({
+  id: '/auth/callback',
+  path: '/auth/callback',
+  getParentRoute: () => rootRouteImport,
+} as any)
 const ApiPublicWhopWebhookRoute = ApiPublicWhopWebhookRouteImport.update({
   id: '/api/public/whop-webhook',
   path: '/api/public/whop-webhook',
@@ -124,6 +143,8 @@ export interface FileRoutesByFullPath {
   '/connexion': typeof ConnexionRoute
   '/inscription': typeof InscriptionRoute
   '/mentions-legales': typeof MentionsLegalesRoute
+  '/mot-de-passe-oublie': typeof MotDePasseOublieRoute
+  '/reinitialisation-mot-de-passe': typeof ReinitialisationMotDePasseRoute
   '/abonnement': typeof AuthenticatedAbonnementRoute
   '/calendrier': typeof AuthenticatedCalendrierRoute
   '/creer-un-post': typeof AuthenticatedCreerUnPostRoute
@@ -132,6 +153,7 @@ export interface FileRoutesByFullPath {
   '/idees-de-contenu': typeof AuthenticatedIdeesDeContenuRoute
   '/parametres': typeof AuthenticatedParametresRoute
   '/repondre-aux-avis': typeof AuthenticatedRepondreAuxAvisRoute
+  '/auth/callback': typeof AuthCallbackRoute
   '/api/public/whop-webhook': typeof ApiPublicWhopWebhookRoute
 }
 export interface FileRoutesByTo {
@@ -142,6 +164,8 @@ export interface FileRoutesByTo {
   '/connexion': typeof ConnexionRoute
   '/inscription': typeof InscriptionRoute
   '/mentions-legales': typeof MentionsLegalesRoute
+  '/mot-de-passe-oublie': typeof MotDePasseOublieRoute
+  '/reinitialisation-mot-de-passe': typeof ReinitialisationMotDePasseRoute
   '/abonnement': typeof AuthenticatedAbonnementRoute
   '/calendrier': typeof AuthenticatedCalendrierRoute
   '/creer-un-post': typeof AuthenticatedCreerUnPostRoute
@@ -150,6 +174,7 @@ export interface FileRoutesByTo {
   '/idees-de-contenu': typeof AuthenticatedIdeesDeContenuRoute
   '/parametres': typeof AuthenticatedParametresRoute
   '/repondre-aux-avis': typeof AuthenticatedRepondreAuxAvisRoute
+  '/auth/callback': typeof AuthCallbackRoute
   '/api/public/whop-webhook': typeof ApiPublicWhopWebhookRoute
 }
 export interface FileRoutesById {
@@ -162,6 +187,8 @@ export interface FileRoutesById {
   '/connexion': typeof ConnexionRoute
   '/inscription': typeof InscriptionRoute
   '/mentions-legales': typeof MentionsLegalesRoute
+  '/mot-de-passe-oublie': typeof MotDePasseOublieRoute
+  '/reinitialisation-mot-de-passe': typeof ReinitialisationMotDePasseRoute
   '/_authenticated/abonnement': typeof AuthenticatedAbonnementRoute
   '/_authenticated/calendrier': typeof AuthenticatedCalendrierRoute
   '/_authenticated/creer-un-post': typeof AuthenticatedCreerUnPostRoute
@@ -170,6 +197,7 @@ export interface FileRoutesById {
   '/_authenticated/idees-de-contenu': typeof AuthenticatedIdeesDeContenuRoute
   '/_authenticated/parametres': typeof AuthenticatedParametresRoute
   '/_authenticated/repondre-aux-avis': typeof AuthenticatedRepondreAuxAvisRoute
+  '/auth/callback': typeof AuthCallbackRoute
   '/api/public/whop-webhook': typeof ApiPublicWhopWebhookRoute
 }
 export interface FileRouteTypes {
@@ -182,6 +210,8 @@ export interface FileRouteTypes {
     | '/connexion'
     | '/inscription'
     | '/mentions-legales'
+    | '/mot-de-passe-oublie'
+    | '/reinitialisation-mot-de-passe'
     | '/abonnement'
     | '/calendrier'
     | '/creer-un-post'
@@ -190,6 +220,7 @@ export interface FileRouteTypes {
     | '/idees-de-contenu'
     | '/parametres'
     | '/repondre-aux-avis'
+    | '/auth/callback'
     | '/api/public/whop-webhook'
   fileRoutesByTo: FileRoutesByTo
   to:
@@ -200,6 +231,8 @@ export interface FileRouteTypes {
     | '/connexion'
     | '/inscription'
     | '/mentions-legales'
+    | '/mot-de-passe-oublie'
+    | '/reinitialisation-mot-de-passe'
     | '/abonnement'
     | '/calendrier'
     | '/creer-un-post'
@@ -208,6 +241,7 @@ export interface FileRouteTypes {
     | '/idees-de-contenu'
     | '/parametres'
     | '/repondre-aux-avis'
+    | '/auth/callback'
     | '/api/public/whop-webhook'
   id:
     | '__root__'
@@ -219,6 +253,8 @@ export interface FileRouteTypes {
     | '/connexion'
     | '/inscription'
     | '/mentions-legales'
+    | '/mot-de-passe-oublie'
+    | '/reinitialisation-mot-de-passe'
     | '/_authenticated/abonnement'
     | '/_authenticated/calendrier'
     | '/_authenticated/creer-un-post'
@@ -227,6 +263,7 @@ export interface FileRouteTypes {
     | '/_authenticated/idees-de-contenu'
     | '/_authenticated/parametres'
     | '/_authenticated/repondre-aux-avis'
+    | '/auth/callback'
     | '/api/public/whop-webhook'
   fileRoutesById: FileRoutesById
 }
@@ -239,6 +276,9 @@ export interface RootRouteChildren {
   ConnexionRoute: typeof ConnexionRoute
   InscriptionRoute: typeof InscriptionRoute
   MentionsLegalesRoute: typeof MentionsLegalesRoute
+  MotDePasseOublieRoute: typeof MotDePasseOublieRoute
+  ReinitialisationMotDePasseRoute: typeof ReinitialisationMotDePasseRoute
+  AuthCallbackRoute: typeof AuthCallbackRoute
   ApiPublicWhopWebhookRoute: typeof ApiPublicWhopWebhookRoute
 }
 
@@ -300,6 +340,20 @@ declare module '@tanstack/react-router' {
       preLoaderRoute: typeof MentionsLegalesRouteImport
       parentRoute: typeof rootRouteImport
     }
+    '/mot-de-passe-oublie': {
+      id: '/mot-de-passe-oublie'
+      path: '/mot-de-passe-oublie'
+      fullPath: '/mot-de-passe-oublie'
+      preLoaderRoute: typeof MotDePasseOublieRouteImport
+      parentRoute: typeof rootRouteImport
+    }
+    '/reinitialisation-mot-de-passe': {
+      id: '/reinitialisation-mot-de-passe'
+      path: '/reinitialisation-mot-de-passe'
+      fullPath: '/reinitialisation-mot-de-passe'
+      preLoaderRoute: typeof ReinitialisationMotDePasseRouteImport
+      parentRoute: typeof rootRouteImport
+    }
     '/_authenticated/abonnement': {
       id: '/_authenticated/abonnement'
       path: '/abonnement'
@@ -356,6 +410,13 @@ declare module '@tanstack/react-router' {
       preLoaderRoute: typeof AuthenticatedRepondreAuxAvisRouteImport
       parentRoute: typeof AuthenticatedRouteRoute
     }
+    '/auth/callback': {
+      id: '/auth/callback'
+      path: '/auth/callback'
+      fullPath: '/auth/callback'
+      preLoaderRoute: typeof AuthCallbackRouteImport
+      parentRoute: typeof rootRouteImport
+    }
     '/api/public/whop-webhook': {
       id: '/api/public/whop-webhook'
       path: '/api/public/whop-webhook'
@@ -400,6 +461,9 @@ const rootRouteChildren: RootRouteChildren = {
   ConnexionRoute: ConnexionRoute,
   InscriptionRoute: InscriptionRoute,
   MentionsLegalesRoute: MentionsLegalesRoute,
+  MotDePasseOublieRoute: MotDePasseOublieRoute,
+  ReinitialisationMotDePasseRoute: ReinitialisationMotDePasseRoute,
+  AuthCallbackRoute: AuthCallbackRoute,
   ApiPublicWhopWebhookRoute: ApiPublicWhopWebhookRoute,
 }
 export const routeTree = rootRouteImport
