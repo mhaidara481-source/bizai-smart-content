@@ -22,11 +22,26 @@ type WhopEvent = {
 };
 
 function planFromEvent(event: WhopEvent): PlanId {
-  const raw = `${event.data?.metadata?.plan ?? ""} ${event.data?.plan_id ?? ""} ${
-    event.data?.product_id ?? ""
-  }`.toLowerCase();
-  if (raw.includes("business")) return "business";
-  if (raw.includes("pro")) return "pro";
+  const d = (event.data ?? {}) as Record<string, unknown>;
+  const nestedId = (v: unknown) =>
+    v && typeof v === "object" && "id" in v ? String((v as { id: unknown }).id) : null;
+  const productId =
+    (d["product_id"] as string | undefined) ?? nestedId(d["product"]) ?? (d["access_pass"] as string | undefined) ?? null;
+
+  // 1) Correspondance exacte avec les Product IDs configurés côté serveur.
+  if (productId) {
+    const map: Array<[PlanId, string | undefined]> = [
+      ["starter", process.env["WHOP_PRODUCT_ID_STARTER"]],
+      ["pro", process.env["WHOP_PRODUCT_ID_PRO"]],
+      ["business", process.env["WHOP_PRODUCT_ID_BUSINESS"]],
+    ];
+    const hit = map.find(([, id]) => id && id === productId);
+    if (hit) return hit[0];
+  }
+
+  // 2) Métadonnées posées lors du checkout.
+  const meta = event.data?.metadata?.plan;
+  if (meta === "starter" || meta === "pro" || meta === "business") return meta;
   return "starter";
 }
 
@@ -80,7 +95,11 @@ export const Route = createFileRoute("/api/public/whop-webhook")({
           request.headers.get("x-whop-signature") ?? request.headers.get("whop-signature");
 
         const { verifyWebhookSignature } = await import("@/lib/payments/whop.server");
-        const check = await verifyWebhookSignature(rawBody, signature);
+        const check = await verifyWebhookSignature(rawBody, signature, {
+          id: request.headers.get("webhook-id"),
+          timestamp: request.headers.get("webhook-timestamp"),
+          signature: request.headers.get("webhook-signature"),
+        });
         if (!check.configured) {
           return Response.json({ received: false, reason: "whop_not_configured" }, { status: 503 });
         }

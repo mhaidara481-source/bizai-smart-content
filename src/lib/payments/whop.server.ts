@@ -131,23 +131,45 @@ export async function createCheckoutSession(input: {
 }
 
 /**
- * URL du portail de gestion d'abonnement Whop.
- * TODO(whop): retourner l'URL réelle du portail client une fois Whop branché.
+ * Portail client Whop : l'utilisateur y gère/annule ses abonnements
+ * (connecté avec le même email que lors du paiement).
  */
-export function billingPortalUrl(): string | null {
-  return whopConfig().mode === "live" ? null : null;
-}
+export const WHOP_CUSTOMER_PORTAL_URL = "https://whop.com/@me/settings/memberships/";
 
-/** Vérifie la signature d'un webhook Whop. */
-export async function verifyWebhookSignature(rawBody: string, signatureHeader: string | null) {
+/**
+ * Vérifie la signature d'un webhook Whop. Supporte :
+ *  - le format "Standard Webhooks" (headers webhook-id / webhook-timestamp / webhook-signature)
+ *  - l'ancien format HMAC hex (x-whop-signature).
+ */
+export async function verifyWebhookSignature(
+  rawBody: string,
+  signatureHeader: string | null,
+  std?: { id: string | null; timestamp: string | null; signature: string | null },
+) {
   const secret = whopConfig().webhookSecret;
   if (!secret) return { ok: false, configured: false as const };
-  if (!signatureHeader) return { ok: false, configured: true as const };
 
   const { createHmac, timingSafeEqual } = await import("node:crypto");
+  const safeEq = (x: string, y: string) => {
+    const a = Buffer.from(x);
+    const b = Buffer.from(y);
+    return a.length === b.length && timingSafeEqual(a, b);
+  };
+
+  if (std?.id && std.timestamp && std.signature) {
+    const keyRaw = secret.startsWith("whsec_") ? secret.slice(6) : secret;
+    const candidates = [Buffer.from(keyRaw, "base64"), Buffer.from(secret, "utf8")];
+    const signed = `${std.id}.${std.timestamp}.${rawBody}`;
+    const provided = std.signature.split(" ").map((s) => s.replace(/^v1,/, ""));
+    const ok = candidates.some((key) => {
+      const expected = createHmac("sha256", key).update(signed).digest("base64");
+      return provided.some((p) => safeEq(p, expected));
+    });
+    return { ok, configured: true as const };
+  }
+
+  if (!signatureHeader) return { ok: false, configured: true as const };
   const expected = createHmac("sha256", secret).update(rawBody, "utf8").digest("hex");
   const provided = signatureHeader.replace(/^sha256=/, "");
-  const a = Buffer.from(provided, "utf8");
-  const b = Buffer.from(expected, "utf8");
-  return { ok: a.length === b.length && timingSafeEqual(a, b), configured: true as const };
+  return { ok: safeEq(provided, expected), configured: true as const };
 }
