@@ -23,6 +23,7 @@ import { Route as AuthenticatedAbonnementRouteImport } from './routes/_authentic
 import { Route as AuthenticatedCalendrierRouteImport } from './routes/_authenticated/calendrier'
 import { Route as AuthenticatedCreerUnPostRouteImport } from './routes/_authenticated/creer-un-post'
 import { Route as AuthenticatedCreerUnVisuelRouteImport } from './routes/_authenticated/creer-un-visuel'
+import { Route as AuthenticatedCreerUneVideoRouteImport } from './routes/_authenticated/creer-une-video'
 import { Route as AuthenticatedDashboardRouteImport } from './routes/_authenticated/dashboard'
 import { Route as AuthenticatedIdeesDeContenuRouteImport } from './routes/_authenticated/idees-de-contenu'
 import { Route as AuthenticatedParametresRouteImport } from './routes/_authenticated/parametres'
@@ -102,6 +103,12 @@ const AuthenticatedCreerUnVisuelRoute =
     path: '/creer-un-visuel',
     getParentRoute: () => AuthenticatedRouteRoute,
   } as any)
+const AuthenticatedCreerUneVideoRoute =
+  AuthenticatedCreerUneVideoRouteImport.update({
+    id: '/creer-une-video',
+    path: '/creer-une-video',
+    getParentRoute: () => AuthenticatedRouteRoute,
+  } as any)
 const AuthenticatedDashboardRoute = AuthenticatedDashboardRouteImport.update({
   id: '/dashboard',
   path: '/dashboard',
@@ -149,6 +156,7 @@ export interface FileRoutesByFullPath {
   '/calendrier': typeof AuthenticatedCalendrierRoute
   '/creer-un-post': typeof AuthenticatedCreerUnPostRoute
   '/creer-un-visuel': typeof AuthenticatedCreerUnVisuelRoute
+  '/creer-une-video': typeof AuthenticatedCreerUneVideoRoute
   '/dashboard': typeof AuthenticatedDashboardRoute
   '/idees-de-contenu': typeof AuthenticatedIdeesDeContenuRoute
   '/parametres': typeof AuthenticatedParametresRoute
@@ -170,6 +178,7 @@ export interface FileRoutesByTo {
   '/calendrier': typeof AuthenticatedCalendrierRoute
   '/creer-un-post': typeof AuthenticatedCreerUnPostRoute
   '/creer-un-visuel': typeof AuthenticatedCreerUnVisuelRoute
+  '/creer-une-video': typeof AuthenticatedCreerUneVideoRoute
   '/dashboard': typeof AuthenticatedDashboardRoute
   '/idees-de-contenu': typeof AuthenticatedIdeesDeContenuRoute
   '/parametres': typeof AuthenticatedParametresRoute
@@ -193,6 +202,7 @@ export interface FileRoutesById {
   '/_authenticated/calendrier': typeof AuthenticatedCalendrierRoute
   '/_authenticated/creer-un-post': typeof AuthenticatedCreerUnPostRoute
   '/_authenticated/creer-un-visuel': typeof AuthenticatedCreerUnVisuelRoute
+  '/_authenticated/creer-une-video': typeof AuthenticatedCreerUneVideoRoute
   '/_authenticated/dashboard': typeof AuthenticatedDashboardRoute
   '/_authenticated/idees-de-contenu': typeof AuthenticatedIdeesDeContenuRoute
   '/_authenticated/parametres': typeof AuthenticatedParametresRoute
@@ -216,6 +226,7 @@ export interface FileRouteTypes {
     | '/calendrier'
     | '/creer-un-post'
     | '/creer-un-visuel'
+    | '/creer-une-video'
     | '/dashboard'
     | '/idees-de-contenu'
     | '/parametres'
@@ -237,6 +248,7 @@ export interface FileRouteTypes {
     | '/calendrier'
     | '/creer-un-post'
     | '/creer-un-visuel'
+    | '/creer-une-video'
     | '/dashboard'
     | '/idees-de-contenu'
     | '/parametres'
@@ -259,6 +271,7 @@ export interface FileRouteTypes {
     | '/_authenticated/calendrier'
     | '/_authenticated/creer-un-post'
     | '/_authenticated/creer-un-visuel'
+    | '/_authenticated/creer-une-video'
     | '/_authenticated/dashboard'
     | '/_authenticated/idees-de-contenu'
     | '/_authenticated/parametres'
@@ -382,6 +395,13 @@ declare module '@tanstack/react-router' {
       preLoaderRoute: typeof AuthenticatedCreerUnVisuelRouteImport
       parentRoute: typeof AuthenticatedRouteRoute
     }
+    '/_authenticated/creer-une-video': {
+      id: '/_authenticated/creer-une-video'
+      path: '/creer-une-video'
+      fullPath: '/creer-une-video'
+      preLoaderRoute: typeof AuthenticatedCreerUneVideoRouteImport
+      parentRoute: typeof AuthenticatedRouteRoute
+    }
     '/_authenticated/dashboard': {
       id: '/_authenticated/dashboard'
       path: '/dashboard'
@@ -432,6 +452,7 @@ interface AuthenticatedRouteRouteChildren {
   AuthenticatedCalendrierRoute: typeof AuthenticatedCalendrierRoute
   AuthenticatedCreerUnPostRoute: typeof AuthenticatedCreerUnPostRoute
   AuthenticatedCreerUnVisuelRoute: typeof AuthenticatedCreerUnVisuelRoute
+  AuthenticatedCreerUneVideoRoute: typeof AuthenticatedCreerUneVideoRoute
   AuthenticatedDashboardRoute: typeof AuthenticatedDashboardRoute
   AuthenticatedIdeesDeContenuRoute: typeof AuthenticatedIdeesDeContenuRoute
   AuthenticatedParametresRoute: typeof AuthenticatedParametresRoute
@@ -443,6 +464,7 @@ const AuthenticatedRouteRouteChildren: AuthenticatedRouteRouteChildren = {
   AuthenticatedCalendrierRoute: AuthenticatedCalendrierRoute,
   AuthenticatedCreerUnPostRoute: AuthenticatedCreerUnPostRoute,
   AuthenticatedCreerUnVisuelRoute: AuthenticatedCreerUnVisuelRoute,
+  AuthenticatedCreerUneVideoRoute: AuthenticatedCreerUneVideoRoute,
   AuthenticatedDashboardRoute: AuthenticatedDashboardRoute,
   AuthenticatedIdeesDeContenuRoute: AuthenticatedIdeesDeContenuRoute,
   AuthenticatedParametresRoute: AuthenticatedParametresRoute,

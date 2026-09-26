@@ -2,6 +2,7 @@ import {
   LayoutDashboard,
   PenLine,
   Image as ImageIcon,
+  Clapperboard,
   MessageSquareQuote,
   Lightbulb,
   CalendarDays,
@@ -14,6 +15,7 @@ export type NavItem = {
     | "/dashboard"
     | "/creer-un-post"
     | "/creer-un-visuel"
+    | "/creer-une-video"
     | "/repondre-aux-avis"
     | "/idees-de-contenu"
     | "/calendrier"
@@ -44,6 +46,12 @@ export const navItems: NavItem[] = [
     description: "Génère des images marketing avec l'IA",
   },
   {
+    to: "/creer-une-video",
+    label: "Créer une vidéo",
+    icon: Clapperboard,
+    description: "Des vidéos marketing courtes générées par l'IA",
+  },
+  {
     to: "/repondre-aux-avis",
     label: "Répondre aux avis",
     icon: MessageSquareQuote,
@@ -65,4 +73,4 @@ export const navItems: NavItem[] = [
   { to: "/parametres", label: "Paramètres", icon: Settings, description: "Ton profil et ton entreprise" },
 ];
 
-export const toolItems = navItems.slice(1, 6);
+export const toolItems = navItems.slice(1, 7);

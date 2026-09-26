@@ -133,3 +133,15 @@ export const PLAN_COMPARISON: Array<{ label: string; values: Record<string, stri
     values: { starter: "Email", pro: "Prioritaire", business: "Prioritaire + accompagnement" },
   },
 ];
+
+/** Quota mensuel de vidéos, séparé du quota de générations. */
+export const VIDEO_LIMITS: Record<string, number> = {
+  free: 0,
+  starter: 3,
+  pro: 10,
+  business: 30,
+};
+
+export function videoLimitFor(plan: string | undefined): number {
+  return VIDEO_LIMITS[plan ?? "free"] ?? 0;
+}
