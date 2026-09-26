@@ -1,7 +1,7 @@
 import { createFileRoute } from "@tanstack/react-router";
 import { useMutation, useQueryClient } from "@tanstack/react-query";
 import { useServerFn } from "@tanstack/react-start";
-import { useState } from "react";
+import { useEffect, useState } from "react";
 import { Download, ImageIcon, Loader2, RefreshCw, Sparkles } from "lucide-react";
 import { toast } from "sonner";
 
@@ -60,6 +60,14 @@ function CreateVisual() {
   const [result, setResult] = useState<VisualResult | null>(null);
   const [demo, setDemo] = useState(false);
   const [limitReached, setLimitReached] = useState(false);
+  const [loadingStep, setLoadingStep] = useState(0);
+
+  const LOADING_MESSAGES = [
+    "Analyse de ta demande…",
+    "Création de ton visuel professionnel…",
+    "Finalisation des détails…",
+  ];
+
 
   const mutation = useMutation({
     mutationFn: async () =>
@@ -79,6 +87,19 @@ function CreateVisual() {
       toast.error(error.message || "La génération a échoué.");
     },
   });
+
+  useEffect(() => {
+    if (!mutation.isPending) {
+      setLoadingStep(0);
+      return;
+    }
+    const timer = setInterval(
+      () => setLoadingStep((s) => (s + 1) % LOADING_MESSAGES.length),
+      3500,
+    );
+    return () => clearInterval(timer);
+  }, [mutation.isPending, LOADING_MESSAGES.length]);
+
 
   const canSubmit = subject.trim().length >= 3 && !mutation.isPending;
 
@@ -195,8 +216,11 @@ function CreateVisual() {
             {mutation.isPending && (
               <div className="flex flex-col items-center py-16 text-center">
                 <Loader2 className="size-6 animate-spin text-primary" />
-                <p className="mt-4 text-sm text-muted-foreground">
-                  BizAI crée ton visuel… cela peut prendre jusqu'à une minute.
+                <p
+                  key={loadingStep}
+                  className="mt-4 text-sm text-muted-foreground transition-opacity duration-500 animate-fade-in"
+                >
+                  {LOADING_MESSAGES[loadingStep]}
                 </p>
               </div>
             )}
