@@ -6,7 +6,7 @@
 //   - WHOP_API_KEY
 //   - WHOP_PRODUCT_ID_STARTER
 //   - WHOP_PRODUCT_ID_PRO
-//   - WHOP_PRODUCT_ID_BUSINESS (optionnel tant que le plan Business n'est pas vendu)
+//   - WHOP_PRODUCT_ID_BUSINESS
 //   - WHOP_WEBHOOK_SECRET
 //
 // Aucune valeur factice n'est écrite dans le code : tant que WHOP_API_KEY est

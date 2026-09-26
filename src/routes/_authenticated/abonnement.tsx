@@ -71,7 +71,6 @@ function SubscriptionPage() {
         : "Choisir Starter";
 
   async function handleCheckout(plan: PlanId) {
-    if (plan === "business") return;
     setPending(plan);
     try {
       const result = await checkout({ data: { plan } });
@@ -202,21 +201,15 @@ function SubscriptionPage() {
                     </li>
                   ))}
                 </ul>
-                {plan.id === "business" ? (
-                  <div className="mt-8 flex h-9 w-full items-center justify-center rounded-full border border-border bg-muted text-sm font-semibold text-muted-foreground">
-                    Bientôt disponible
-                  </div>
-                ) : (
-                  <Button
-                    className="mt-8 w-full rounded-full"
-                    variant={current ? "outline" : "secondary"}
-                    disabled={current || loading || pending !== null}
-                    onClick={() => handleCheckout(plan.id)}
-                  >
-                    {pending === plan.id ? <Loader2 className="mr-2 size-4 animate-spin" /> : null}
-                    {current ? "Offre active" : "Choisir ce plan"}
-                  </Button>
-                )}
+                <Button
+                  className="mt-8 w-full rounded-full"
+                  variant={current ? "outline" : "secondary"}
+                  disabled={current || loading || pending !== null}
+                  onClick={() => handleCheckout(plan.id)}
+                >
+                  {pending === plan.id ? <Loader2 className="mr-2 size-4 animate-spin" /> : null}
+                  {current ? "Offre active" : plan.id === "business" ? "Passer à Business" : "Choisir ce plan"}
+                </Button>
               </CardContent>
             </Card>
           );

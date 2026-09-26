@@ -365,19 +365,13 @@ function Landing() {
                       </li>
                     ))}
                   </ul>
-                  {plan.id === "business" ? (
-                    <div className="mt-7 flex h-9 w-full items-center justify-center rounded-full border border-border bg-muted text-sm font-semibold text-muted-foreground">
-                      Bientôt disponible
-                    </div>
-                  ) : (
-                    <Button
-                      asChild
-                      className="mt-7 w-full rounded-full"
-                      variant={plan.highlight ? "default" : "outline"}
-                    >
-                      <Link to="/inscription">Choisir ce plan</Link>
-                    </Button>
-                  )}
+                  <Button
+                    asChild
+                    className="mt-7 w-full rounded-full"
+                    variant={plan.highlight ? "default" : "outline"}
+                  >
+                    <Link to="/inscription">Choisir ce plan</Link>
+                  </Button>
                 </CardContent>
               </Card>
             ))}

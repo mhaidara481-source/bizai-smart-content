@@ -6,7 +6,7 @@ import { z } from "zod";
 import { requireSupabaseAuth } from "@/integrations/supabase/auth-middleware";
 
 const checkoutSchema = z.object({
-  plan: z.enum(["starter", "pro"]),
+  plan: z.enum(["starter", "pro", "business"]),
   /** Mode démo : simule un abonnement actif sans paiement réel. */
   simulate: z.boolean().optional(),
 });
