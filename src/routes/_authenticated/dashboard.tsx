@@ -41,13 +41,13 @@ function Dashboard() {
         subtitle="Voici où tu en es ce mois-ci."
       />
 
-      <div className="grid gap-5 sm:grid-cols-2 lg:grid-cols-3">
+      <div className="grid gap-6 sm:grid-cols-2 lg:grid-cols-3 animate-fade-in-up">
         <Card className="rounded-2xl border-border/70 shadow-soft">
           <CardHeader className="pb-2">
             <CardTitle className="text-sm text-muted-foreground">Générations utilisées</CardTitle>
           </CardHeader>
           <CardContent>
-            {loading ? <Skeleton className="h-16 w-full" /> : <><p className="text-3xl font-extrabold">{used}</p><Progress value={percent} className="mt-4" /><p className="mt-2 text-xs text-muted-foreground">sur {limit} ce mois-ci</p></>}
+            {loading ? <div className="space-y-3"><Skeleton className="h-9 w-16" /><Skeleton className="h-2 w-full" /><Skeleton className="h-3 w-28" /></div> : <div className="animate-fade-in"><p className="text-3xl font-extrabold">{used}</p><Progress value={percent} className="mt-4" /><p className="mt-2 text-xs text-muted-foreground">sur {limit} ce mois-ci</p></div>}
           </CardContent>
         </Card>
 
@@ -56,9 +56,9 @@ function Dashboard() {
             <CardTitle className="text-sm text-muted-foreground">Générations restantes</CardTitle>
           </CardHeader>
           <CardContent>
-            {loading ? <Skeleton className="h-16 w-full" /> : <><p className="text-3xl font-extrabold">{remaining}</p><p className="mt-2 text-xs text-muted-foreground">
+            {loading ? <div className="space-y-3"><Skeleton className="h-9 w-16" /><Skeleton className="h-3 w-44" /></div> : <div className="animate-fade-in"><p className="text-3xl font-extrabold">{remaining}</p><p className="mt-2 text-xs text-muted-foreground">
               Réinitialisées au début de chaque mois
-            </p></>}
+            </p></div>}
           </CardContent>
         </Card>
 
@@ -67,7 +67,7 @@ function Dashboard() {
             <CardTitle className="text-sm text-muted-foreground">Abonnement actuel</CardTitle>
           </CardHeader>
           <CardContent>
-            {loading ? <Skeleton className="h-9 w-36" /> : <p className="text-3xl font-extrabold">{PLAN_LABELS[plan] ?? "Découverte"}</p>}
+            {loading ? <Skeleton className="h-9 w-36" /> : <p className="animate-fade-in text-3xl font-extrabold">{PLAN_LABELS[plan] ?? "Découverte"}</p>}
             <Button asChild variant="outline" size="sm" className="mt-4 rounded-full">
               <Link to="/abonnement">Gérer mon offre</Link>
             </Button>
@@ -76,9 +76,9 @@ function Dashboard() {
       </div>
 
       <h2 className="mb-4 mt-10 text-lg font-semibold">Tes outils</h2>
-      <div className="grid gap-5 sm:grid-cols-2">
+      <div className="grid gap-6 sm:grid-cols-2">
         {toolItems.map((tool) => (
-          <Card key={tool.to} className="rounded-2xl border-border/70 shadow-soft">
+          <Card key={tool.to} className="border-border/70 hover:border-primary/20 hover:shadow-lift">
             <CardContent className="flex items-start gap-4 pt-6">
               <span className="flex size-11 shrink-0 items-center justify-center rounded-xl bg-primary-soft">
                 <tool.icon className="size-5 text-primary" />
@@ -101,7 +101,7 @@ function Dashboard() {
       <h2 className="mb-4 mt-10 text-lg font-semibold">Activité récente</h2>
       <Card className="rounded-2xl border-border/70 shadow-soft">
         {recentLoading ? (
-          <CardContent className="space-y-3 py-6"><Skeleton className="h-12 w-full" /><Skeleton className="h-12 w-full" /><Skeleton className="h-12 w-full" /></CardContent>
+          <CardContent className="space-y-4 py-6">{[0, 1, 2].map((item) => <div key={item} className="flex items-center justify-between gap-4"><div className="space-y-2"><Skeleton className="h-4 w-36" /><Skeleton className="h-3 w-24" /></div><Skeleton className="h-6 w-20 rounded-full" /></div>)}</CardContent>
         ) : recent.length === 0 ? (
           <CardContent className="flex flex-col items-center py-14 text-center">
             <span className="flex size-12 items-center justify-center rounded-2xl bg-primary-soft">
@@ -113,7 +113,7 @@ function Dashboard() {
             </p>
           </CardContent>
         ) : (
-          <CardContent className="divide-y divide-border/70 py-2">
+          <CardContent className="animate-fade-in divide-y divide-border/70 py-2">
             {recent.map((item) => (
               <div
                 key={item.id}

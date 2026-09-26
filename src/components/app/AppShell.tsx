@@ -66,9 +66,12 @@ function AccountBlock() {
 
 export function AppShell({ children }: { children: ReactNode }) {
   const [open, setOpen] = useState(false);
-  const currentLabel = useRouterState({
-    select: (state) =>
-      navItems.find((item) => state.location.pathname.startsWith(item.to))?.label ?? "BizAI",
+  const { currentLabel, currentPath } = useRouterState({
+    select: (state) => ({
+      currentLabel:
+        navItems.find((item) => state.location.pathname.startsWith(item.to))?.label ?? "BizAI",
+      currentPath: state.location.pathname,
+    }),
   });
 
   return (
@@ -106,7 +109,11 @@ export function AppShell({ children }: { children: ReactNode }) {
       </header>
 
       <main className="lg:pl-64">
-        <div className="mx-auto w-full max-w-5xl px-5 py-8 sm:py-10 animate-fade-in-up">{children}</div>
+        <div className="mx-auto w-full max-w-5xl px-5 py-8 sm:px-6 sm:py-10">
+          <div key={currentPath} className="animate-fade-in-up">
+            {children}
+          </div>
+        </div>
       </main>
 
       <footer className="border-t border-border/70 py-6 lg:pl-64">

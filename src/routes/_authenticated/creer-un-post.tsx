@@ -11,6 +11,7 @@ import { Button } from "@/components/ui/button";
 import { Card, CardContent } from "@/components/ui/card";
 import { Input } from "@/components/ui/input";
 import { Label } from "@/components/ui/label";
+import { Skeleton } from "@/components/ui/skeleton";
 import { Textarea } from "@/components/ui/textarea";
 import {
   Select,
@@ -109,8 +110,8 @@ function CreatePost() {
         </div>
       )}
 
-      <div className="grid gap-6 lg:grid-cols-2">
-        <Card className="rounded-2xl border-border/70 shadow-soft">
+      <div className="grid gap-6 lg:grid-cols-2 lg:items-start">
+        <Card className="border-border/70">
           <CardContent className="space-y-5 pt-6">
             <div className="grid gap-4 sm:grid-cols-2">
               <div className="space-y-2">
@@ -206,10 +207,10 @@ function CreatePost() {
           </CardContent>
         </Card>
 
-        <Card className="rounded-2xl border-border/70 shadow-soft">
+        <Card className="border-border/70">
           <CardContent className="pt-6">
             {!result && !mutation.isPending && (
-              <div className="flex flex-col items-center py-16 text-center">
+              <div className="flex flex-col items-center py-16 text-center animate-fade-in-up">
                 <span className="flex size-12 items-center justify-center rounded-2xl bg-primary-soft">
                   <Sparkles className="size-5 text-primary" />
                 </span>
@@ -221,14 +222,15 @@ function CreatePost() {
             )}
 
             {mutation.isPending && (
-              <div className="flex flex-col items-center py-16 text-center">
-                <Loader2 className="size-6 animate-spin text-primary" />
-                <p className="mt-4 text-sm text-muted-foreground">BizAI rédige ton post…</p>
+              <div className="space-y-6 py-4" aria-label="Génération du post en cours">
+                <div className="space-y-3"><Skeleton className="h-3 w-20" /><Skeleton className="h-6 w-4/5" /></div>
+                <div className="space-y-3"><Skeleton className="h-3 w-28" /><Skeleton className="h-4 w-full" /><Skeleton className="h-4 w-[94%]" /><Skeleton className="h-4 w-3/4" /></div>
+                <Skeleton className="h-9 w-44 rounded-full" />
               </div>
             )}
 
             {result && !mutation.isPending && (
-              <div className="space-y-5">
+              <div className="space-y-5 animate-fade-in-up">
                 {demo && <DemoBadge />}
                 <div>
                   <p className="text-xs font-semibold uppercase text-muted-foreground">Accroche</p>

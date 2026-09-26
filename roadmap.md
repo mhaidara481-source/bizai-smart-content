@@ -1,7 +1,6 @@
-# Nettoyage avant publication
+# Polish UI/UX de l’app authentifiée
 
-- [ ] Masquer les actions Business
-- [ ] Corriger les textes et placeholders
-- [ ] Vérifier 404 et chargements
-- [ ] Compléter SEO, partage et favicon
-- [ ] Tester inscription et connexion
+- [x] Remplacer les chargements de contenu par des skeletons structurés
+- [x] Ajouter des transitions légères aux pages, résultats et listes
+- [x] Harmoniser les boutons, cartes, espacements et rayons
+- [x] Vérifier le rendu sur ordinateur et mobile

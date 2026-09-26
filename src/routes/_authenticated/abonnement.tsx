@@ -108,7 +108,7 @@ function SubscriptionPage() {
     <div>
       <PageHeader title="Abonnement" subtitle="Ton offre actuelle et tes générations restantes." />
 
-      <Card className="mb-8 rounded-2xl border-border/70 shadow-soft">
+      <Card className="mb-8 border-border/70">
         <CardHeader className="pb-2">
           <CardTitle className="text-sm text-muted-foreground">Offre actuelle</CardTitle>
         </CardHeader>
@@ -120,7 +120,7 @@ function SubscriptionPage() {
               <Skeleton className="h-2 w-full" />
             </div>
           ) : (
-            <>
+            <div className="animate-fade-in">
               <div className="flex flex-wrap items-end justify-between gap-4">
                 <div>
                   <p className="text-3xl font-extrabold">
@@ -155,12 +155,12 @@ function SubscriptionPage() {
                   Gérer mon abonnement
                 </Button>
               </div>
-            </>
+            </div>
           )}
         </CardContent>
       </Card>
 
-      <div className="grid gap-5 lg:grid-cols-3">
+      <div className="grid gap-6 lg:grid-cols-3 animate-fade-in-up">
         {PLANS.map((plan) => {
           const current = activePlan === plan.id;
           return (
@@ -168,8 +168,8 @@ function SubscriptionPage() {
               key={plan.id}
               className={
                 plan.highlight
-                  ? "relative rounded-3xl border-primary/40 shadow-lift"
-                  : "rounded-3xl border-border/70 shadow-soft"
+                  ? "relative border-primary/40 shadow-lift"
+                  : "border-border/70 hover:border-primary/20 hover:shadow-lift"
               }
             >
               {plan.highlight ? (
@@ -217,7 +217,7 @@ function SubscriptionPage() {
       </div>
 
       <h2 className="mb-4 mt-10 text-lg font-semibold">Comparer les offres</h2>
-      <Card className="rounded-2xl border-border/70 shadow-soft">
+      <Card className="border-border/70">
         <CardContent className="overflow-x-auto pt-6">
           <table className="w-full min-w-[34rem] text-sm">
             <thead>

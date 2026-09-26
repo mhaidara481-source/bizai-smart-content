@@ -10,6 +10,7 @@ import { DemoBadge, LimitReached } from "@/components/app/LimitReached";
 import { Button } from "@/components/ui/button";
 import { Card, CardContent } from "@/components/ui/card";
 import { Label } from "@/components/ui/label";
+import { Skeleton } from "@/components/ui/skeleton";
 import {
   Select,
   SelectContent,
@@ -88,7 +89,7 @@ function IdeasPage() {
         </div>
       )}
 
-      <Card className="mb-8 rounded-2xl border-border/70 shadow-soft">
+      <Card className="mb-8 border-border/70">
         <CardContent className="grid gap-4 pt-6 sm:grid-cols-2 lg:grid-cols-5 lg:items-end">
           <div className="space-y-2">
             <Label>Activité</Label>
@@ -175,14 +176,23 @@ function IdeasPage() {
       )}
 
       {mutation.isPending && (
-        <div className="flex flex-col items-center py-16 text-center">
-          <Loader2 className="size-6 animate-spin text-primary" />
-          <p className="mt-4 text-sm text-muted-foreground">BizAI cherche des idées…</p>
+        <div className="grid gap-6 sm:grid-cols-2 lg:grid-cols-3" aria-label="Génération des idées en cours">
+          {[...Array(6)].map((_, i) => (
+            <Card key={i} className="rounded-2xl border-border/70 shadow-soft">
+              <CardContent className="space-y-4 pt-6">
+                <div className="flex justify-between"><Skeleton className="h-5 w-16 rounded-full" /><Skeleton className="h-4 w-8" /></div>
+                <Skeleton className="h-6 w-full" />
+                <Skeleton className="h-4 w-full" />
+                <Skeleton className="h-4 w-2/3" />
+                <Skeleton className="h-4 w-24" />
+              </CardContent>
+            </Card>
+          ))}
         </div>
       )}
 
       {!ideas && !mutation.isPending && (
-        <Card className="rounded-2xl border-border/70 shadow-soft">
+        <Card className="border-border/70 animate-fade-in-up">
           <CardContent className="flex flex-col items-center py-16 text-center">
             <span className="flex size-12 items-center justify-center rounded-2xl bg-primary-soft">
               <Lightbulb className="size-5 text-primary" />
@@ -196,9 +206,9 @@ function IdeasPage() {
       )}
 
       {ideas && !mutation.isPending && (
-        <div className="grid gap-5 sm:grid-cols-2 lg:grid-cols-3">
+        <div className="grid gap-6 sm:grid-cols-2 lg:grid-cols-3 animate-fade-in-up">
           {ideas.map((idea, index) => (
-            <Card key={index} className="rounded-2xl border-border/70 shadow-soft">
+            <Card key={index} className="border-border/70 hover:border-primary/20 hover:shadow-lift">
               <CardContent className="space-y-3 pt-6">
                 <div className="flex items-center justify-between gap-2">
                   <span className="rounded-full bg-primary-soft px-3 py-1 text-xs font-semibold text-primary">

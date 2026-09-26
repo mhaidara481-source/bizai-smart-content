@@ -173,7 +173,7 @@
   h1,
   h2,
   h3 {
-    letter-spacing: -0.02em;
+    letter-spacing: 0;
   }
 
 @keyframes fade-in-up {
@@ -189,6 +189,12 @@
 
 @utility animate-fade-in-up {
   animation: fade-in-up 0.5s ease-out forwards;
+}
+
+@media (prefers-reduced-motion: reduce) {
+  .animate-fade-in-up {
+    animation: none;
+  }
 }
 
 }

@@ -11,6 +11,7 @@ import { Button } from "@/components/ui/button";
 import { Card, CardContent } from "@/components/ui/card";
 import { Input } from "@/components/ui/input";
 import { Label } from "@/components/ui/label";
+import { Skeleton } from "@/components/ui/skeleton";
 import {
   Select,
   SelectContent,
@@ -116,8 +117,8 @@ function CreateVisual() {
         </div>
       )}
 
-      <div className="grid gap-6 lg:grid-cols-2">
-        <Card className="rounded-2xl border-border/70 shadow-soft">
+      <div className="grid gap-6 lg:grid-cols-2 lg:items-start">
+        <Card className="border-border/70">
           <CardContent className="space-y-5 pt-6">
             <div className="space-y-2">
               <Label>Type d'entreprise</Label>
@@ -199,10 +200,10 @@ function CreateVisual() {
           </CardContent>
         </Card>
 
-        <Card className="rounded-2xl border-border/70 shadow-soft">
+        <Card className="border-border/70">
           <CardContent className="pt-6">
             {!result && !mutation.isPending && (
-              <div className="flex flex-col items-center py-16 text-center">
+              <div className="flex flex-col items-center py-16 text-center animate-fade-in-up">
                 <span className="flex size-12 items-center justify-center rounded-2xl bg-primary-soft">
                   <ImageIcon className="size-5 text-primary" />
                 </span>
@@ -214,19 +215,18 @@ function CreateVisual() {
             )}
 
             {mutation.isPending && (
-              <div className="flex flex-col items-center py-16 text-center">
-                <Loader2 className="size-6 animate-spin text-primary" />
-                <p
-                  key={loadingStep}
-                  className="mt-4 text-sm text-muted-foreground transition-opacity duration-500 animate-fade-in"
-                >
-                  {LOADING_MESSAGES[loadingStep]}
-                </p>
+              <div className="space-y-4" aria-label="Génération du visuel en cours">
+                <Skeleton className="aspect-square w-full rounded-2xl" />
+                <p key={loadingStep} className="text-center text-sm text-muted-foreground animate-fade-in-up">{LOADING_MESSAGES[loadingStep]}</p>
+                <div className="flex gap-2">
+                  <Skeleton className="h-9 w-28 rounded-full" />
+                  <Skeleton className="h-9 w-28 rounded-full" />
+                </div>
               </div>
             )}
 
             {result && !mutation.isPending && (
-              <div className="space-y-4">
+              <div className="space-y-4 animate-fade-in-up">
                 {demo && <DemoBadge />}
                 <img
                   src={result.url}
