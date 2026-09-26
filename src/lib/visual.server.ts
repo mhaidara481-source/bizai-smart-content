@@ -18,7 +18,7 @@ const FORMAT_HINTS: Record<string, string> = {
   "Paysage (bannière)": "cadrage horizontal 16:9, adapté à une bannière",
 };
 
-function buildPrompt(input: VisualInput): string {
+export function buildPrompt(input: VisualInput): string {
   return `Photographie marketing professionnelle pour un(e) ${input.businessType}.
 Sujet : ${input.subject}.
 Style visuel : ${input.style}.
@@ -43,7 +43,7 @@ const FORMAT_ASPECT_RATIOS: Record<string, string> = {
   "Paysage (bannière)": "16:9",
 };
 
-async function requestImage(
+export async function requestImage(
   prompt: string,
   apiKey: string,
   format: string,
