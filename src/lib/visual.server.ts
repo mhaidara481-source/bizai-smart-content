@@ -37,7 +37,17 @@ type SupabaseAdmin = Awaited<
   typeof import("@/integrations/supabase/client.server")
 >["supabaseAdmin"];
 
-async function requestImage(prompt: string, apiKey: string): Promise<string> {
+const FORMAT_ASPECT_RATIOS: Record<string, string> = {
+  "Carré (post)": "1:1",
+  "Portrait (story)": "9:16",
+  "Paysage (bannière)": "16:9",
+};
+
+async function requestImage(
+  prompt: string,
+  apiKey: string,
+  format: string,
+): Promise<string> {
   const response = await fetch(GATEWAY_IMAGE_URL, {
     method: "POST",
     headers: { Authorization: `Bearer ${apiKey}`, "Content-Type": "application/json" },
@@ -45,6 +55,12 @@ async function requestImage(prompt: string, apiKey: string): Promise<string> {
       model: GATEWAY_MODEL,
       messages: [{ role: "user", content: prompt }],
       modalities: ["image", "text"],
+      generationConfig: {
+        imageConfig: {
+          imageSize: "2K",
+          aspectRatio: FORMAT_ASPECT_RATIOS[format] ?? "1:1",
+        },
+      },
     }),
   });
 
@@ -79,7 +95,7 @@ export async function generateVisual(
   }
 
   const prompt = buildPrompt(input);
-  const b64 = await requestImage(prompt, apiKey);
+  const b64 = await requestImage(prompt, apiKey, input.format);
   const bytes = Buffer.from(b64, "base64");
   const path = `${userId}/${Date.now()}-${crypto.randomUUID()}.png`;
 
