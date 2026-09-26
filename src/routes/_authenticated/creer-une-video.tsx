@@ -124,7 +124,7 @@ function CreateVideo() {
         </div>
       )}
 
-      <div className="grid gap-6 lg:grid-cols-2 lg:items-start">
+      <div className="grid gap-6 md:grid-cols-2 md:items-start">
         <Card className="border-border/70">
           <CardContent className="space-y-5 pt-6">
             <div className="flex items-center justify-between rounded-xl bg-muted/60 px-4 py-3 text-sm">

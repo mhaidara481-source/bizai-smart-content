@@ -7,6 +7,8 @@ import {
   Lightbulb,
   MessageSquareQuote,
   PenLine,
+  Play,
+  Quote,
   Sparkles,
   TrendingUp,
   Wallet,
@@ -138,58 +140,99 @@ const faq = [
   },
 ];
 
+const businessProfiles = [
+  {
+    quote: "Je prépare la semaine de publications entre deux rendez-vous, sans partir d'une page blanche.",
+    name: "Sarah",
+    role: "Gérante d'un salon de coiffure",
+    initials: "SM",
+  },
+  {
+    quote: "Les réponses aux avis gardent mon ton, même quand la journée a été chargée.",
+    name: "Karim",
+    role: "Restaurateur indépendant",
+    initials: "KB",
+  },
+  {
+    quote: "Le calendrier me donne enfin une vue claire de ce que je dois publier dans le mois.",
+    name: "Élodie",
+    role: "Créatrice et commerçante",
+    initials: "EL",
+  },
+];
+
 function Landing() {
   return (
     <div className="min-h-screen bg-background">
       <SiteHeader />
 
       {/* Hero */}
-      <section className="relative overflow-hidden">
-        <div className="pointer-events-none absolute -top-40 left-1/2 size-[38rem] -translate-x-1/2 rounded-full bg-primary-soft blur-3xl" />
-        <div className="relative mx-auto w-full max-w-4xl px-5 py-20 text-center sm:py-28">
-          <Badge variant="secondary" className="mb-6 rounded-full px-3 py-1 text-xs font-semibold">
-            Assistant IA pour les petites entreprises
-          </Badge>
-          <h1 className="text-4xl font-extrabold leading-[1.1] sm:text-5xl md:text-6xl">
-            Crée ton contenu marketing avec l'IA en{" "}
-            <span className="text-gradient-hero">quelques secondes.</span>
-          </h1>
-          <p className="mx-auto mt-6 max-w-2xl text-base text-muted-foreground sm:text-lg">
-            BizAI aide les petites entreprises à créer leurs publications, répondre à leurs clients
-            et planifier leur contenu.
-          </p>
-          <div className="mt-9 flex flex-col items-center justify-center gap-3 sm:flex-row">
-            <Button asChild size="lg" className="w-full rounded-full px-7 sm:w-auto">
-              <Link to="/inscription">
-                Commencer gratuitement
-                <ArrowRight className="size-4" />
-              </Link>
-            </Button>
-            <Button asChild size="lg" variant="outline" className="w-full rounded-full px-7 sm:w-auto">
-              <a href="#fonctionnalites">Voir les fonctionnalités</a>
-            </Button>
+      <section className="relative overflow-hidden border-b border-border/60">
+        <div className="pointer-events-none absolute inset-x-0 top-0 h-72 bg-primary-soft/60 [mask-image:linear-gradient(to_bottom,black,transparent)]" />
+        <div className="relative mx-auto grid min-h-[calc(100vh-4rem)] w-full max-w-6xl items-center gap-12 px-5 py-16 md:grid-cols-[minmax(0,0.9fr)_minmax(0,1.1fr)] md:gap-8 md:py-20 lg:gap-14">
+          <div className="min-w-0 animate-fade-in-up text-center md:text-left">
+            <Badge variant="secondary" className="mb-6 rounded-full px-3 py-1 text-xs font-semibold">
+              Assistant IA pour les petites entreprises
+            </Badge>
+            <h1 className="text-4xl font-extrabold leading-[1.08] sm:text-5xl lg:text-6xl">
+              Crée ton contenu marketing avec l'IA en{" "}
+              <span className="text-gradient-hero">quelques secondes.</span>
+            </h1>
+            <p className="mx-auto mt-6 max-w-xl text-base leading-relaxed text-muted-foreground sm:text-lg md:mx-0">
+              Publications, visuels, vidéos et calendrier : transforme une idée en contenu prêt à
+              publier, sans perdre ta journée.
+            </p>
+            <div className="mt-9 flex flex-col items-center gap-3 sm:flex-row md:items-start">
+              <Button asChild size="lg" className="w-full rounded-full px-7 shadow-lift sm:w-auto">
+                <Link to="/inscription">
+                  Commencer gratuitement
+                  <ArrowRight className="size-4" />
+                </Link>
+              </Button>
+              <Button asChild size="lg" variant="outline" className="w-full rounded-full px-7 sm:w-auto">
+                <a href="#fonctionnalites">
+                  <Play className="size-4" /> Voir les outils
+                </a>
+              </Button>
+            </div>
+            <p className="mt-4 text-xs text-muted-foreground">
+              Sans engagement · Prêt à utiliser en 2 minutes
+            </p>
           </div>
-          <p className="mt-4 text-xs text-muted-foreground">
-            Sans engagement · Prêt à utiliser en 2 minutes
-          </p>
-          <div className="relative mt-14">
+
+          <div className="relative min-w-0 animate-fade-in-up [animation-delay:120ms]">
             <div className="overflow-hidden rounded-3xl border border-border/70 bg-card p-2 shadow-lift">
               <img
                 src={heroImage}
-                alt="Restauratrice montrant une publication générée par BizAI sur son téléphone"
+                alt="Restauratrice utilisant BizAI pour préparer une publication marketing"
                 width={1600}
                 height={1008}
+                fetchPriority="high"
                 className="aspect-[16/10] w-full rounded-[1.25rem] object-cover"
               />
             </div>
-            <div className="mx-auto -mt-8 flex w-fit flex-wrap items-center justify-center gap-x-6 gap-y-2 rounded-full border border-border/70 bg-background/95 px-6 py-3 text-xs font-medium text-muted-foreground shadow-soft backdrop-blur sm:text-sm">
-              <span>Restaurants</span>
-              <span>Coiffeurs & barbiers</span>
-              <span>Garages</span>
-              <span>Boutiques</span>
-              <span className="hidden sm:inline">Artisans</span>
+            <div className="absolute -bottom-7 left-3 right-3 grid grid-cols-[auto_minmax(0,1fr)_auto] items-center gap-3 rounded-2xl border border-border/70 bg-background/95 p-3 shadow-lift backdrop-blur sm:left-8 sm:right-8 sm:p-4">
+              <span className="flex size-10 shrink-0 items-center justify-center rounded-xl bg-primary-soft">
+                <Sparkles className="size-4 text-primary" />
+              </span>
+              <div className="min-w-0">
+                <p className="truncate text-sm font-semibold">Publication Instagram prête</p>
+                <p className="truncate text-xs text-muted-foreground">Ton professionnel · 3 variantes générées</p>
+              </div>
+              <span className="shrink-0 rounded-full bg-primary-soft px-2.5 py-1 text-xs font-semibold text-primary">
+                Terminé
+              </span>
             </div>
           </div>
+        </div>
+
+        <div className="relative mx-auto flex w-full max-w-6xl flex-wrap items-center justify-center gap-x-7 gap-y-3 px-5 pb-10 pt-4 text-xs font-semibold text-muted-foreground md:justify-start md:pt-0">
+          <span className="text-foreground">Pensé pour</span>
+          <span>Restaurants</span>
+          <span>Salons</span>
+          <span>Garages</span>
+          <span>Boutiques</span>
+          <span>Artisans</span>
         </div>
       </section>
 
@@ -230,7 +273,7 @@ function Landing() {
       <section className="py-20">
         <div className="mx-auto w-full max-w-6xl px-5">
           <h2 className="text-center text-3xl font-bold sm:text-4xl">Ce que tu y gagnes</h2>
-          <div className="mt-12 grid gap-5 sm:grid-cols-2 lg:grid-cols-4">
+          <div className="mt-12 grid gap-5 sm:grid-cols-2 xl:grid-cols-4">
             {benefits.map((benefit) => (
               <Card key={benefit.title} className="rounded-2xl border-border/70 shadow-soft">
                 <CardContent className="pt-6">
@@ -274,7 +317,7 @@ function Landing() {
           <p className="mx-auto mt-4 max-w-xl text-center text-muted-foreground">
             Tout ce qu'il te faut pour publier, répondre et planifier.
           </p>
-          <div className="mt-12 grid gap-6 sm:grid-cols-2 lg:grid-cols-3">
+          <div className="mt-12 grid gap-6 md:grid-cols-2 xl:grid-cols-3">
             {[
               {
                 src: featurePostsImage,
@@ -294,7 +337,7 @@ function Landing() {
             ].map((image) => (
               <figure
                 key={image.caption}
-                className="overflow-hidden rounded-3xl border border-border/70 bg-card shadow-soft"
+                className="group overflow-hidden rounded-3xl border border-border/70 bg-card shadow-soft transition-all duration-300 hover:-translate-y-1 hover:shadow-lift last:md:col-span-2 last:xl:col-span-1"
               >
                 <img
                   src={image.src}
@@ -302,7 +345,7 @@ function Landing() {
                   loading="lazy"
                   width={1200}
                   height={912}
-                  className="h-56 w-full object-cover sm:h-64"
+                  className="h-56 w-full object-cover transition-transform duration-500 group-hover:scale-[1.02] sm:h-64"
                 />
                 <figcaption className="px-5 py-4 text-sm font-medium">{image.caption}</figcaption>
               </figure>
@@ -326,6 +369,34 @@ function Landing() {
         </div>
       </section>
 
+      {/* Profils d'utilisation */}
+      <section className="border-y border-border/70 bg-muted/40 py-20">
+        <div className="mx-auto w-full max-w-6xl px-5">
+          <div className="mx-auto max-w-2xl text-center">
+            <Badge variant="secondary" className="rounded-full">Au quotidien</Badge>
+            <h2 className="mt-4 text-3xl font-bold sm:text-4xl">Conçu pour les journées déjà bien remplies</h2>
+            <p className="mt-4 text-muted-foreground">Des situations inspirées des besoins les plus fréquents des petites entreprises.</p>
+          </div>
+          <div className="mt-12 grid gap-5 md:grid-cols-3">
+            {businessProfiles.map((profile) => (
+              <Card key={profile.name} className="border-border/70 shadow-soft transition-all duration-300 hover:-translate-y-1 hover:shadow-lift">
+                <CardContent className="pt-6">
+                  <Quote className="size-5 text-primary" />
+                  <p className="mt-4 text-sm leading-relaxed">« {profile.quote} »</p>
+                  <div className="mt-6 flex min-w-0 items-center gap-3">
+                    <span className="flex size-10 shrink-0 items-center justify-center rounded-full bg-primary-soft text-xs font-bold text-primary">{profile.initials}</span>
+                    <div className="min-w-0">
+                      <p className="truncate text-sm font-semibold">{profile.name}</p>
+                      <p className="truncate text-xs text-muted-foreground">{profile.role}</p>
+                    </div>
+                  </div>
+                </CardContent>
+              </Card>
+            ))}
+          </div>
+        </div>
+      </section>
+
       {/* Tarifs */}
       <section id="tarifs" className="border-y border-border/70 bg-muted/40 py-20">
         <div className="mx-auto w-full max-w-6xl px-5">
@@ -333,14 +404,14 @@ function Landing() {
           <p className="mx-auto mt-4 max-w-xl text-center text-muted-foreground">
             Choisis le volume qui correspond à ton rythme de publication.
           </p>
-          <div className="mt-12 grid gap-6 md:grid-cols-2 lg:grid-cols-3">
+          <div className="mt-12 grid gap-6 md:grid-cols-2 xl:grid-cols-3">
             {plans.map((plan) => (
               <Card
                 key={plan.name}
                 className={
                   plan.highlight
-                    ? "relative rounded-3xl border-primary/40 shadow-lift"
-                    : "rounded-3xl border-border/70 shadow-soft"
+                    ? "relative rounded-3xl border-primary/40 shadow-lift last:md:col-span-2 last:xl:col-span-1"
+                    : "rounded-3xl border-border/70 shadow-soft last:md:col-span-2 last:xl:col-span-1"
                 }
               >
                 {plan.highlight ? (

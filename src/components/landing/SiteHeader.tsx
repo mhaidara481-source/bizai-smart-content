@@ -34,7 +34,7 @@ export function SiteHeader() {
       <div className="mx-auto flex h-16 w-full max-w-6xl items-center justify-between px-5">
         <BizAILogo />
 
-        <nav className="hidden items-center gap-7 md:flex">
+        <nav className="hidden items-center gap-6 lg:flex">
           {sections.map((section) => (
             <a
               key={section.href}
@@ -46,7 +46,7 @@ export function SiteHeader() {
           ))}
         </nav>
 
-        <div className="hidden items-center gap-2 md:flex">
+        <div className="hidden items-center gap-2 lg:flex">
           {user ? (
             <Button asChild>
               <Link to="/dashboard">Mon espace</Link>
@@ -64,7 +64,7 @@ export function SiteHeader() {
         </div>
 
         <Sheet open={open} onOpenChange={setOpen}>
-          <SheetTrigger asChild className="md:hidden">
+          <SheetTrigger asChild className="lg:hidden">
             <Button variant="outline" size="icon" aria-label="Ouvrir le menu">
               <Menu className="size-5" />
             </Button>
