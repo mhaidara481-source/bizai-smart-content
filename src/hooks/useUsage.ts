@@ -64,6 +64,7 @@ export const TOOL_LABELS: Record<string, string> = {
   review: "Réponse à un avis",
   ideas: "Idées de contenu",
   calendar: "Calendrier marketing",
+  video: "Vidéo générée",
 };
 
 export function useRecentGenerations(limit = 6) {
