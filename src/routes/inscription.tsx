@@ -1,25 +1,18 @@
 import { useState } from "react";
 import { createFileRoute, Link, useNavigate } from "@tanstack/react-router";
 import { toast } from "sonner";
+import { Loader2 } from "lucide-react";
 
 import { supabase } from "@/integrations/supabase/client";
 import { AuthCard } from "@/components/auth/AuthCard";
 import { Button } from "@/components/ui/button";
 import { Input } from "@/components/ui/input";
 import { Label } from "@/components/ui/label";
+import { getAuthErrorMessage } from "@/lib/auth-errors";
+import { pageHead } from "@/lib/seo";
 
 export const Route = createFileRoute("/inscription")({
-  head: () => ({
-    meta: [
-      { title: "Créer un compte BizAI" },
-      {
-        name: "description",
-        content: "Crée ton compte BizAI et génère ton contenu marketing en quelques secondes.",
-      },
-      { property: "og:title", content: "Créer un compte BizAI" },
-      { property: "og:description", content: "Rejoins BizAI et lance ta communication." },
-    ],
-  }),
+  head: () => pageHead({ title: "Créer un compte — BizAI", description: "Crée ton compte BizAI et génère ton contenu marketing en quelques secondes.", path: "/inscription", noindex: true }),
   component: SignUpPage,
 });
 
@@ -36,28 +29,26 @@ function SignUpPage() {
     event.preventDefault();
     setLoading(true);
 
-    const { data, error } = await supabase.auth.signUp({
-      email,
-      password,
-      options: {
-        emailRedirectTo: window.location.origin,
-        data: { full_name: fullName, business_name: businessName },
-      },
-    });
-
-    setLoading(false);
-
-    if (error) {
-      toast.error(error.message);
-      return;
+    try {
+      const { data, error } = await supabase.auth.signUp({
+        email: email.trim(),
+        password,
+        options: {
+          emailRedirectTo: `${window.location.origin}/auth/callback`,
+          data: { full_name: fullName.trim(), business_name: businessName.trim() },
+        },
+      });
+      if (error) throw error;
+      if (data.session) {
+        navigate({ to: "/dashboard" });
+        return;
+      }
+      setEmailSent(true);
+    } catch (error) {
+      toast.error(getAuthErrorMessage(error));
+    } finally {
+      setLoading(false);
     }
-
-    if (data.session) {
-      navigate({ to: "/dashboard" });
-      return;
-    }
-
-    setEmailSent(true);
   }
 
   if (emailSent) {
@@ -135,7 +126,7 @@ function SignUpPage() {
           />
         </div>
         <Button type="submit" className="w-full rounded-full" disabled={loading}>
-          {loading ? "Création…" : "Commencer gratuitement"}
+          {loading ? <><Loader2 className="size-4 animate-spin" />Création…</> : "Commencer gratuitement"}
         </Button>
       </form>
     </AuthCard>

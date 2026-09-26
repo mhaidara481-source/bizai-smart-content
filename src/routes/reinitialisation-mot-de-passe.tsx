@@ -9,13 +9,10 @@ import { Button } from "@/components/ui/button";
 import { Input } from "@/components/ui/input";
 import { Label } from "@/components/ui/label";
 import { getAuthErrorMessage } from "@/lib/auth-errors";
+import { pageHead } from "@/lib/seo";
 
 export const Route = createFileRoute("/reinitialisation-mot-de-passe")({
-  head: () => ({
-    meta: [
-      { title: "Nouveau mot de passe — BizAI" },
-    ],
-  }),
+  head: () => pageHead({ title: "Nouveau mot de passe — BizAI", description: "Choisis un nouveau mot de passe pour ton compte BizAI.", path: "/reinitialisation-mot-de-passe", noindex: true }),
   component: ResetPasswordPage,
 });
 

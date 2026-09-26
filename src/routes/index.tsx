@@ -28,24 +28,17 @@ import heroImage from "@/assets/hero-bizai.jpg";
 import featurePostsImage from "@/assets/feature-posts.jpg";
 import featureCalendarImage from "@/assets/feature-calendrier.jpg";
 import featureReviewsImage from "@/assets/feature-avis.jpg";
+import { pageHead } from "@/lib/seo";
 
 export const Route = createFileRoute("/")({
-  head: () => ({
-    meta: [
-      { title: "BizAI — Crée ton contenu marketing avec l'IA" },
-      {
-        name: "description",
-        content:
-          "BizAI aide les restaurants, coiffeurs, garages et artisans à créer leurs publications, répondre à leurs clients et planifier leur contenu.",
-      },
-      { property: "og:title", content: "BizAI — Crée ton contenu marketing avec l'IA" },
-      {
-        property: "og:description",
-        content:
-          "Publications, réponses aux avis, idées et calendrier marketing : tout ton contenu en quelques secondes.",
-      },
-    ],
-  }),
+  head: () =>
+    pageHead({
+      title: "BizAI — Crée ton contenu marketing avec l'IA",
+      description:
+        "BizAI aide les petites entreprises à créer leurs publications, répondre à leurs clients et planifier leur contenu.",
+      path: "/",
+      image: "https://bizai-smart-content.lovable.app/og-bizai.jpg",
+    }),
   component: Landing,
 });
 
@@ -114,6 +107,7 @@ const features = [
 ];
 
 const plans = PLANS.map((plan) => ({
+  id: plan.id,
   name: plan.name.toUpperCase(),
   price: plan.priceLabel,
   generations: `${plan.generations.toLocaleString("fr-FR")} générations par mois`,
@@ -371,13 +365,19 @@ function Landing() {
                       </li>
                     ))}
                   </ul>
-                  <Button
-                    asChild
-                    className="mt-7 w-full rounded-full"
-                    variant={plan.highlight ? "default" : "outline"}
-                  >
-                    <Link to="/inscription">Choisir ce plan</Link>
-                  </Button>
+                  {plan.id === "business" ? (
+                    <div className="mt-7 flex h-9 w-full items-center justify-center rounded-full border border-border bg-muted text-sm font-semibold text-muted-foreground">
+                      Bientôt disponible
+                    </div>
+                  ) : (
+                    <Button
+                      asChild
+                      className="mt-7 w-full rounded-full"
+                      variant={plan.highlight ? "default" : "outline"}
+                    >
+                      <Link to="/inscription">Choisir ce plan</Link>
+                    </Button>
+                  )}
                 </CardContent>
               </Card>
             ))}
