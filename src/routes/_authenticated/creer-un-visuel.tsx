@@ -68,17 +68,6 @@ function CreateVisual() {
     "Finalisation des détails…",
   ];
 
-  useEffect(() => {
-    if (!mutation.isPending) {
-      setLoadingStep(0);
-      return;
-    }
-    const timer = setInterval(
-      () => setLoadingStep((s) => (s + 1) % LOADING_MESSAGES.length),
-      3500,
-    );
-    return () => clearInterval(timer);
-  }, [mutation.isPending, LOADING_MESSAGES.length]);
 
   const mutation = useMutation({
     mutationFn: async () =>
