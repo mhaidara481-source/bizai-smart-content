@@ -1,3 +1,4 @@
+import { useEffect } from "react";
 import { createFileRoute, Link } from "@tanstack/react-router";
 import {
   ArrowRight,
@@ -162,6 +163,31 @@ const businessProfiles = [
 ];
 
 function Landing() {
+  useEffect(() => {
+    const elements = Array.from(document.querySelectorAll<HTMLElement>("[data-reveal]"));
+    const reducedMotion = window.matchMedia("(prefers-reduced-motion: reduce)").matches;
+
+    if (reducedMotion || !("IntersectionObserver" in window)) {
+      elements.forEach((element) => element.classList.add("is-visible"));
+      return;
+    }
+
+    const observer = new IntersectionObserver(
+      (entries) => {
+        entries.forEach((entry) => {
+          if (entry.isIntersecting) {
+            entry.target.classList.add("is-visible");
+            observer.unobserve(entry.target);
+          }
+        });
+      },
+      { rootMargin: "0px 0px -8%", threshold: 0.12 },
+    );
+
+    elements.forEach((element) => observer.observe(element));
+    return () => observer.disconnect();
+  }, []);
+
   return (
     <div className="min-h-screen bg-background">
       <SiteHeader />
@@ -169,7 +195,9 @@ function Landing() {
       {/* Hero */}
       <section className="relative overflow-hidden border-b border-border/60">
         <div className="pointer-events-none absolute inset-x-0 top-0 h-72 bg-primary-soft/60 [mask-image:linear-gradient(to_bottom,black,transparent)]" />
-        <div className="relative mx-auto grid w-full max-w-6xl items-center gap-12 px-5 py-16 md:grid-cols-[minmax(0,0.9fr)_minmax(0,1.1fr)] md:gap-8 md:py-20 lg:gap-14 lg:py-24">
+        <div className="hero-drift pointer-events-none absolute -right-20 top-16 h-44 w-72 rotate-12 rounded-[3rem] border border-primary/15 bg-primary-soft/30" />
+        <div className="hero-drift-delayed pointer-events-none absolute -left-24 bottom-16 h-32 w-64 -rotate-12 rounded-[3rem] border border-primary/10 bg-background/50" />
+        <div className="relative mx-auto grid w-full max-w-6xl items-center gap-10 px-5 py-14 md:grid-cols-[minmax(0,0.9fr)_minmax(0,1.1fr)] md:gap-8 md:py-16 lg:gap-12 lg:py-20">
           <div className="min-w-0 animate-fade-in-up text-center md:text-left">
             <Badge variant="secondary" className="mb-6 rounded-full px-3 py-1 text-xs font-semibold">
               Assistant IA pour les petites entreprises
@@ -226,7 +254,7 @@ function Landing() {
           </div>
         </div>
 
-        <div className="relative mx-auto flex w-full max-w-6xl flex-wrap items-center justify-center gap-x-7 gap-y-3 px-5 pb-10 pt-4 text-xs font-semibold text-muted-foreground md:justify-start md:pt-0">
+        <div className="relative mx-auto flex w-full max-w-6xl flex-wrap items-center justify-center gap-x-7 gap-y-3 px-5 pb-8 pt-3 text-xs font-semibold text-muted-foreground md:justify-start md:pt-0">
           <span className="text-foreground">Pensé pour</span>
           <span>Restaurants</span>
           <span>Salons</span>
@@ -237,23 +265,23 @@ function Landing() {
       </section>
 
       {/* Problème résolu */}
-      <section id="produit" className="border-t border-border/70 bg-muted/40 py-20">
-        <div className="mx-auto grid w-full max-w-6xl gap-10 px-5 md:grid-cols-2 md:items-center">
-          <div>
+      <section id="produit" className="border-t border-border/70 bg-muted/40 py-14 sm:py-16">
+        <div className="mx-auto grid w-full max-w-6xl gap-7 px-5 md:grid-cols-2 md:items-center md:gap-9">
+          <div data-reveal>
             <h2 className="text-3xl font-bold sm:text-4xl">
               Tu gères ton entreprise. Pas une agence de communication.
             </h2>
-            <p className="mt-5 text-muted-foreground">
+            <p className="mt-4 text-muted-foreground">
               Trouver quoi publier, écrire un texte correct, répondre à un avis délicat, tenir un
               rythme régulier : c'est du temps que tu n'as pas. Résultat, la communication passe
               après tout le reste, et les clients ne voient plus rien de ton activité.
             </p>
-            <p className="mt-4 text-muted-foreground">
+            <p className="mt-3 text-muted-foreground">
               BizAI comble ce vide. Tu décris ton métier une seule fois, et l'assistant se charge de
               rédiger, répondre et planifier à ta place — dans un ton qui te ressemble.
             </p>
           </div>
-          <Card className="rounded-3xl border-border/70 shadow-soft">
+          <Card data-reveal data-reveal-delay="1" className="rounded-3xl border-border/70 shadow-soft">
             <CardHeader>
               <CardTitle className="text-base">Avant / Après BizAI</CardTitle>
             </CardHeader>
@@ -270,12 +298,12 @@ function Landing() {
       </section>
 
       {/* Avantages */}
-      <section className="py-20">
+      <section className="py-14 sm:py-16">
         <div className="mx-auto w-full max-w-6xl px-5">
-          <h2 className="text-center text-3xl font-bold sm:text-4xl">Ce que tu y gagnes</h2>
-          <div className="mt-12 grid gap-5 sm:grid-cols-2 xl:grid-cols-4">
-            {benefits.map((benefit) => (
-              <Card key={benefit.title} className="rounded-2xl border-border/70 shadow-soft">
+          <h2 data-reveal className="text-center text-3xl font-bold sm:text-4xl">Ce que tu y gagnes</h2>
+          <div className="mt-8 grid gap-4 sm:grid-cols-2 xl:grid-cols-4">
+            {benefits.map((benefit, index) => (
+              <Card key={benefit.title} data-reveal data-reveal-delay={(index % 3).toString()} className="rounded-2xl border-border/70 shadow-soft transition-all duration-300 hover:-translate-y-1 hover:border-primary/25 hover:shadow-lift">
                 <CardContent className="pt-6">
                   <span className="flex size-10 items-center justify-center rounded-xl bg-primary-soft">
                     <benefit.icon className="size-5 text-primary" />
@@ -290,15 +318,15 @@ function Landing() {
       </section>
 
       {/* Comment ça marche */}
-      <section id="fonctionnement" className="border-y border-border/70 bg-muted/40 py-20">
+      <section id="fonctionnement" className="border-y border-border/70 bg-muted/40 py-14 sm:py-16">
         <div className="mx-auto w-full max-w-6xl px-5">
-          <h2 className="text-center text-3xl font-bold sm:text-4xl">Comment ça marche</h2>
-          <p className="mx-auto mt-4 max-w-xl text-center text-muted-foreground">
+          <h2 data-reveal className="text-center text-3xl font-bold sm:text-4xl">Comment ça marche</h2>
+          <p data-reveal className="mx-auto mt-3 max-w-xl text-center text-muted-foreground">
             Trois étapes, et ton contenu est prêt.
           </p>
-          <div className="mt-12 grid gap-5 md:grid-cols-3">
-            {steps.map((step) => (
-              <Card key={step.number} className="rounded-2xl border-border/70 shadow-soft">
+          <div className="mt-8 grid gap-4 md:grid-cols-3">
+            {steps.map((step, index) => (
+              <Card key={step.number} data-reveal data-reveal-delay={(index % 3).toString()} className="rounded-2xl border-border/70 shadow-soft transition-all duration-300 hover:-translate-y-1 hover:border-primary/25 hover:shadow-lift">
                 <CardContent className="pt-6">
                   <span className="text-sm font-extrabold text-primary">{step.number}</span>
                   <h3 className="mt-3 text-lg font-semibold">{step.title}</h3>
@@ -311,13 +339,14 @@ function Landing() {
       </section>
 
       {/* Fonctionnalités */}
-      <section id="fonctionnalites" className="py-20">
+      <section id="fonctionnalites" className="relative overflow-hidden py-14 sm:py-16">
+        <div className="section-drift pointer-events-none absolute -right-28 top-1/3 h-24 w-72 rotate-12 rounded-[3rem] border border-primary/10 bg-primary-soft/30" />
         <div className="mx-auto w-full max-w-6xl px-5">
-          <h2 className="text-center text-3xl font-bold sm:text-4xl">Quatre outils, un seul espace</h2>
-          <p className="mx-auto mt-4 max-w-xl text-center text-muted-foreground">
+          <h2 data-reveal className="text-center text-3xl font-bold sm:text-4xl">Quatre outils, un seul espace</h2>
+          <p data-reveal className="mx-auto mt-3 max-w-xl text-center text-muted-foreground">
             Tout ce qu'il te faut pour publier, répondre et planifier.
           </p>
-          <div className="mt-12 grid gap-6 md:grid-cols-2 xl:grid-cols-3">
+          <div className="relative mt-8 grid gap-5 md:grid-cols-2 xl:grid-cols-3">
             {[
               {
                 src: featurePostsImage,
@@ -334,10 +363,12 @@ function Landing() {
                 alt: "Gérante de boutique qui planifie son mois de publications",
                 caption: "Un mois de contenu planifié",
               },
-            ].map((image) => (
+            ].map((image, index) => (
               <figure
                 key={image.caption}
-                className="group overflow-hidden rounded-3xl border border-border/70 bg-card shadow-soft transition-all duration-300 hover:-translate-y-1 hover:shadow-lift last:md:col-span-2 last:xl:col-span-1"
+                data-reveal
+                data-reveal-delay={(index % 3).toString()}
+                className="group overflow-hidden rounded-3xl border border-border/70 bg-card shadow-soft transition-all duration-300 hover:-translate-y-1.5 hover:border-primary/30 hover:shadow-lift last:md:col-span-2 last:xl:col-span-1"
               >
                 <img
                   src={image.src}
@@ -351,9 +382,9 @@ function Landing() {
               </figure>
             ))}
           </div>
-          <div className="mt-6 grid gap-5 md:grid-cols-2">
-            {features.map((feature) => (
-              <Card key={feature.title} className="rounded-2xl border-border/70 shadow-soft">
+          <div className="mt-5 grid gap-4 md:grid-cols-2">
+            {features.map((feature, index) => (
+              <Card key={feature.title} data-reveal data-reveal-delay={(index % 2).toString()} className="rounded-2xl border-border/70 shadow-soft transition-all duration-300 hover:-translate-y-1 hover:border-primary/25 hover:shadow-lift">
                 <CardContent className="flex gap-4 pt-6">
                   <span className="flex size-11 shrink-0 items-center justify-center rounded-xl bg-primary-soft">
                     <feature.icon className="size-5 text-primary" />
@@ -370,16 +401,16 @@ function Landing() {
       </section>
 
       {/* Profils d'utilisation */}
-      <section className="border-y border-border/70 bg-muted/40 py-20">
+      <section className="border-y border-border/70 bg-muted/40 py-14 sm:py-16">
         <div className="mx-auto w-full max-w-6xl px-5">
-          <div className="mx-auto max-w-2xl text-center">
+          <div data-reveal className="mx-auto max-w-2xl text-center">
             <Badge variant="secondary" className="rounded-full">Au quotidien</Badge>
             <h2 className="mt-4 text-3xl font-bold sm:text-4xl">Conçu pour les journées déjà bien remplies</h2>
             <p className="mt-4 text-muted-foreground">Des situations inspirées des besoins les plus fréquents des petites entreprises.</p>
           </div>
-          <div className="mt-12 grid gap-5 md:grid-cols-3">
-            {businessProfiles.map((profile) => (
-              <Card key={profile.name} className="border-border/70 shadow-soft transition-all duration-300 hover:-translate-y-1 hover:shadow-lift">
+          <div className="mt-8 grid gap-4 md:grid-cols-3">
+            {businessProfiles.map((profile, index) => (
+              <Card key={profile.name} data-reveal data-reveal-delay={(index % 3).toString()} className="border-border/70 shadow-soft transition-all duration-300 hover:-translate-y-1 hover:border-primary/25 hover:shadow-lift">
                 <CardContent className="pt-6">
                   <Quote className="size-5 text-primary" />
                   <p className="mt-4 text-sm leading-relaxed">« {profile.quote} »</p>
@@ -398,20 +429,22 @@ function Landing() {
       </section>
 
       {/* Tarifs */}
-      <section id="tarifs" className="border-y border-border/70 bg-muted/40 py-20">
+      <section id="tarifs" className="border-y border-border/70 bg-muted/40 py-14 sm:py-16">
         <div className="mx-auto w-full max-w-6xl px-5">
-          <h2 className="text-center text-3xl font-bold sm:text-4xl">Des tarifs simples</h2>
-          <p className="mx-auto mt-4 max-w-xl text-center text-muted-foreground">
+          <h2 data-reveal className="text-center text-3xl font-bold sm:text-4xl">Des tarifs simples</h2>
+          <p data-reveal className="mx-auto mt-3 max-w-xl text-center text-muted-foreground">
             Choisis le volume qui correspond à ton rythme de publication.
           </p>
-          <div className="mt-12 grid gap-6 md:grid-cols-2 xl:grid-cols-3">
-            {plans.map((plan) => (
+          <div className="mt-8 grid gap-5 md:grid-cols-2 xl:grid-cols-3">
+            {plans.map((plan, index) => (
               <Card
                 key={plan.name}
+                data-reveal
+                data-reveal-delay={(index % 3).toString()}
                 className={
                   plan.highlight
-                    ? "relative rounded-3xl border-primary/40 shadow-lift last:md:col-span-2 last:xl:col-span-1"
-                    : "rounded-3xl border-border/70 shadow-soft last:md:col-span-2 last:xl:col-span-1"
+                    ? "relative rounded-3xl border-primary/40 shadow-lift transition-all duration-300 hover:-translate-y-1.5 hover:border-primary/60 hover:shadow-lift last:md:col-span-2 last:xl:col-span-1"
+                    : "rounded-3xl border-border/70 shadow-soft transition-all duration-300 hover:-translate-y-1.5 hover:border-primary/30 hover:shadow-lift last:md:col-span-2 last:xl:col-span-1"
                 }
               >
                 {plan.highlight ? (
@@ -451,10 +484,10 @@ function Landing() {
       </section>
 
       {/* FAQ */}
-      <section id="faq" className="py-20">
+      <section id="faq" className="py-14 sm:py-16">
         <div className="mx-auto w-full max-w-3xl px-5">
-          <h2 className="text-center text-3xl font-bold sm:text-4xl">Questions fréquentes</h2>
-          <Accordion type="single" collapsible className="mt-10">
+          <h2 data-reveal className="text-center text-3xl font-bold sm:text-4xl">Questions fréquentes</h2>
+          <Accordion data-reveal type="single" collapsible className="mt-7">
             {faq.map((item) => (
               <AccordionItem key={item.q} value={item.q}>
                 <AccordionTrigger className="text-left text-base font-semibold">
@@ -470,8 +503,8 @@ function Landing() {
       </section>
 
       {/* CTA final */}
-      <section className="px-5 pb-20">
-        <div className="mx-auto max-w-6xl rounded-3xl bg-gradient-hero px-6 py-14 text-center shadow-lift">
+      <section className="px-5 pb-14 sm:pb-16">
+        <div data-reveal className="mx-auto max-w-6xl rounded-3xl bg-gradient-hero px-6 py-11 text-center shadow-lift">
           <h2 className="text-3xl font-extrabold text-primary-foreground sm:text-4xl">
             Ton prochain post est à une minute d'ici.
           </h2>
