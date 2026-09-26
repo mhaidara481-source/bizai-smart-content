@@ -111,7 +111,7 @@ function CreatePost() {
       )}
 
       <div className="grid gap-6 lg:grid-cols-2 lg:items-start">
-        <Card className="rounded-2xl border-border/70 shadow-soft">
+        <Card className="border-border/70">
           <CardContent className="space-y-5 pt-6">
             <div className="grid gap-4 sm:grid-cols-2">
               <div className="space-y-2">
@@ -207,7 +207,7 @@ function CreatePost() {
           </CardContent>
         </Card>
 
-        <Card className="rounded-2xl border-border/70 shadow-soft">
+        <Card className="border-border/70">
           <CardContent className="pt-6">
             {!result && !mutation.isPending && (
               <div className="flex flex-col items-center py-16 text-center animate-fade-in-up">

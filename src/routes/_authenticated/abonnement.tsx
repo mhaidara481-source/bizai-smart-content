@@ -108,7 +108,7 @@ function SubscriptionPage() {
     <div>
       <PageHeader title="Abonnement" subtitle="Ton offre actuelle et tes générations restantes." />
 
-      <Card className="mb-8 rounded-2xl border-border/70 shadow-soft">
+      <Card className="mb-8 border-border/70">
         <CardHeader className="pb-2">
           <CardTitle className="text-sm text-muted-foreground">Offre actuelle</CardTitle>
         </CardHeader>
@@ -217,7 +217,7 @@ function SubscriptionPage() {
       </div>
 
       <h2 className="mb-4 mt-10 text-lg font-semibold">Comparer les offres</h2>
-      <Card className="rounded-2xl border-border/70 shadow-soft">
+      <Card className="border-border/70">
         <CardContent className="overflow-x-auto pt-6">
           <table className="w-full min-w-[34rem] text-sm">
             <thead>

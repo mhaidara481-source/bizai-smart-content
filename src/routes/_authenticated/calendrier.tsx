@@ -130,7 +130,7 @@ function CalendarPage() {
         </div>
       )}
 
-      <Card className="mb-8 rounded-2xl border-border/70 shadow-soft">
+      <Card className="mb-8 border-border/70">
         <CardContent className="grid gap-4 pt-6 sm:grid-cols-3 sm:items-end">
           <div className="space-y-2">
             <Label>Type d'activité</Label>
