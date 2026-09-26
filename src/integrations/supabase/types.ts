@@ -179,6 +179,63 @@ export type Database = {
         }
         Relationships: []
       }
+      video_jobs: {
+        Row: {
+          created_at: string
+          demo: boolean
+          error: string | null
+          id: string
+          path: string | null
+          prompt: string
+          status: string
+          task_id: string | null
+          user_id: string
+        }
+        Insert: {
+          created_at?: string
+          demo?: boolean
+          error?: string | null
+          id?: string
+          path?: string | null
+          prompt: string
+          status?: string
+          task_id?: string | null
+          user_id: string
+        }
+        Update: {
+          created_at?: string
+          demo?: boolean
+          error?: string | null
+          id?: string
+          path?: string | null
+          prompt?: string
+          status?: string
+          task_id?: string | null
+          user_id?: string
+        }
+        Relationships: []
+      }
+      video_usage: {
+        Row: {
+          period_start: string
+          updated_at: string
+          user_id: string
+          videos_used: number
+        }
+        Insert: {
+          period_start: string
+          updated_at?: string
+          user_id: string
+          videos_used?: number
+        }
+        Update: {
+          period_start?: string
+          updated_at?: string
+          user_id?: string
+          videos_used?: number
+        }
+        Relationships: []
+      }
     }
     Views: {
       [_ in never]: never
