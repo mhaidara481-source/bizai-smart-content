@@ -1,22 +1,18 @@
 import { useState } from "react";
 import { createFileRoute, Link, useNavigate } from "@tanstack/react-router";
 import { toast } from "sonner";
+import { Loader2 } from "lucide-react";
 
 import { supabase } from "@/integrations/supabase/client";
 import { AuthCard } from "@/components/auth/AuthCard";
 import { Button } from "@/components/ui/button";
 import { Input } from "@/components/ui/input";
 import { Label } from "@/components/ui/label";
+import { getAuthErrorMessage } from "@/lib/auth-errors";
+import { pageHead } from "@/lib/seo";
 
 export const Route = createFileRoute("/connexion")({
-  head: () => ({
-    meta: [
-      { title: "Connexion — BizAI" },
-      { name: "description", content: "Connecte-toi à ton espace BizAI." },
-      { property: "og:title", content: "Connexion — BizAI" },
-      { property: "og:description", content: "Accède à tes outils de contenu marketing." },
-    ],
-  }),
+  head: () => pageHead({ title: "Connexion — BizAI", description: "Connecte-toi à ton espace BizAI.", path: "/connexion", noindex: true }),
   component: SignInPage,
 });
 
@@ -30,16 +26,15 @@ function SignInPage() {
     event.preventDefault();
     setLoading(true);
 
-    const { error } = await supabase.auth.signInWithPassword({ email, password });
-
-    setLoading(false);
-
-    if (error) {
-      toast.error("Email ou mot de passe incorrect.");
-      return;
+    try {
+      const { error } = await supabase.auth.signInWithPassword({ email: email.trim(), password });
+      if (error) throw error;
+      navigate({ to: "/dashboard" });
+    } catch (error) {
+      toast.error(getAuthErrorMessage(error));
+    } finally {
+      setLoading(false);
     }
-
-    navigate({ to: "/dashboard" });
   }
 
   return (
@@ -79,8 +74,13 @@ function SignInPage() {
             required
           />
         </div>
+        <div className="text-right">
+          <Link to="/mot-de-passe-oublie" className="text-sm font-semibold text-primary hover:underline">
+            Mot de passe oublié ?
+          </Link>
+        </div>
         <Button type="submit" className="w-full rounded-full" disabled={loading}>
-          {loading ? "Connexion…" : "Se connecter"}
+          {loading ? <><Loader2 className="size-4 animate-spin" />Connexion…</> : "Se connecter"}
         </Button>
       </form>
     </AuthCard>

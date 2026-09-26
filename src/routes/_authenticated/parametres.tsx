@@ -9,6 +9,7 @@ import { Button } from "@/components/ui/button";
 import { Card, CardContent } from "@/components/ui/card";
 import { Input } from "@/components/ui/input";
 import { Label } from "@/components/ui/label";
+import { Skeleton } from "@/components/ui/skeleton";
 import {
   Select,
   SelectContent,
@@ -20,16 +21,10 @@ import { supabase } from "@/integrations/supabase/client";
 import { useAuth } from "@/hooks/useAuth";
 import { useProfile } from "@/hooks/useProfile";
 import { BUSINESS_TYPES } from "@/lib/ai-types";
+import { pageHead } from "@/lib/seo";
 
 export const Route = createFileRoute("/_authenticated/parametres")({
-  head: () => ({
-    meta: [
-      { title: "Paramètres — BizAI" },
-      { name: "description", content: "Mets à jour ton profil et les infos de ton entreprise." },
-      { property: "og:title", content: "Paramètres — BizAI" },
-      { property: "og:description", content: "Ton profil et ton entreprise sur BizAI." },
-    ],
-  }),
+  head: () => pageHead({ title: "Paramètres — BizAI", description: "Mets à jour ton profil et les informations de ton entreprise.", path: "/parametres", noindex: true }),
   component: SettingsPage,
 });
 
@@ -74,6 +69,7 @@ function SettingsPage() {
 
       <Card className="max-w-2xl rounded-2xl border-border/70 shadow-soft">
         <CardContent className="space-y-5 pt-6">
+          {isLoading ? <div className="space-y-4"><Skeleton className="h-10 w-full" /><Skeleton className="h-10 w-full" /><Skeleton className="h-10 w-full" /><Skeleton className="h-10 w-full" /></div> : <>
           <div className="space-y-2">
             <Label htmlFor="email">Email</Label>
             <Input id="email" value={user?.email ?? ""} disabled />
@@ -126,6 +122,7 @@ function SettingsPage() {
               "Enregistrer"
             )}
           </Button>
+          </>}
         </CardContent>
       </Card>
     </div>

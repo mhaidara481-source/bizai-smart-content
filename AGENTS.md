@@ -8,3 +8,5 @@
 > Commits you push to the connected branch sync back to Lovable and show up in
 > the editor, so keep the branch in a working state.
 <!-- LOVABLE:END -->
+
+- Centralize per-route metadata in `src/lib/seo.ts` so canonical and social tags stay consistent across every page.

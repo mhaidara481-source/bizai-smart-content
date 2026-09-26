@@ -13,24 +13,20 @@ import {
 import { Card, CardContent, CardHeader, CardTitle } from "@/components/ui/card";
 import { Button } from "@/components/ui/button";
 import { Progress } from "@/components/ui/progress";
+import { Skeleton } from "@/components/ui/skeleton";
+import { pageHead } from "@/lib/seo";
 
 export const Route = createFileRoute("/_authenticated/dashboard")({
-  head: () => ({
-    meta: [
-      { title: "Dashboard — BizAI" },
-      { name: "description", content: "Ton activité et tes outils BizAI en un coup d'œil." },
-      { property: "og:title", content: "Dashboard — BizAI" },
-      { property: "og:description", content: "Suis tes générations et accède à tes outils." },
-    ],
-  }),
+  head: () => pageHead({ title: "Tableau de bord — BizAI", description: "Ton activité et tes outils BizAI en un coup d'œil.", path: "/dashboard", noindex: true }),
   component: Dashboard,
 });
 
 function Dashboard() {
-  const { data: profile } = useProfile();
-  const { data: subscription } = useSubscription();
-  const { data: usedThisMonth = 0 } = useUsage();
-  const { data: recent = [] } = useRecentGenerations();
+  const { data: profile, isLoading: profileLoading } = useProfile();
+  const { data: subscription, isLoading: subscriptionLoading } = useSubscription();
+  const { data: usedThisMonth = 0, isLoading: usageLoading } = useUsage();
+  const { data: recent = [], isLoading: recentLoading } = useRecentGenerations();
+  const loading = profileLoading || subscriptionLoading || usageLoading;
   const plan =
     subscription?.status === "active" ? subscription.plan : (profile?.plan ?? "free");
   const used = usedThisMonth;
@@ -51,9 +47,7 @@ function Dashboard() {
             <CardTitle className="text-sm text-muted-foreground">Générations utilisées</CardTitle>
           </CardHeader>
           <CardContent>
-            <p className="text-3xl font-extrabold">{used}</p>
-            <Progress value={percent} className="mt-4" />
-            <p className="mt-2 text-xs text-muted-foreground">sur {limit} ce mois-ci</p>
+            {loading ? <Skeleton className="h-16 w-full" /> : <><p className="text-3xl font-extrabold">{used}</p><Progress value={percent} className="mt-4" /><p className="mt-2 text-xs text-muted-foreground">sur {limit} ce mois-ci</p></>}
           </CardContent>
         </Card>
 
@@ -62,10 +56,9 @@ function Dashboard() {
             <CardTitle className="text-sm text-muted-foreground">Générations restantes</CardTitle>
           </CardHeader>
           <CardContent>
-            <p className="text-3xl font-extrabold">{remaining}</p>
-            <p className="mt-2 text-xs text-muted-foreground">
+            {loading ? <Skeleton className="h-16 w-full" /> : <><p className="text-3xl font-extrabold">{remaining}</p><p className="mt-2 text-xs text-muted-foreground">
               Réinitialisées au début de chaque mois
-            </p>
+            </p></>}
           </CardContent>
         </Card>
 
@@ -74,7 +67,7 @@ function Dashboard() {
             <CardTitle className="text-sm text-muted-foreground">Abonnement actuel</CardTitle>
           </CardHeader>
           <CardContent>
-            <p className="text-3xl font-extrabold">{PLAN_LABELS[plan] ?? "Découverte"}</p>
+            {loading ? <Skeleton className="h-9 w-36" /> : <p className="text-3xl font-extrabold">{PLAN_LABELS[plan] ?? "Découverte"}</p>}
             <Button asChild variant="outline" size="sm" className="mt-4 rounded-full">
               <Link to="/abonnement">Gérer mon offre</Link>
             </Button>
@@ -107,7 +100,9 @@ function Dashboard() {
 
       <h2 className="mb-4 mt-10 text-lg font-semibold">Activité récente</h2>
       <Card className="rounded-2xl border-border/70 shadow-soft">
-        {recent.length === 0 ? (
+        {recentLoading ? (
+          <CardContent className="space-y-3 py-6"><Skeleton className="h-12 w-full" /><Skeleton className="h-12 w-full" /><Skeleton className="h-12 w-full" /></CardContent>
+        ) : recent.length === 0 ? (
           <CardContent className="flex flex-col items-center py-14 text-center">
             <span className="flex size-12 items-center justify-center rounded-2xl bg-primary-soft">
               <Sparkles className="size-5 text-primary" />

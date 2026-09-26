@@ -2,7 +2,7 @@ import { useState } from "react";
 import { createFileRoute } from "@tanstack/react-router";
 import { useQueryClient } from "@tanstack/react-query";
 import { useServerFn } from "@tanstack/react-start";
-import { ArrowUpRight, Check, Loader2, Settings2, Sparkles } from "lucide-react";
+import { ArrowUpRight, Check, Loader2, Settings2 } from "lucide-react";
 import { toast } from "sonner";
 
 import { PageHeader } from "@/components/app/PageHeader";
@@ -61,7 +61,7 @@ function SubscriptionPage() {
   const percent = limit > 0 ? Math.min((used / limit) * 100, 100) : 0;
 
   const nextPlan: PlanId | null =
-    activePlan === "business" ? null : activePlan === "pro" ? "business" : hasPaidPlan ? "pro" : "starter";
+    activePlan === "pro" || activePlan === "business" ? null : hasPaidPlan ? "pro" : "starter";
 
   const primaryLabel =
     nextPlan === null
@@ -71,10 +71,10 @@ function SubscriptionPage() {
         : "Choisir Starter";
 
   async function handleCheckout(plan: PlanId) {
+    if (plan === "business") return;
     setPending(plan);
     try {
-      // Mode démo : simule un abonnement actif, sans paiement réel.
-      const result = await checkout({ data: { plan, simulate: true } });
+      const result = await checkout({ data: { plan } });
       if (result.url) {
         window.location.href = result.url;
         return;
@@ -202,15 +202,21 @@ function SubscriptionPage() {
                     </li>
                   ))}
                 </ul>
-                <Button
-                  className="mt-8 w-full rounded-full"
-                  variant={current ? "outline" : "secondary"}
-                  disabled={current || loading || pending !== null}
-                  onClick={() => handleCheckout(plan.id)}
-                >
-                  {pending === plan.id ? <Loader2 className="mr-2 size-4 animate-spin" /> : null}
-                  {current ? "Offre active" : "Choisir ce plan"}
-                </Button>
+                {plan.id === "business" ? (
+                  <div className="mt-8 flex h-9 w-full items-center justify-center rounded-full border border-border bg-muted text-sm font-semibold text-muted-foreground">
+                    Bientôt disponible
+                  </div>
+                ) : (
+                  <Button
+                    className="mt-8 w-full rounded-full"
+                    variant={current ? "outline" : "secondary"}
+                    disabled={current || loading || pending !== null}
+                    onClick={() => handleCheckout(plan.id)}
+                  >
+                    {pending === plan.id ? <Loader2 className="mr-2 size-4 animate-spin" /> : null}
+                    {current ? "Offre active" : "Choisir ce plan"}
+                  </Button>
+                )}
               </CardContent>
             </Card>
           );
@@ -247,21 +253,6 @@ function SubscriptionPage() {
         </CardContent>
       </Card>
 
-      <Card className="mt-8 rounded-2xl border-border/70 bg-primary-soft/50 shadow-soft">
-        <CardContent className="flex items-start gap-4 pt-6">
-          <span className="flex size-11 shrink-0 items-center justify-center rounded-xl bg-background">
-            <Sparkles className="size-5 text-primary" />
-          </span>
-          <div>
-            <p className="font-semibold">Mode démo — paiement bientôt disponible</p>
-            <p className="mt-1 text-sm text-muted-foreground">
-              Aucun paiement réel n'est encore possible : changer d'offre ici active simplement le
-              plan pour tester l'application. Tes limites de génération restent toujours vérifiées
-              côté serveur.
-            </p>
-          </div>
-        </CardContent>
-      </Card>
     </div>
   );
 }

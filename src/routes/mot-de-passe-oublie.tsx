@@ -9,14 +9,10 @@ import { Button } from "@/components/ui/button";
 import { Input } from "@/components/ui/input";
 import { Label } from "@/components/ui/label";
 import { getAuthErrorMessage } from "@/lib/auth-errors";
+import { pageHead } from "@/lib/seo";
 
 export const Route = createFileRoute("/mot-de-passe-oublie")({
-  head: () => ({
-    meta: [
-      { title: "Mot de passe oublié — BizAI" },
-      { name: "description", content: "Réinitialise ton mot de passe BizAI." },
-    ],
-  }),
+  head: () => pageHead({ title: "Mot de passe oublié — BizAI", description: "Réinitialise ton mot de passe BizAI.", path: "/mot-de-passe-oublie", noindex: true }),
   component: ForgotPasswordPage,
 });
 
@@ -29,25 +25,24 @@ function ForgotPasswordPage() {
     event.preventDefault();
     setLoading(true);
 
-    const { error } = await supabase.auth.resetPasswordForEmail(email, {
-      redirectTo: `${window.location.origin}/auth/callback`,
-    });
-
-    setLoading(false);
-
-    if (error) {
+    try {
+      const { error } = await supabase.auth.resetPasswordForEmail(email.trim(), {
+        redirectTo: `${window.location.origin}/auth/callback?type=recovery`,
+      });
+      if (error) throw error;
+      setSent(true);
+    } catch (error) {
       toast.error(getAuthErrorMessage(error));
-      return;
+    } finally {
+      setLoading(false);
     }
-
-    setSent(true);
   }
 
   if (sent) {
     return (
       <AuthCard
         title="Email envoyé"
-        subtitle="Vérifie ta boîte mail. Un lien de réinitialisation a été envoyé à ${email}."
+        subtitle={`Vérifie ta boîte mail. Un lien de réinitialisation a été envoyé à ${email}.`}
       >
         <Button asChild variant="outline" className="w-full rounded-full">
           <Link to="/connexion">Retour à la connexion</Link>
