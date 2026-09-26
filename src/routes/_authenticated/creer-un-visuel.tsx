@@ -214,8 +214,11 @@ function CreateVisual() {
             {mutation.isPending && (
               <div className="flex flex-col items-center py-16 text-center">
                 <Loader2 className="size-6 animate-spin text-primary" />
-                <p className="mt-4 text-sm text-muted-foreground">
-                  BizAI crée ton visuel… cela peut prendre jusqu'à une minute.
+                <p
+                  key={loadingStep}
+                  className="mt-4 text-sm text-muted-foreground transition-opacity duration-500 animate-fade-in"
+                >
+                  {LOADING_MESSAGES[loadingStep]}
                 </p>
               </div>
             )}
