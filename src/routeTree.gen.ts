@@ -30,6 +30,7 @@ import { Route as AuthenticatedParametresRouteImport } from './routes/_authentic
 import { Route as AuthenticatedRepondreAuxAvisRouteImport } from './routes/_authenticated/repondre-aux-avis'
 import { Route as AuthCallbackRouteImport } from './routes/auth/callback'
 import { Route as ApiPublicWhopWebhookRouteImport } from './routes/api/public/whop-webhook'
+import { Route as ApiPublicMetaCallbackRouteImport } from './routes/api/public/meta/callback'
 
 const IndexRoute = IndexRouteImport.update({
   id: '/',
@@ -141,6 +142,11 @@ const ApiPublicWhopWebhookRoute = ApiPublicWhopWebhookRouteImport.update({
   path: '/api/public/whop-webhook',
   getParentRoute: () => rootRouteImport,
 } as any)
+const ApiPublicMetaCallbackRoute = ApiPublicMetaCallbackRouteImport.update({
+  id: '/api/public/meta/callback',
+  path: '/api/public/meta/callback',
+  getParentRoute: () => rootRouteImport,
+} as any)
 
 export interface FileRoutesByFullPath {
   '/': typeof IndexRoute
@@ -163,6 +169,7 @@ export interface FileRoutesByFullPath {
   '/repondre-aux-avis': typeof AuthenticatedRepondreAuxAvisRoute
   '/auth/callback': typeof AuthCallbackRoute
   '/api/public/whop-webhook': typeof ApiPublicWhopWebhookRoute
+  '/api/public/meta/callback': typeof ApiPublicMetaCallbackRoute
 }
 export interface FileRoutesByTo {
   '/': typeof IndexRoute
@@ -185,6 +192,7 @@ export interface FileRoutesByTo {
   '/repondre-aux-avis': typeof AuthenticatedRepondreAuxAvisRoute
   '/auth/callback': typeof AuthCallbackRoute
   '/api/public/whop-webhook': typeof ApiPublicWhopWebhookRoute
+  '/api/public/meta/callback': typeof ApiPublicMetaCallbackRoute
 }
 export interface FileRoutesById {
   __root__: typeof rootRouteImport
@@ -209,6 +217,7 @@ export interface FileRoutesById {
   '/_authenticated/repondre-aux-avis': typeof AuthenticatedRepondreAuxAvisRoute
   '/auth/callback': typeof AuthCallbackRoute
   '/api/public/whop-webhook': typeof ApiPublicWhopWebhookRoute
+  '/api/public/meta/callback': typeof ApiPublicMetaCallbackRoute
 }
 export interface FileRouteTypes {
   fileRoutesByFullPath: FileRoutesByFullPath
@@ -233,6 +242,7 @@ export interface FileRouteTypes {
     | '/repondre-aux-avis'
     | '/auth/callback'
     | '/api/public/whop-webhook'
+    | '/api/public/meta/callback'
   fileRoutesByTo: FileRoutesByTo
   to:
     | '/'
@@ -255,6 +265,7 @@ export interface FileRouteTypes {
     | '/repondre-aux-avis'
     | '/auth/callback'
     | '/api/public/whop-webhook'
+    | '/api/public/meta/callback'
   id:
     | '__root__'
     | '/'
@@ -278,6 +289,7 @@ export interface FileRouteTypes {
     | '/_authenticated/repondre-aux-avis'
     | '/auth/callback'
     | '/api/public/whop-webhook'
+    | '/api/public/meta/callback'
   fileRoutesById: FileRoutesById
 }
 export interface RootRouteChildren {
@@ -293,6 +305,7 @@ export interface RootRouteChildren {
   ReinitialisationMotDePasseRoute: typeof ReinitialisationMotDePasseRoute
   AuthCallbackRoute: typeof AuthCallbackRoute
   ApiPublicWhopWebhookRoute: typeof ApiPublicWhopWebhookRoute
+  ApiPublicMetaCallbackRoute: typeof ApiPublicMetaCallbackRoute
 }
 
 declare module '@tanstack/react-router' {
@@ -444,6 +457,13 @@ declare module '@tanstack/react-router' {
       preLoaderRoute: typeof ApiPublicWhopWebhookRouteImport
       parentRoute: typeof rootRouteImport
     }
+    '/api/public/meta/callback': {
+      id: '/api/public/meta/callback'
+      path: '/api/public/meta/callback'
+      fullPath: '/api/public/meta/callback'
+      preLoaderRoute: typeof ApiPublicMetaCallbackRouteImport
+      parentRoute: typeof rootRouteImport
+    }
   }
 }
 
@@ -487,6 +507,7 @@ const rootRouteChildren: RootRouteChildren = {
   ReinitialisationMotDePasseRoute: ReinitialisationMotDePasseRoute,
   AuthCallbackRoute: AuthCallbackRoute,
   ApiPublicWhopWebhookRoute: ApiPublicWhopWebhookRoute,
+  ApiPublicMetaCallbackRoute: ApiPublicMetaCallbackRoute,
 }
 export const routeTree = rootRouteImport
   ._addFileChildren(rootRouteChildren)

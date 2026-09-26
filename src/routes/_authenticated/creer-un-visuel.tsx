@@ -5,6 +5,8 @@ import { useEffect, useState } from "react";
 import { Download, ImageIcon, Loader2, RefreshCw, Sparkles } from "lucide-react";
 import { toast } from "sonner";
 
+import { PublishPanel } from "@/components/app/PublishPanel";
+import { Textarea } from "@/components/ui/textarea";
 import { PageHeader } from "@/components/app/PageHeader";
 import { DemoBadge, LimitReached } from "@/components/app/LimitReached";
 import { Button } from "@/components/ui/button";
@@ -62,6 +64,7 @@ function CreateVisual() {
   const [demo, setDemo] = useState(false);
   const [limitReached, setLimitReached] = useState(false);
   const [loadingStep, setLoadingStep] = useState(0);
+  const [caption, setCaption] = useState("");
 
   const LOADING_MESSAGES = [
     "Analyse de ta demande…",
@@ -248,6 +251,17 @@ function CreateVisual() {
                     <RefreshCw className="size-4" /> Régénérer
                   </Button>
                 </div>
+                <div className="space-y-2">
+                  <Label htmlFor="caption">Légende (pour publier)</Label>
+                  <Textarea
+                    id="caption"
+                    className="min-h-20"
+                    placeholder="Écris la légende de ta publication…"
+                    value={caption}
+                    onChange={(e) => setCaption(e.target.value)}
+                  />
+                </div>
+                <PublishPanel message={caption || subject} imageUrl={result.url} />
               </div>
             )}
           </CardContent>
