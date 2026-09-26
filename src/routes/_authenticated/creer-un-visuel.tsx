@@ -226,7 +226,6 @@ function CreateVisual() {
 
             {result && !mutation.isPending && (
               <div className="space-y-4 animate-fade-in-up">
-              <div className="space-y-4">
                 {demo && <DemoBadge />}
                 <img
                   src={result.url}

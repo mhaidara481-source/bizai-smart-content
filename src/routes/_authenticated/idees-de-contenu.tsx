@@ -207,7 +207,6 @@ function IdeasPage() {
 
       {ideas && !mutation.isPending && (
         <div className="grid gap-5 sm:grid-cols-2 lg:grid-cols-3 animate-fade-in-up">
-        <div className="grid gap-5 sm:grid-cols-2 lg:grid-cols-3">
           {ideas.map((idea, index) => (
             <Card key={index} className="rounded-2xl border-border/70 shadow-soft">
               <CardContent className="space-y-3 pt-6">

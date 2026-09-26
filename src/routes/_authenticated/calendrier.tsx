@@ -216,11 +216,8 @@ function CalendarPage() {
       )}
 
       {!generate.isPending && entries.length > 0 && (
-        <div className="space-y-3">
+        <div className="space-y-3 animate-fade-in-up">
           {entries.map((entry) => {
-            const published = entry.status === "publie";
-            return (
-              <div key={entry.id} className="animate-fade-in-up">
             const published = entry.status === "publie";
             return (
               <Card key={entry.id} className="rounded-2xl border-border/70 shadow-soft">

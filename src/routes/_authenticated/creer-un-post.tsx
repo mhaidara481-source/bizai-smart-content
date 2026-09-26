@@ -231,7 +231,6 @@ function CreatePost() {
 
             {result && !mutation.isPending && (
               <div className="space-y-5 animate-fade-in-up">
-              <div className="space-y-5">
                 {demo && <DemoBadge />}
                 <div>
                   <p className="text-xs font-semibold uppercase text-muted-foreground">Accroche</p>

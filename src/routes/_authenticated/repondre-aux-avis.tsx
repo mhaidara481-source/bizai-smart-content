@@ -196,7 +196,6 @@ function ReviewsPage() {
 
             {result && !mutation.isPending && (
               <div className="space-y-5 animate-fade-in-up">
-              <div className="space-y-5">
                 {demo && <DemoBadge />}
                 <div className="flex items-center gap-2">
                   <span className="text-xs font-semibold uppercase text-muted-foreground">
