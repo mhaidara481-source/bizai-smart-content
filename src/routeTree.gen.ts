@@ -32,6 +32,7 @@ import { Route as AuthenticatedReseauxRouteImport } from './routes/_authenticate
 import { Route as AuthCallbackRouteImport } from './routes/auth/callback'
 import { Route as ApiPublicWhopWebhookRouteImport } from './routes/api/public/whop-webhook'
 import { Route as ApiPublicMetaCallbackRouteImport } from './routes/api/public/meta/callback'
+import { Route as ApiPublicTiktokCallbackRouteImport } from './routes/api/public/tiktok/callback'
 
 const IndexRoute = IndexRouteImport.update({
   id: '/',
@@ -153,6 +154,11 @@ const ApiPublicMetaCallbackRoute = ApiPublicMetaCallbackRouteImport.update({
   path: '/api/public/meta/callback',
   getParentRoute: () => rootRouteImport,
 } as any)
+const ApiPublicTiktokCallbackRoute = ApiPublicTiktokCallbackRouteImport.update({
+  id: '/api/public/tiktok/callback',
+  path: '/api/public/tiktok/callback',
+  getParentRoute: () => rootRouteImport,
+} as any)
 
 export interface FileRoutesByFullPath {
   '/': typeof IndexRoute
@@ -177,6 +183,7 @@ export interface FileRoutesByFullPath {
   '/auth/callback': typeof AuthCallbackRoute
   '/api/public/whop-webhook': typeof ApiPublicWhopWebhookRoute
   '/api/public/meta/callback': typeof ApiPublicMetaCallbackRoute
+  '/api/public/tiktok/callback': typeof ApiPublicTiktokCallbackRoute
 }
 export interface FileRoutesByTo {
   '/': typeof IndexRoute
@@ -201,6 +208,7 @@ export interface FileRoutesByTo {
   '/auth/callback': typeof AuthCallbackRoute
   '/api/public/whop-webhook': typeof ApiPublicWhopWebhookRoute
   '/api/public/meta/callback': typeof ApiPublicMetaCallbackRoute
+  '/api/public/tiktok/callback': typeof ApiPublicTiktokCallbackRoute
 }
 export interface FileRoutesById {
   __root__: typeof rootRouteImport
@@ -227,6 +235,7 @@ export interface FileRoutesById {
   '/auth/callback': typeof AuthCallbackRoute
   '/api/public/whop-webhook': typeof ApiPublicWhopWebhookRoute
   '/api/public/meta/callback': typeof ApiPublicMetaCallbackRoute
+  '/api/public/tiktok/callback': typeof ApiPublicTiktokCallbackRoute
 }
 export interface FileRouteTypes {
   fileRoutesByFullPath: FileRoutesByFullPath
@@ -253,6 +262,7 @@ export interface FileRouteTypes {
     | '/auth/callback'
     | '/api/public/whop-webhook'
     | '/api/public/meta/callback'
+    | '/api/public/tiktok/callback'
   fileRoutesByTo: FileRoutesByTo
   to:
     | '/'
@@ -277,6 +287,7 @@ export interface FileRouteTypes {
     | '/auth/callback'
     | '/api/public/whop-webhook'
     | '/api/public/meta/callback'
+    | '/api/public/tiktok/callback'
   id:
     | '__root__'
     | '/'
@@ -302,6 +313,7 @@ export interface FileRouteTypes {
     | '/auth/callback'
     | '/api/public/whop-webhook'
     | '/api/public/meta/callback'
+    | '/api/public/tiktok/callback'
   fileRoutesById: FileRoutesById
 }
 export interface RootRouteChildren {
@@ -318,6 +330,7 @@ export interface RootRouteChildren {
   AuthCallbackRoute: typeof AuthCallbackRoute
   ApiPublicWhopWebhookRoute: typeof ApiPublicWhopWebhookRoute
   ApiPublicMetaCallbackRoute: typeof ApiPublicMetaCallbackRoute
+  ApiPublicTiktokCallbackRoute: typeof ApiPublicTiktokCallbackRoute
 }
 
 declare module '@tanstack/react-router' {
@@ -483,6 +496,13 @@ declare module '@tanstack/react-router' {
       preLoaderRoute: typeof ApiPublicMetaCallbackRouteImport
       parentRoute: typeof rootRouteImport
     }
+    '/api/public/tiktok/callback': {
+      id: '/api/public/tiktok/callback'
+      path: '/api/public/tiktok/callback'
+      fullPath: '/api/public/tiktok/callback'
+      preLoaderRoute: typeof ApiPublicTiktokCallbackRouteImport
+      parentRoute: typeof rootRouteImport
+    }
   }
 }
 
@@ -529,6 +549,7 @@ const rootRouteChildren: RootRouteChildren = {
   AuthCallbackRoute: AuthCallbackRoute,
   ApiPublicWhopWebhookRoute: ApiPublicWhopWebhookRoute,
   ApiPublicMetaCallbackRoute: ApiPublicMetaCallbackRoute,
+  ApiPublicTiktokCallbackRoute: ApiPublicTiktokCallbackRoute,
 }
 export const routeTree = rootRouteImport
   ._addFileChildren(rootRouteChildren)
