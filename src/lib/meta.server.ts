@@ -79,7 +79,7 @@ async function graph<T>(
   const res = await fetch(url, {
     method,
     headers: method === "POST" ? { "Content-Type": "application/x-www-form-urlencoded" } : {},
-    body: method === "POST" ? body : undefined,
+    body: method === "POST" ? body.toString() : null,
   });
   const json = (await res.json().catch(() => ({}))) as T & GraphError;
   if (!res.ok || json.error) throw friendlyError(json.error, res.status);
@@ -203,7 +203,7 @@ export async function completeConnection(
 export type PublishInput = {
   accountId: string;
   message: string;
-  imageUrl?: string;
+  imageUrl?: string | undefined;
 };
 
 export type PublishResult = { status: "published"; permalink: string | null; postId: string };
