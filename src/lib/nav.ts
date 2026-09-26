@@ -7,6 +7,7 @@ import {
   Lightbulb,
   CalendarDays,
   CreditCard,
+  Share2,
   Settings,
 } from "lucide-react";
 
@@ -19,6 +20,7 @@ export type NavItem = {
     | "/repondre-aux-avis"
     | "/idees-de-contenu"
     | "/calendrier"
+    | "/reseaux"
     | "/abonnement"
     | "/parametres";
   label: string;
@@ -69,6 +71,7 @@ export const navItems: NavItem[] = [
     icon: CalendarDays,
     description: "Planifie ton mois de communication",
   },
+  { to: "/reseaux", label: "Mes réseaux", icon: Share2, description: "Connecte Facebook et Instagram" },
   { to: "/abonnement", label: "Abonnement", icon: CreditCard, description: "Gère ton offre BizAI" },
   { to: "/parametres", label: "Paramètres", icon: Settings, description: "Ton profil et ton entreprise" },
 ];

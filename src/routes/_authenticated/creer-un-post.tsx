@@ -5,6 +5,7 @@ import { useState } from "react";
 import { Copy, Loader2, Pencil, RefreshCw, Sparkles } from "lucide-react";
 import { toast } from "sonner";
 
+import { PublishPanel } from "@/components/app/PublishPanel";
 import { PageHeader } from "@/components/app/PageHeader";
 import { DemoBadge, LimitReached } from "@/components/app/LimitReached";
 import { Button } from "@/components/ui/button";
@@ -285,6 +286,7 @@ function CreatePost() {
                     <Pencil className="size-4" /> {editing ? "Terminer" : "Modifier"}
                   </Button>
                 </div>
+                <PublishPanel message={fullText} />
               </div>
             )}
           </CardContent>

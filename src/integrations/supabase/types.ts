@@ -113,6 +113,157 @@ export type Database = {
         }
         Relationships: []
       }
+      social_accounts: {
+        Row: {
+          created_at: string
+          external_id: string
+          id: string
+          name: string
+          page_id: string
+          picture_url: string | null
+          platform: string
+          status: string
+          token_expires_at: string | null
+          updated_at: string
+          user_id: string
+          username: string | null
+        }
+        Insert: {
+          created_at?: string
+          external_id: string
+          id?: string
+          name: string
+          page_id: string
+          picture_url?: string | null
+          platform: string
+          status?: string
+          token_expires_at?: string | null
+          updated_at?: string
+          user_id: string
+          username?: string | null
+        }
+        Update: {
+          created_at?: string
+          external_id?: string
+          id?: string
+          name?: string
+          page_id?: string
+          picture_url?: string | null
+          platform?: string
+          status?: string
+          token_expires_at?: string | null
+          updated_at?: string
+          user_id?: string
+          username?: string | null
+        }
+        Relationships: []
+      }
+      social_oauth_states: {
+        Row: {
+          created_at: string
+          state: string
+          user_id: string
+        }
+        Insert: {
+          created_at?: string
+          state: string
+          user_id: string
+        }
+        Update: {
+          created_at?: string
+          state?: string
+          user_id?: string
+        }
+        Relationships: []
+      }
+      social_publications: {
+        Row: {
+          account_id: string | null
+          created_at: string
+          error: string | null
+          external_post_id: string | null
+          id: string
+          image_url: string | null
+          message: string | null
+          permalink: string | null
+          platform: string
+          status: string
+          updated_at: string
+          user_id: string
+        }
+        Insert: {
+          account_id?: string | null
+          created_at?: string
+          error?: string | null
+          external_post_id?: string | null
+          id?: string
+          image_url?: string | null
+          message?: string | null
+          permalink?: string | null
+          platform: string
+          status?: string
+          updated_at?: string
+          user_id: string
+        }
+        Update: {
+          account_id?: string | null
+          created_at?: string
+          error?: string | null
+          external_post_id?: string | null
+          id?: string
+          image_url?: string | null
+          message?: string | null
+          permalink?: string | null
+          platform?: string
+          status?: string
+          updated_at?: string
+          user_id?: string
+        }
+        Relationships: [
+          {
+            foreignKeyName: "social_publications_account_id_fkey"
+            columns: ["account_id"]
+            isOneToOne: false
+            referencedRelation: "social_accounts"
+            referencedColumns: ["id"]
+          },
+        ]
+      }
+      social_tokens: {
+        Row: {
+          access_token: string
+          account_id: string
+          refresh_token: string | null
+          updated_at: string
+          user_access_token: string | null
+          user_id: string
+        }
+        Insert: {
+          access_token: string
+          account_id: string
+          refresh_token?: string | null
+          updated_at?: string
+          user_access_token?: string | null
+          user_id: string
+        }
+        Update: {
+          access_token?: string
+          account_id?: string
+          refresh_token?: string | null
+          updated_at?: string
+          user_access_token?: string | null
+          user_id?: string
+        }
+        Relationships: [
+          {
+            foreignKeyName: "social_tokens_account_id_fkey"
+            columns: ["account_id"]
+            isOneToOne: true
+            referencedRelation: "social_accounts"
+            referencedColumns: ["id"]
+          },
+        ]
+      }
       subscriptions: {
         Row: {
           created_at: string

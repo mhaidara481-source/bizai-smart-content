@@ -28,8 +28,10 @@ import { Route as AuthenticatedDashboardRouteImport } from './routes/_authentica
 import { Route as AuthenticatedIdeesDeContenuRouteImport } from './routes/_authenticated/idees-de-contenu'
 import { Route as AuthenticatedParametresRouteImport } from './routes/_authenticated/parametres'
 import { Route as AuthenticatedRepondreAuxAvisRouteImport } from './routes/_authenticated/repondre-aux-avis'
+import { Route as AuthenticatedReseauxRouteImport } from './routes/_authenticated/reseaux'
 import { Route as AuthCallbackRouteImport } from './routes/auth/callback'
 import { Route as ApiPublicWhopWebhookRouteImport } from './routes/api/public/whop-webhook'
+import { Route as ApiPublicMetaCallbackRouteImport } from './routes/api/public/meta/callback'
 
 const IndexRoute = IndexRouteImport.update({
   id: '/',
@@ -131,6 +133,11 @@ const AuthenticatedRepondreAuxAvisRoute =
     path: '/repondre-aux-avis',
     getParentRoute: () => AuthenticatedRouteRoute,
   } as any)
+const AuthenticatedReseauxRoute = AuthenticatedReseauxRouteImport.update({
+  id: '/reseaux',
+  path: '/reseaux',
+  getParentRoute: () => AuthenticatedRouteRoute,
+} as any)
 const AuthCallbackRoute = AuthCallbackRouteImport.update({
   id: '/auth/callback',
   path: '/auth/callback',
@@ -139,6 +146,11 @@ const AuthCallbackRoute = AuthCallbackRouteImport.update({
 const ApiPublicWhopWebhookRoute = ApiPublicWhopWebhookRouteImport.update({
   id: '/api/public/whop-webhook',
   path: '/api/public/whop-webhook',
+  getParentRoute: () => rootRouteImport,
+} as any)
+const ApiPublicMetaCallbackRoute = ApiPublicMetaCallbackRouteImport.update({
+  id: '/api/public/meta/callback',
+  path: '/api/public/meta/callback',
   getParentRoute: () => rootRouteImport,
 } as any)
 
@@ -161,8 +173,10 @@ export interface FileRoutesByFullPath {
   '/idees-de-contenu': typeof AuthenticatedIdeesDeContenuRoute
   '/parametres': typeof AuthenticatedParametresRoute
   '/repondre-aux-avis': typeof AuthenticatedRepondreAuxAvisRoute
+  '/reseaux': typeof AuthenticatedReseauxRoute
   '/auth/callback': typeof AuthCallbackRoute
   '/api/public/whop-webhook': typeof ApiPublicWhopWebhookRoute
+  '/api/public/meta/callback': typeof ApiPublicMetaCallbackRoute
 }
 export interface FileRoutesByTo {
   '/': typeof IndexRoute
@@ -183,8 +197,10 @@ export interface FileRoutesByTo {
   '/idees-de-contenu': typeof AuthenticatedIdeesDeContenuRoute
   '/parametres': typeof AuthenticatedParametresRoute
   '/repondre-aux-avis': typeof AuthenticatedRepondreAuxAvisRoute
+  '/reseaux': typeof AuthenticatedReseauxRoute
   '/auth/callback': typeof AuthCallbackRoute
   '/api/public/whop-webhook': typeof ApiPublicWhopWebhookRoute
+  '/api/public/meta/callback': typeof ApiPublicMetaCallbackRoute
 }
 export interface FileRoutesById {
   __root__: typeof rootRouteImport
@@ -207,8 +223,10 @@ export interface FileRoutesById {
   '/_authenticated/idees-de-contenu': typeof AuthenticatedIdeesDeContenuRoute
   '/_authenticated/parametres': typeof AuthenticatedParametresRoute
   '/_authenticated/repondre-aux-avis': typeof AuthenticatedRepondreAuxAvisRoute
+  '/_authenticated/reseaux': typeof AuthenticatedReseauxRoute
   '/auth/callback': typeof AuthCallbackRoute
   '/api/public/whop-webhook': typeof ApiPublicWhopWebhookRoute
+  '/api/public/meta/callback': typeof ApiPublicMetaCallbackRoute
 }
 export interface FileRouteTypes {
   fileRoutesByFullPath: FileRoutesByFullPath
@@ -231,8 +249,10 @@ export interface FileRouteTypes {
     | '/idees-de-contenu'
     | '/parametres'
     | '/repondre-aux-avis'
+    | '/reseaux'
     | '/auth/callback'
     | '/api/public/whop-webhook'
+    | '/api/public/meta/callback'
   fileRoutesByTo: FileRoutesByTo
   to:
     | '/'
@@ -253,8 +273,10 @@ export interface FileRouteTypes {
     | '/idees-de-contenu'
     | '/parametres'
     | '/repondre-aux-avis'
+    | '/reseaux'
     | '/auth/callback'
     | '/api/public/whop-webhook'
+    | '/api/public/meta/callback'
   id:
     | '__root__'
     | '/'
@@ -276,8 +298,10 @@ export interface FileRouteTypes {
     | '/_authenticated/idees-de-contenu'
     | '/_authenticated/parametres'
     | '/_authenticated/repondre-aux-avis'
+    | '/_authenticated/reseaux'
     | '/auth/callback'
     | '/api/public/whop-webhook'
+    | '/api/public/meta/callback'
   fileRoutesById: FileRoutesById
 }
 export interface RootRouteChildren {
@@ -293,6 +317,7 @@ export interface RootRouteChildren {
   ReinitialisationMotDePasseRoute: typeof ReinitialisationMotDePasseRoute
   AuthCallbackRoute: typeof AuthCallbackRoute
   ApiPublicWhopWebhookRoute: typeof ApiPublicWhopWebhookRoute
+  ApiPublicMetaCallbackRoute: typeof ApiPublicMetaCallbackRoute
 }
 
 declare module '@tanstack/react-router' {
@@ -430,6 +455,13 @@ declare module '@tanstack/react-router' {
       preLoaderRoute: typeof AuthenticatedRepondreAuxAvisRouteImport
       parentRoute: typeof AuthenticatedRouteRoute
     }
+    '/_authenticated/reseaux': {
+      id: '/_authenticated/reseaux'
+      path: '/reseaux'
+      fullPath: '/reseaux'
+      preLoaderRoute: typeof AuthenticatedReseauxRouteImport
+      parentRoute: typeof AuthenticatedRouteRoute
+    }
     '/auth/callback': {
       id: '/auth/callback'
       path: '/auth/callback'
@@ -442,6 +474,13 @@ declare module '@tanstack/react-router' {
       path: '/api/public/whop-webhook'
       fullPath: '/api/public/whop-webhook'
       preLoaderRoute: typeof ApiPublicWhopWebhookRouteImport
+      parentRoute: typeof rootRouteImport
+    }
+    '/api/public/meta/callback': {
+      id: '/api/public/meta/callback'
+      path: '/api/public/meta/callback'
+      fullPath: '/api/public/meta/callback'
+      preLoaderRoute: typeof ApiPublicMetaCallbackRouteImport
       parentRoute: typeof rootRouteImport
     }
   }
@@ -457,6 +496,7 @@ interface AuthenticatedRouteRouteChildren {
   AuthenticatedIdeesDeContenuRoute: typeof AuthenticatedIdeesDeContenuRoute
   AuthenticatedParametresRoute: typeof AuthenticatedParametresRoute
   AuthenticatedRepondreAuxAvisRoute: typeof AuthenticatedRepondreAuxAvisRoute
+  AuthenticatedReseauxRoute: typeof AuthenticatedReseauxRoute
 }
 
 const AuthenticatedRouteRouteChildren: AuthenticatedRouteRouteChildren = {
@@ -469,6 +509,7 @@ const AuthenticatedRouteRouteChildren: AuthenticatedRouteRouteChildren = {
   AuthenticatedIdeesDeContenuRoute: AuthenticatedIdeesDeContenuRoute,
   AuthenticatedParametresRoute: AuthenticatedParametresRoute,
   AuthenticatedRepondreAuxAvisRoute: AuthenticatedRepondreAuxAvisRoute,
+  AuthenticatedReseauxRoute: AuthenticatedReseauxRoute,
 }
 
 const AuthenticatedRouteRouteWithChildren =
@@ -487,6 +528,7 @@ const rootRouteChildren: RootRouteChildren = {
   ReinitialisationMotDePasseRoute: ReinitialisationMotDePasseRoute,
   AuthCallbackRoute: AuthCallbackRoute,
   ApiPublicWhopWebhookRoute: ApiPublicWhopWebhookRoute,
+  ApiPublicMetaCallbackRoute: ApiPublicMetaCallbackRoute,
 }
 export const routeTree = rootRouteImport
   ._addFileChildren(rootRouteChildren)
