@@ -5,3 +5,4 @@
 - [x] Harmoniser les boutons, cartes, espacements et rayons
 - [x] Vérifier le rendu sur ordinateur et mobile
 - [x] Polish premium landing et responsive tablette 768–1024 px
+- [ ] Densifier la landing et ajouter des animations au scroll accessibles
