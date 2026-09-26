@@ -4,3 +4,4 @@
 - [x] Ajouter des transitions légères aux pages, résultats et listes
 - [x] Harmoniser les boutons, cartes, espacements et rayons
 - [x] Vérifier le rendu sur ordinateur et mobile
+- [ ] Polish premium landing et responsive tablette 768–1024 px (validé, en cours)
