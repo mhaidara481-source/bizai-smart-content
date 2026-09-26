@@ -8,6 +8,13 @@
       "when": 1790447163435,
       "tag": "0000_video_usage_jobs",
       "breakpoints": true
+    },
+    {
+      "idx": 1,
+      "version": "7",
+      "when": 1790465860840,
+      "tag": "0001_social_publishing",
+      "breakpoints": true
     }
   ]
 }
