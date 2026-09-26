@@ -169,12 +169,12 @@ function Landing() {
       {/* Hero */}
       <section className="relative overflow-hidden border-b border-border/60">
         <div className="pointer-events-none absolute inset-x-0 top-0 h-72 bg-primary-soft/60 [mask-image:linear-gradient(to_bottom,black,transparent)]" />
-        <div className="relative mx-auto grid min-h-[calc(100vh-4rem)] w-full max-w-6xl items-center gap-12 px-5 py-16 md:grid-cols-[minmax(0,0.9fr)_minmax(0,1.1fr)] md:gap-8 md:py-20 lg:gap-14">
+        <div className="relative mx-auto grid w-full max-w-6xl items-center gap-12 px-5 py-16 md:grid-cols-[minmax(0,0.9fr)_minmax(0,1.1fr)] md:gap-8 md:py-20 lg:gap-14 lg:py-24">
           <div className="min-w-0 animate-fade-in-up text-center md:text-left">
             <Badge variant="secondary" className="mb-6 rounded-full px-3 py-1 text-xs font-semibold">
               Assistant IA pour les petites entreprises
             </Badge>
-            <h1 className="text-4xl font-extrabold leading-[1.08] sm:text-5xl lg:text-6xl">
+            <h1 className="text-4xl font-extrabold leading-[1.08] sm:text-5xl md:text-4xl lg:text-5xl xl:text-6xl">
               Crée ton contenu marketing avec l'IA en{" "}
               <span className="text-gradient-hero">quelques secondes.</span>
             </h1>
