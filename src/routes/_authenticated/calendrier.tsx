@@ -10,6 +10,7 @@ import { DemoBadge, LimitReached } from "@/components/app/LimitReached";
 import { Button } from "@/components/ui/button";
 import { Card, CardContent } from "@/components/ui/card";
 import { Label } from "@/components/ui/label";
+import { Skeleton } from "@/components/ui/skeleton";
 import {
   Select,
   SelectContent,
@@ -186,7 +187,7 @@ function CalendarPage() {
       )}
 
       {(entriesQuery.isLoading || generate.isPending) && (
-        <div className="space-y-3">
+        <div className="space-y-4" aria-label="Chargement du calendrier">
           {[...Array(5)].map((_, i) => (
             <Card key={i} className="rounded-2xl border-border/70 shadow-soft">
               <CardContent className="flex flex-col gap-4 pt-6 sm:flex-row sm:items-center sm:justify-between">
@@ -220,7 +221,7 @@ function CalendarPage() {
           {entries.map((entry) => {
             const published = entry.status === "publie";
             return (
-              <Card key={entry.id} className="rounded-2xl border-border/70 shadow-soft">
+              <Card key={entry.id} className="border-border/70 hover:border-primary/20 hover:shadow-lift">
                 <CardContent className="flex flex-col gap-4 pt-6 sm:flex-row sm:items-center sm:justify-between">
                   <div className="min-w-0">
                     <div className="flex flex-wrap items-center gap-2">

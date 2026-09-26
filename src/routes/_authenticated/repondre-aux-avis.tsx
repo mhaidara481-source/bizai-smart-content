@@ -10,6 +10,7 @@ import { DemoBadge, LimitReached } from "@/components/app/LimitReached";
 import { Button } from "@/components/ui/button";
 import { Card, CardContent } from "@/components/ui/card";
 import { Label } from "@/components/ui/label";
+import { Skeleton } from "@/components/ui/skeleton";
 import { Textarea } from "@/components/ui/textarea";
 import {
   Select,
@@ -90,7 +91,7 @@ function ReviewsPage() {
         </div>
       )}
 
-      <div className="grid gap-6 lg:grid-cols-2">
+      <div className="grid gap-6 lg:grid-cols-2 lg:items-start">
         <Card className="rounded-2xl border-border/70 shadow-soft">
           <CardContent className="space-y-5 pt-6">
             <div className="space-y-2">
@@ -174,8 +175,7 @@ function ReviewsPage() {
         <Card className="rounded-2xl border-border/70 shadow-soft">
           <CardContent className="pt-6">
             {!result && !mutation.isPending && (
-              <div className="space-y-5 animate-fade-in-up">
-              <div className="flex flex-col items-center py-16 text-center">
+              <div className="flex flex-col items-center py-16 text-center animate-fade-in-up">
                 <span className="flex size-12 items-center justify-center rounded-2xl bg-primary-soft">
                   <MessageSquareQuote className="size-5 text-primary" />
                 </span>
@@ -187,10 +187,10 @@ function ReviewsPage() {
             )}
 
             {mutation.isPending && (
-              <div className="space-y-5">
-                <div className="flex gap-2 items-center"><Skeleton className="h-4 w-28" /><Skeleton className="h-5 w-16 rounded-full" /></div>
-                <Skeleton className="h-56 w-full" />
-                <div className="flex gap-2"><Skeleton className="h-9 w-24 rounded-full" /><Skeleton className="h-9 w-24 rounded-full" /></div>
+              <div className="space-y-5 py-4" aria-label="Génération de la réponse en cours">
+                <div className="flex items-center gap-3"><Skeleton className="h-3 w-28" /><Skeleton className="h-6 w-20 rounded-full" /></div>
+                <div className="space-y-3 rounded-xl border border-border/60 p-4"><Skeleton className="h-4 w-full" /><Skeleton className="h-4 w-[96%]" /><Skeleton className="h-4 w-[88%]" /><Skeleton className="h-4 w-2/3" /></div>
+                <div className="flex gap-2"><Skeleton className="h-8 w-24 rounded-full" /><Skeleton className="h-8 w-24 rounded-full" /></div>
               </div>
             )}
 

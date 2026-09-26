@@ -120,7 +120,7 @@ function SubscriptionPage() {
               <Skeleton className="h-2 w-full" />
             </div>
           ) : (
-            <>
+            <div className="animate-fade-in">
               <div className="flex flex-wrap items-end justify-between gap-4">
                 <div>
                   <p className="text-3xl font-extrabold">
@@ -155,12 +155,12 @@ function SubscriptionPage() {
                   Gérer mon abonnement
                 </Button>
               </div>
-            </>
+            </div>
           )}
         </CardContent>
       </Card>
 
-      <div className="grid gap-5 lg:grid-cols-3">
+      <div className="grid gap-6 lg:grid-cols-3 animate-fade-in-up">
         {PLANS.map((plan) => {
           const current = activePlan === plan.id;
           return (
@@ -168,8 +168,8 @@ function SubscriptionPage() {
               key={plan.id}
               className={
                 plan.highlight
-                  ? "relative rounded-3xl border-primary/40 shadow-lift"
-                  : "rounded-3xl border-border/70 shadow-soft"
+                  ? "relative border-primary/40 shadow-lift"
+                  : "border-border/70 hover:border-primary/20 hover:shadow-lift"
               }
             >
               {plan.highlight ? (

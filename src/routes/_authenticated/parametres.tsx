@@ -67,9 +67,9 @@ function SettingsPage() {
     <div>
       <PageHeader title="Paramètres" subtitle="Tes informations personnelles et ton entreprise." />
 
-      <Card className="max-w-2xl rounded-2xl border-border/70 shadow-soft">
+      <Card className="max-w-2xl border-border/70">
         <CardContent className="space-y-5 pt-6">
-          {isLoading ? <div className="space-y-4"><Skeleton className="h-10 w-full" /><Skeleton className="h-10 w-full" /><Skeleton className="h-10 w-full" /><Skeleton className="h-10 w-full" /></div> : <>
+          {isLoading ? <div className="space-y-5">{[0, 1, 2, 3].map((item) => <div key={item} className="space-y-2"><Skeleton className="h-3 w-28" /><Skeleton className="h-9 w-full" /></div>)}</div> : <div className="animate-fade-in space-y-5">
           <div className="space-y-2">
             <Label htmlFor="email">Email</Label>
             <Input id="email" value={user?.email ?? ""} disabled />
@@ -122,7 +122,7 @@ function SettingsPage() {
               "Enregistrer"
             )}
           </Button>
-          </>}
+          </div>}
         </CardContent>
       </Card>
     </div>
