@@ -5,6 +5,7 @@ import { useEffect, useRef, useState } from "react";
 import { Clapperboard, Download, Loader2, RefreshCw, Sparkles } from "lucide-react";
 import { toast } from "sonner";
 
+import { TikTokPublishPanel } from "@/components/app/TikTokPublishPanel";
 import { PageHeader } from "@/components/app/PageHeader";
 import { DemoBadge, LimitReached } from "@/components/app/LimitReached";
 import { Button } from "@/components/ui/button";
@@ -240,6 +241,7 @@ function CreateVideo() {
                     <RefreshCw className="size-4" /> Régénérer
                   </Button>
                 </div>
+                <TikTokPublishPanel jobId={job.jobId} demoVideo={job.demo || !job.url} defaultCaption={subject} />
               </div>
             )}
           </CardContent>

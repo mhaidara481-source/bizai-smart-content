@@ -6,7 +6,7 @@ import { requireSupabaseAuth } from "@/integrations/supabase/auth-middleware";
 
 export type SocialAccount = {
   id: string;
-  platform: "facebook" | "instagram";
+  platform: "facebook" | "instagram" | "tiktok";
   name: string;
   username: string | null;
   picture_url: string | null;

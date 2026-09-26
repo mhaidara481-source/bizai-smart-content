@@ -27,9 +27,10 @@ export function PublishPanel({ message, imageUrl }: { message: string; imageUrl?
 
   const publishable = imageUrl?.startsWith("https://") ? imageUrl : undefined;
   const accounts = (data?.accounts ?? []).filter(
-    (a) => a.status === "active" && (a.platform === "facebook" || publishable),
+    (a) => a.status === "active" && (a.platform === "facebook" || (a.platform === "instagram" && publishable)),
   );
-  const expired = (data?.accounts ?? []).some((a) => a.status === "expired");
+  const metaAccounts = (data?.accounts ?? []).filter((a) => a.platform !== "tiktok");
+  const expired = metaAccounts.some((a) => a.status === "expired");
 
   useEffect(() => {
     setResults(null);
@@ -76,7 +77,7 @@ export function PublishPanel({ message, imageUrl }: { message: string; imageUrl?
         <p className="mt-1 text-muted-foreground">
           {expired
             ? "Reconnecte Facebook & Instagram pour publier."
-            : (data.accounts.length > 0 && !publishable)
+            : (metaAccounts.length > 0 && !publishable)
               ? "Instagram exige une image : génère un visuel, ou connecte une page Facebook."
               : "Connecte ta page Facebook et ton compte Instagram pour publier en un clic."}
         </p>
