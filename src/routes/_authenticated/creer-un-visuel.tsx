@@ -202,6 +202,7 @@ function CreateVisual() {
         <Card className="rounded-2xl border-border/70 shadow-soft">
           <CardContent className="pt-6">
             {!result && !mutation.isPending && (
+              <div className="space-y-4 animate-fade-in-up">
               <div className="flex flex-col items-center py-16 text-center">
                 <span className="flex size-12 items-center justify-center rounded-2xl bg-primary-soft">
                   <ImageIcon className="size-5 text-primary" />
@@ -214,18 +215,17 @@ function CreateVisual() {
             )}
 
             {mutation.isPending && (
-              <div className="flex flex-col items-center py-16 text-center">
-                <Loader2 className="size-6 animate-spin text-primary" />
-                <p
-                  key={loadingStep}
-                  className="mt-4 text-sm text-muted-foreground transition-opacity duration-500 animate-fade-in"
-                >
-                  {LOADING_MESSAGES[loadingStep]}
-                </p>
+              <div className="space-y-4">
+                <Skeleton className="aspect-square w-full rounded-2xl" />
+                <div className="flex gap-2">
+                  <Skeleton className="h-9 w-28 rounded-full" />
+                  <Skeleton className="h-9 w-28 rounded-full" />
+                </div>
               </div>
             )}
 
             {result && !mutation.isPending && (
+              <div className="space-y-4 animate-fade-in-up">
               <div className="space-y-4">
                 {demo && <DemoBadge />}
                 <img

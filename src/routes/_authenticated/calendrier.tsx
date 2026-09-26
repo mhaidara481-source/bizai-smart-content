@@ -186,9 +186,18 @@ function CalendarPage() {
       )}
 
       {(entriesQuery.isLoading || generate.isPending) && (
-        <div className="flex flex-col items-center py-16 text-center">
-          <Loader2 className="size-6 animate-spin text-primary" />
-          <p className="mt-4 text-sm text-muted-foreground">Chargement du calendrier…</p>
+        <div className="space-y-3">
+          {[...Array(5)].map((_, i) => (
+            <Card key={i} className="rounded-2xl border-border/70 shadow-soft">
+              <CardContent className="flex flex-col gap-4 pt-6 sm:flex-row sm:items-center sm:justify-between">
+                <div className="w-full space-y-2">
+                  <div className="flex gap-2"><Skeleton className="h-4 w-20" /><Skeleton className="h-4 w-16 rounded-full" /></div>
+                  <Skeleton className="h-4 w-3/4" />
+                </div>
+                <Skeleton className="h-9 w-32 rounded-full" />
+              </CardContent>
+            </Card>
+          ))}
         </div>
       )}
 
@@ -209,6 +218,9 @@ function CalendarPage() {
       {!generate.isPending && entries.length > 0 && (
         <div className="space-y-3">
           {entries.map((entry) => {
+            const published = entry.status === "publie";
+            return (
+              <div key={entry.id} className="animate-fade-in-up">
             const published = entry.status === "publie";
             return (
               <Card key={entry.id} className="rounded-2xl border-border/70 shadow-soft">

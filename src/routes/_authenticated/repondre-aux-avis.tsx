@@ -174,6 +174,7 @@ function ReviewsPage() {
         <Card className="rounded-2xl border-border/70 shadow-soft">
           <CardContent className="pt-6">
             {!result && !mutation.isPending && (
+              <div className="space-y-5 animate-fade-in-up">
               <div className="flex flex-col items-center py-16 text-center">
                 <span className="flex size-12 items-center justify-center rounded-2xl bg-primary-soft">
                   <MessageSquareQuote className="size-5 text-primary" />
@@ -186,13 +187,15 @@ function ReviewsPage() {
             )}
 
             {mutation.isPending && (
-              <div className="flex flex-col items-center py-16 text-center">
-                <Loader2 className="size-6 animate-spin text-primary" />
-                <p className="mt-4 text-sm text-muted-foreground">BizAI rédige la réponse…</p>
+              <div className="space-y-5">
+                <div className="flex gap-2 items-center"><Skeleton className="h-4 w-28" /><Skeleton className="h-5 w-16 rounded-full" /></div>
+                <Skeleton className="h-56 w-full" />
+                <div className="flex gap-2"><Skeleton className="h-9 w-24 rounded-full" /><Skeleton className="h-9 w-24 rounded-full" /></div>
               </div>
             )}
 
             {result && !mutation.isPending && (
+              <div className="space-y-5 animate-fade-in-up">
               <div className="space-y-5">
                 {demo && <DemoBadge />}
                 <div className="flex items-center gap-2">

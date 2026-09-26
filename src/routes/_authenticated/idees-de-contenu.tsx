@@ -175,13 +175,23 @@ function IdeasPage() {
       )}
 
       {mutation.isPending && (
-        <div className="flex flex-col items-center py-16 text-center">
-          <Loader2 className="size-6 animate-spin text-primary" />
-          <p className="mt-4 text-sm text-muted-foreground">BizAI cherche des idées…</p>
+        <div className="grid gap-5 sm:grid-cols-2 lg:grid-cols-3">
+          {[...Array(6)].map((_, i) => (
+            <Card key={i} className="rounded-2xl border-border/70 shadow-soft">
+              <CardContent className="space-y-4 pt-6">
+                <div className="flex justify-between"><Skeleton className="h-5 w-16 rounded-full" /><Skeleton className="h-4 w-8" /></div>
+                <Skeleton className="h-6 w-full" />
+                <Skeleton className="h-4 w-full" />
+                <Skeleton className="h-4 w-2/3" />
+                <Skeleton className="h-4 w-24" />
+              </CardContent>
+            </Card>
+          ))}
         </div>
       )}
 
       {!ideas && !mutation.isPending && (
+        <div className="grid gap-5 sm:grid-cols-2 lg:grid-cols-3 animate-fade-in-up">
         <Card className="rounded-2xl border-border/70 shadow-soft">
           <CardContent className="flex flex-col items-center py-16 text-center">
             <span className="flex size-12 items-center justify-center rounded-2xl bg-primary-soft">
@@ -196,6 +206,7 @@ function IdeasPage() {
       )}
 
       {ideas && !mutation.isPending && (
+        <div className="grid gap-5 sm:grid-cols-2 lg:grid-cols-3 animate-fade-in-up">
         <div className="grid gap-5 sm:grid-cols-2 lg:grid-cols-3">
           {ideas.map((idea, index) => (
             <Card key={index} className="rounded-2xl border-border/70 shadow-soft">

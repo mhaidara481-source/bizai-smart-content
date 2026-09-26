@@ -209,6 +209,7 @@ function CreatePost() {
         <Card className="rounded-2xl border-border/70 shadow-soft">
           <CardContent className="pt-6">
             {!result && !mutation.isPending && (
+              <div className="space-y-5 animate-fade-in-up">
               <div className="flex flex-col items-center py-16 text-center">
                 <span className="flex size-12 items-center justify-center rounded-2xl bg-primary-soft">
                   <Sparkles className="size-5 text-primary" />
@@ -221,13 +222,15 @@ function CreatePost() {
             )}
 
             {mutation.isPending && (
-              <div className="flex flex-col items-center py-16 text-center">
-                <Loader2 className="size-6 animate-spin text-primary" />
-                <p className="mt-4 text-sm text-muted-foreground">BizAI rédige ton post…</p>
+              <div className="space-y-5">
+                <div className="space-y-2"><Skeleton className="h-4 w-20" /><Skeleton className="h-6 w-full" /></div>
+                <div className="space-y-2"><Skeleton className="h-4 w-24" /><Skeleton className="h-32 w-full" /></div>
+                <div className="space-y-2"><Skeleton className="h-4 w-28" /><Skeleton className="h-6 w-3/4" /></div>
               </div>
             )}
 
             {result && !mutation.isPending && (
+              <div className="space-y-5 animate-fade-in-up">
               <div className="space-y-5">
                 {demo && <DemoBadge />}
                 <div>
