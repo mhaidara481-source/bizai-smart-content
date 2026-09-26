@@ -41,7 +41,7 @@ function Dashboard() {
         subtitle="Voici où tu en es ce mois-ci."
       />
 
-      <div className="grid gap-6 sm:grid-cols-2 lg:grid-cols-3 animate-fade-in-up">
+      <div className="grid gap-6 sm:grid-cols-2 md:grid-cols-3 animate-fade-in-up">
         <Card className="rounded-2xl border-border/70 shadow-soft">
           <CardHeader className="pb-2">
             <CardTitle className="text-sm text-muted-foreground">Générations utilisées</CardTitle>

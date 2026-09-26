@@ -160,7 +160,7 @@ function SubscriptionPage() {
         </CardContent>
       </Card>
 
-      <div className="grid gap-6 lg:grid-cols-3 animate-fade-in-up">
+      <div className="grid gap-6 md:grid-cols-2 xl:grid-cols-3 animate-fade-in-up">
         {PLANS.map((plan) => {
           const current = activePlan === plan.id;
           return (

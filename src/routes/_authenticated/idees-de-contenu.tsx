@@ -90,7 +90,7 @@ function IdeasPage() {
       )}
 
       <Card className="mb-8 border-border/70">
-        <CardContent className="grid gap-4 pt-6 sm:grid-cols-2 lg:grid-cols-5 lg:items-end">
+        <CardContent className="grid gap-4 pt-6 sm:grid-cols-2 md:grid-cols-3 lg:grid-cols-5 lg:items-end">
           <div className="space-y-2">
             <Label>Activité</Label>
             <Select value={businessType} onValueChange={setBusinessType}>

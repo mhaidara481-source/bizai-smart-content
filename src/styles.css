@@ -175,6 +175,7 @@
   h3 {
     letter-spacing: 0;
   }
+}
 
 @keyframes fade-in-up {
   from {
@@ -195,6 +196,4 @@
   .animate-fade-in-up {
     animation: none;
   }
-}
-
 }
