@@ -6,6 +6,6 @@
 - [x] Vérifier le rendu sur ordinateur et mobile
 - [x] Polish premium landing et responsive tablette 768–1024 px
 - [x] Densifier la landing et ajouter des animations au scroll accessibles
-- [ ] Publication directe Instagram/Facebook (en attente des secrets META_APP_ID / META_APP_SECRET)
+- [x] Publication directe Instagram/Facebook — techniquement fonctionnelle (secrets META_APP_ID / META_APP_SECRET / META_CONFIG_ID configurés, OAuth opérationnel). Reste à connecter un compte Facebook qui gère une vraie Page pour valider le bout en bout (dernier test arrêté sur `meta=no_pages`, comportement attendu).
 - [ ] Publication TikTok (en attente des secrets TIKTOK_CLIENT_KEY / TIKTOK_CLIENT_SECRET)
 - [x] Polish mobile de l’app authentifiée et grille d’outils moderne
