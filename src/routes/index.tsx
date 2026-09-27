@@ -265,7 +265,7 @@ function Landing() {
       </section>
 
       {/* Problème résolu */}
-      <section id="produit" className="border-t border-border/70 bg-muted/40 py-14 sm:py-16">
+      <section id="produit" className="border-t border-border/70 bg-wash-a py-14 sm:py-16">
         <div className="mx-auto grid w-full max-w-6xl gap-7 px-5 md:grid-cols-2 md:items-center md:gap-9">
           <div data-reveal>
             <h2 className="text-3xl font-bold sm:text-4xl">
@@ -298,9 +298,7 @@ function Landing() {
       </section>
 
       {/* Avantages */}
-      <section className="py-14 sm:py-16">
-        <div className="mx-auto w-full max-w-6xl px-5">
-          <h2 data-reveal className="text-center text-3xl font-bold sm:text-4xl">Ce que tu y gagnes</h2>
+      <section className="bg-wash-faint py-14 sm:py-16">
           <div className="mt-8 grid gap-4 sm:grid-cols-2 xl:grid-cols-4">
             {benefits.map((benefit, index) => (
               <Card key={benefit.title} data-reveal data-reveal-delay={(index % 3).toString()} className="rounded-2xl border-border/70 shadow-soft transition-all duration-300 hover:-translate-y-1 hover:border-primary/25 hover:shadow-lift">
