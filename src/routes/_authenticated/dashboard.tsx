@@ -32,6 +32,12 @@ const TOOL_COLORS = [
   { icon: "text-tool-7", bg: "bg-tool-7-soft", border: "hover:border-tool-7/20" },
 ];
 
+const DEFAULT_TOOL_COLORS = TOOL_COLORS[0] ?? {
+  icon: "text-primary",
+  bg: "bg-primary-soft",
+  border: "hover:border-primary/20",
+};
+
 function Dashboard() {
   const { data: profile, isLoading: profileLoading } = useProfile();
   const { data: subscription, isLoading: subscriptionLoading } = useSubscription();
@@ -93,7 +99,7 @@ function Dashboard() {
         </div>
         <div className="grid grid-cols-2 gap-3 sm:gap-4 md:grid-cols-3 xl:grid-cols-4">
           {toolItems.map((tool, index) => {
-            const colors = TOOL_COLORS[index % TOOL_COLORS.length];
+            const colors = TOOL_COLORS[index % TOOL_COLORS.length] ?? DEFAULT_TOOL_COLORS;
             return (
               <Card 
                 key={tool.to} 
