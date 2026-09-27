@@ -76,4 +76,4 @@ export const navItems: NavItem[] = [
   { to: "/parametres", label: "Paramètres", icon: Settings, description: "Ton profil et ton entreprise" },
 ];
 
-export const toolItems = navItems.slice(1, 7);
+export const toolItems = navItems.slice(1, 8);

@@ -4,20 +4,6 @@
 
 @custom-variant dark (&:is(.dark *));
 
-/*
- * Design system definition.
- *
- * The @theme inline block maps CSS custom properties to Tailwind utility
- * classes (e.g. --color-primary -> bg-primary, text-primary).
- *
- * The :root and .dark blocks define the actual color values using oklch.
- * All colors MUST use oklch format.
- *
- * To add a new semantic color:
- * 1. Add the variable to :root (light value) and .dark (dark value)
- * 2. Register it in @theme inline as --color-<name>: var(--<name>)
- */
-
 @theme inline {
   --radius-sm: calc(var(--radius) - 4px);
   --radius-md: calc(var(--radius) - 2px);
@@ -60,25 +46,26 @@
   --color-sidebar-border: var(--sidebar-border);
   --color-sidebar-ring: var(--sidebar-ring);
   --color-primary-soft: var(--primary-soft);
-  --color-tool-violet: var(--tool-violet);
-  --color-tool-violet-soft: var(--tool-violet-soft);
-  --color-tool-blue: var(--tool-blue);
-  --color-tool-blue-soft: var(--tool-blue-soft);
-  --color-tool-rose: var(--tool-rose);
-  --color-tool-rose-soft: var(--tool-rose-soft);
-  --color-tool-amber: var(--tool-amber);
-  --color-tool-amber-soft: var(--tool-amber-soft);
-  --color-tool-teal: var(--tool-teal);
-  --color-tool-teal-soft: var(--tool-teal-soft);
-  --color-tool-sky: var(--tool-sky);
-  --color-tool-sky-soft: var(--tool-sky-soft);
-  --color-tool-coral: var(--tool-coral);
-  --color-tool-coral-soft: var(--tool-coral-soft);
+  
+  --color-tool-1: var(--tool-1);
+  --color-tool-1-soft: var(--tool-1-soft);
+  --color-tool-2: var(--tool-2);
+  --color-tool-2-soft: var(--tool-2-soft);
+  --color-tool-3: var(--tool-3);
+  --color-tool-3-soft: var(--tool-3-soft);
+  --color-tool-4: var(--tool-4);
+  --color-tool-4-soft: var(--tool-4-soft);
+  --color-tool-5: var(--tool-5);
+  --color-tool-5-soft: var(--tool-5-soft);
+  --color-tool-6: var(--tool-6);
+  --color-tool-6-soft: var(--tool-6-soft);
+  --color-tool-7: var(--tool-7);
+  --color-tool-7-soft: var(--tool-7-soft);
+
   --font-sans: var(--font-sans);
   --shadow-soft: var(--shadow-soft);
   --shadow-lift: var(--shadow-lift);
 }
-
 
 :root {
   --radius: 0.875rem;
@@ -115,26 +102,26 @@
   --sidebar-accent-foreground: oklch(0.35 0.09 277);
   --sidebar-border: oklch(0.93 0.008 275);
   --sidebar-ring: oklch(0.53 0.21 277);
-  --tool-violet: oklch(0.53 0.21 277);
-  --tool-violet-soft: oklch(0.95 0.035 277);
-  --tool-blue: oklch(0.56 0.18 250);
-  --tool-blue-soft: oklch(0.95 0.035 250);
-  --tool-rose: oklch(0.59 0.2 345);
-  --tool-rose-soft: oklch(0.96 0.035 345);
-  --tool-amber: oklch(0.66 0.16 75);
-  --tool-amber-soft: oklch(0.96 0.04 75);
-  --tool-teal: oklch(0.55 0.13 175);
-  --tool-teal-soft: oklch(0.95 0.035 175);
-  --tool-sky: oklch(0.58 0.14 220);
-  --tool-sky-soft: oklch(0.95 0.035 220);
-  --tool-coral: oklch(0.62 0.18 30);
-  --tool-coral-soft: oklch(0.96 0.035 30);
   --gradient-hero: linear-gradient(135deg, oklch(0.53 0.21 277), oklch(0.62 0.19 315));
   --shadow-soft: 0 1px 2px oklch(0.21 0.03 275 / 0.04), 0 8px 24px -12px oklch(0.21 0.03 275 / 0.12);
   --shadow-lift: 0 2px 4px oklch(0.21 0.03 275 / 0.04), 0 18px 40px -18px oklch(0.21 0.03 275 / 0.18);
   --font-sans: "Plus Jakarta Sans", ui-sans-serif, system-ui, sans-serif;
-}
 
+  --tool-1: oklch(0.6 0.18 280);
+  --tool-1-soft: oklch(0.96 0.02 280);
+  --tool-2: oklch(0.65 0.2 350);
+  --tool-2-soft: oklch(0.97 0.02 350);
+  --tool-3: oklch(0.6 0.22 300);
+  --tool-3-soft: oklch(0.96 0.02 300);
+  --tool-4: oklch(0.78 0.15 85);
+  --tool-4-soft: oklch(0.98 0.02 85);
+  --tool-5: oklch(0.7 0.18 165);
+  --tool-5-soft: oklch(0.97 0.02 165);
+  --tool-6: oklch(0.7 0.15 230);
+  --tool-6-soft: oklch(0.97 0.02 230);
+  --tool-7: oklch(0.65 0.22 45);
+  --tool-7-soft: oklch(0.97 0.02 45);
+}
 
 .dark {
   --background: oklch(0.129 0.042 264.695);
@@ -169,20 +156,21 @@
   --sidebar-accent-foreground: oklch(0.984 0.003 247.858);
   --sidebar-border: oklch(1 0 0 / 10%);
   --sidebar-ring: oklch(0.551 0.027 264.364);
-  --tool-violet: oklch(0.74 0.16 285);
-  --tool-violet-soft: oklch(0.3 0.07 277);
-  --tool-blue: oklch(0.72 0.14 250);
-  --tool-blue-soft: oklch(0.29 0.06 250);
-  --tool-rose: oklch(0.73 0.15 345);
-  --tool-rose-soft: oklch(0.3 0.06 345);
-  --tool-amber: oklch(0.78 0.14 75);
-  --tool-amber-soft: oklch(0.31 0.06 75);
-  --tool-teal: oklch(0.72 0.12 175);
-  --tool-teal-soft: oklch(0.29 0.05 175);
-  --tool-sky: oklch(0.74 0.12 220);
-  --tool-sky-soft: oklch(0.29 0.05 220);
-  --tool-coral: oklch(0.74 0.15 30);
-  --tool-coral-soft: oklch(0.3 0.06 30);
+
+  --tool-1: oklch(0.75 0.12 280);
+  --tool-1-soft: oklch(0.25 0.05 280);
+  --tool-2: oklch(0.75 0.15 350);
+  --tool-2-soft: oklch(0.25 0.05 350);
+  --tool-3: oklch(0.75 0.15 300);
+  --tool-3-soft: oklch(0.25 0.05 300);
+  --tool-4: oklch(0.85 0.08 85);
+  --tool-4-soft: oklch(0.25 0.05 85);
+  --tool-5: oklch(0.8 0.12 165);
+  --tool-5-soft: oklch(0.25 0.05 165);
+  --tool-6: oklch(0.8 0.1 230);
+  --tool-6-soft: oklch(0.25 0.05 230);
+  --tool-7: oklch(0.75 0.15 45);
+  --tool-7-soft: oklch(0.25 0.05 45);
 }
 
 @layer base {
