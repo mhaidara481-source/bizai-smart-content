@@ -46,25 +46,25 @@ function Dashboard() {
   const percent = limit > 0 ? Math.min((used / limit) * 100, 100) : 0;
 
   return (
-    <div className="space-y-10 pb-10">
+    <div className="space-y-9 pb-8 sm:space-y-10 sm:pb-10">
       <PageHeader
         title={`Bonjour ${profile?.full_name?.split(" ")[0] ?? ""}`.trim()}
         subtitle="Voici où tu en es ce mois-ci."
       />
 
-      <div className="grid gap-6 sm:grid-cols-2 lg:grid-cols-3 animate-fade-in-up">
-        <Card className="rounded-2xl border-border/70 shadow-soft">
+      <div className="grid grid-cols-2 gap-3 animate-fade-in-up sm:gap-4 lg:grid-cols-3">
+        <Card className="col-span-2 lg:col-span-1">
           <CardHeader className="pb-2">
-            <CardTitle className="text-sm text-muted-foreground uppercase tracking-wider font-bold">Générations utilisées</CardTitle>
+            <CardTitle className="text-xs font-bold uppercase text-muted-foreground sm:text-sm">Générations utilisées</CardTitle>
           </CardHeader>
           <CardContent>
             {loading ? <div className="space-y-3"><Skeleton className="h-9 w-16" /><Skeleton className="h-2 w-full" /><Skeleton className="h-3 w-28" /></div> : <div className="animate-fade-in"><p className="text-4xl font-black tracking-tight">{used}</p><Progress value={percent} className="mt-4 h-2" /><p className="mt-2 text-xs text-muted-foreground font-medium">sur {limit} ce mois-ci</p></div>}
           </CardContent>
         </Card>
 
-        <Card className="rounded-2xl border-border/70 shadow-soft">
+        <Card>
           <CardHeader className="pb-2">
-            <CardTitle className="text-sm text-muted-foreground uppercase tracking-wider font-bold">Générations restantes</CardTitle>
+            <CardTitle className="text-xs font-bold uppercase text-muted-foreground sm:text-sm">Générations restantes</CardTitle>
           </CardHeader>
           <CardContent>
             {loading ? <div className="space-y-3"><Skeleton className="h-9 w-16" /><Skeleton className="h-3 w-44" /></div> : <div className="animate-fade-in"><p className="text-4xl font-black tracking-tight">{remaining}</p><p className="mt-2 text-xs text-muted-foreground font-medium">
@@ -73,9 +73,9 @@ function Dashboard() {
           </CardContent>
         </Card>
 
-        <Card className="rounded-2xl border-border/70 shadow-soft">
+        <Card>
           <CardHeader className="pb-2">
-            <CardTitle className="text-sm text-muted-foreground uppercase tracking-wider font-bold">Abonnement actuel</CardTitle>
+            <CardTitle className="text-xs font-bold uppercase text-muted-foreground sm:text-sm">Abonnement actuel</CardTitle>
           </CardHeader>
           <CardContent>
             {loading ? <Skeleton className="h-9 w-36" /> : <p className="animate-fade-in text-4xl font-black tracking-tight text-primary">{PLAN_LABELS[plan] ?? "Découverte"}</p>}
@@ -87,39 +87,38 @@ function Dashboard() {
       </div>
 
       <section className="animate-fade-in-up" style={{ animationDelay: '100ms' }}>
-        <h2 className="mb-6 text-xl font-extrabold tracking-tight">Tes outils boostés à l'IA</h2>
-        <div className="grid gap-4 sm:grid-cols-2 lg:grid-cols-3 xl:grid-cols-4">
+        <div className="mb-5">
+          <h2 className="text-xl font-extrabold">Tes outils</h2>
+          <p className="mt-1 text-sm text-muted-foreground">Crée et organise tes contenus en quelques gestes.</p>
+        </div>
+        <div className="grid grid-cols-2 gap-3 sm:gap-4 md:grid-cols-3 xl:grid-cols-4">
           {toolItems.map((tool, index) => {
             const colors = TOOL_COLORS[index % TOOL_COLORS.length];
             return (
               <Card 
                 key={tool.to} 
                 className={cn(
-                  "group relative overflow-hidden border-border/50 transition-all duration-300 hover:shadow-lift",
+                  "group h-full overflow-hidden border-border/50 transition-all duration-300 hover:shadow-lift motion-safe:hover:-translate-y-1 motion-safe:active:translate-y-0",
                   colors.border
                 )}
               >
-                <CardContent className="flex flex-col items-start gap-4 p-6">
+                <CardContent className="flex h-full min-h-40 flex-col items-start p-4 sm:min-h-44 sm:p-5">
                   <span className={cn(
-                    "flex size-12 shrink-0 items-center justify-center rounded-2xl transition-transform duration-300 group-hover:scale-110",
+                    "flex size-12 shrink-0 items-center justify-center rounded-2xl transition-transform duration-300 group-hover:scale-105",
                     colors.bg
                   )}>
                     <tool.icon className={cn("size-6", colors.icon)} />
                   </span>
-                  <div className="min-w-0 flex-1">
-                    <h3 className="font-bold text-base leading-tight group-hover:text-primary transition-colors">{tool.label}</h3>
-                    <p className="mt-1.5 text-sm text-muted-foreground line-clamp-2 leading-relaxed">{tool.description}</p>
+                  <div className="mt-5 min-w-0 flex-1">
+                    <h3 className="text-sm font-bold leading-snug transition-colors group-hover:text-primary sm:text-base">{tool.label}</h3>
+                    <p className="mt-1.5 line-clamp-2 text-xs leading-relaxed text-muted-foreground sm:text-sm">{tool.description}</p>
                   </div>
-                  <Button asChild variant="secondary" size="sm" className="mt-2 w-full rounded-xl font-semibold opacity-0 group-hover:opacity-100 transition-all duration-300">
+                  <Button asChild variant="ghost" size="sm" className="relative z-10 mt-3 -ml-3 rounded-xl px-3 font-semibold text-primary">
                     <Link to={tool.to}>
-                      Lancer l'outil
-                      <ArrowRight className="ml-2 size-4" />
+                      Ouvrir
+                      <ArrowRight className="size-4 transition-transform group-hover:translate-x-0.5" />
                     </Link>
                   </Button>
-                  {/* Invisible link for the whole card area */}
-                  <Link to={tool.to} className="absolute inset-0 z-0">
-                    <span className="sr-only">Ouvrir {tool.label}</span>
-                  </Link>
                 </CardContent>
               </Card>
             );

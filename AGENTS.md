@@ -10,3 +10,4 @@
 <!-- LOVABLE:END -->
 
 - Centralize per-route metadata in `src/lib/seo.ts` so canonical and social tags stay consistent across every page.
+- Keep authenticated-page visual consistency in shared `Card`, `PageHeader`, and `AppShell` primitives; dashboard tool accents use semantic `tool-*` tokens.
