@@ -16,6 +16,16 @@ import { Progress } from "@/components/ui/progress";
 import { Skeleton } from "@/components/ui/skeleton";
 import { pageHead } from "@/lib/seo";
 
+const TOOL_TONES = [
+  "bg-tool-violet-soft text-tool-violet",
+  "bg-tool-blue-soft text-tool-blue",
+  "bg-tool-rose-soft text-tool-rose",
+  "bg-tool-amber-soft text-tool-amber",
+  "bg-tool-teal-soft text-tool-teal",
+  "bg-tool-sky-soft text-tool-sky",
+  "bg-tool-coral-soft text-tool-coral",
+] as const;
+
 export const Route = createFileRoute("/_authenticated/dashboard")({
   head: () => pageHead({ title: "Tableau de bord — BizAI", description: "Ton activité et tes outils BizAI en un coup d'œil.", path: "/dashboard", noindex: true }),
   component: Dashboard,
@@ -41,32 +51,32 @@ function Dashboard() {
         subtitle="Voici où tu en es ce mois-ci."
       />
 
-      <div className="grid gap-6 sm:grid-cols-2 md:grid-cols-3 animate-fade-in-up">
-        <Card className="rounded-2xl border-border/70 shadow-soft">
-          <CardHeader className="pb-2">
-            <CardTitle className="text-sm text-muted-foreground">Générations utilisées</CardTitle>
+      <div className="grid grid-cols-2 gap-3 animate-fade-in-up sm:gap-4 lg:grid-cols-3">
+        <Card className="col-span-2 lg:col-span-1">
+          <CardHeader className="p-5 pb-2 sm:p-6 sm:pb-2">
+            <CardTitle className="text-xs font-semibold text-muted-foreground sm:text-sm">Générations utilisées</CardTitle>
           </CardHeader>
-          <CardContent>
+          <CardContent className="p-5 pt-0 sm:p-6 sm:pt-0">
             {loading ? <div className="space-y-3"><Skeleton className="h-9 w-16" /><Skeleton className="h-2 w-full" /><Skeleton className="h-3 w-28" /></div> : <div className="animate-fade-in"><p className="text-3xl font-extrabold">{used}</p><Progress value={percent} className="mt-4" /><p className="mt-2 text-xs text-muted-foreground">sur {limit} ce mois-ci</p></div>}
           </CardContent>
         </Card>
 
-        <Card className="rounded-2xl border-border/70 shadow-soft">
-          <CardHeader className="pb-2">
-            <CardTitle className="text-sm text-muted-foreground">Générations restantes</CardTitle>
+        <Card>
+          <CardHeader className="p-5 pb-2 sm:p-6 sm:pb-2">
+            <CardTitle className="text-xs font-semibold text-muted-foreground sm:text-sm">Générations restantes</CardTitle>
           </CardHeader>
-          <CardContent>
+          <CardContent className="p-5 pt-0 sm:p-6 sm:pt-0">
             {loading ? <div className="space-y-3"><Skeleton className="h-9 w-16" /><Skeleton className="h-3 w-44" /></div> : <div className="animate-fade-in"><p className="text-3xl font-extrabold">{remaining}</p><p className="mt-2 text-xs text-muted-foreground">
               Réinitialisées au début de chaque mois
             </p></div>}
           </CardContent>
         </Card>
 
-        <Card className="rounded-2xl border-border/70 shadow-soft">
-          <CardHeader className="pb-2">
-            <CardTitle className="text-sm text-muted-foreground">Abonnement actuel</CardTitle>
+        <Card>
+          <CardHeader className="p-5 pb-2 sm:p-6 sm:pb-2">
+            <CardTitle className="text-xs font-semibold text-muted-foreground sm:text-sm">Abonnement actuel</CardTitle>
           </CardHeader>
-          <CardContent>
+          <CardContent className="p-5 pt-0 sm:p-6 sm:pt-0">
             {loading ? <Skeleton className="h-9 w-36" /> : <p className="animate-fade-in text-3xl font-extrabold">{PLAN_LABELS[plan] ?? "Découverte"}</p>}
             <Button asChild variant="outline" size="sm" className="mt-4 rounded-full">
               <Link to="/abonnement">Gérer mon offre</Link>
@@ -75,31 +85,42 @@ function Dashboard() {
         </Card>
       </div>
 
-      <h2 className="mb-4 mt-10 text-lg font-semibold">Tes outils</h2>
-      <div className="grid gap-6 sm:grid-cols-2">
-        {toolItems.map((tool) => (
-          <Card key={tool.to} className="border-border/70 hover:border-primary/20 hover:shadow-lift">
-            <CardContent className="flex items-start gap-4 pt-6">
-              <span className="flex size-11 shrink-0 items-center justify-center rounded-xl bg-primary-soft">
-                <tool.icon className="size-5 text-primary" />
-              </span>
-              <div className="min-w-0">
-                <h3 className="font-semibold">{tool.label}</h3>
-                <p className="mt-1 text-sm text-muted-foreground">{tool.description}</p>
-                <Button asChild variant="ghost" size="sm" className="mt-2 -ml-2 rounded-full">
-                  <Link to={tool.to}>
-                    Ouvrir
-                    <ArrowRight className="size-4" />
-                  </Link>
-                </Button>
-              </div>
-            </CardContent>
-          </Card>
+      <div className="mb-4 mt-9 flex items-end justify-between gap-4 sm:mt-10">
+        <div>
+          <h2 className="text-xl font-bold">Tes outils</h2>
+          <p className="mt-1 text-sm text-muted-foreground">Crée et organise tes contenus en quelques gestes.</p>
+        </div>
+      </div>
+      <div className="grid grid-cols-2 gap-3 sm:gap-4 md:grid-cols-3 xl:grid-cols-4">
+        {toolItems.map((tool, index) => (
+          <Link
+            key={tool.to}
+            to={tool.to}
+            className="group min-w-0 rounded-2xl focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-ring focus-visible:ring-offset-2"
+          >
+            <Card className="h-full hover:border-primary/20 hover:shadow-lift motion-safe:group-hover:-translate-y-1 motion-safe:group-active:translate-y-0">
+              <CardContent className="flex h-full min-h-40 flex-col p-4 sm:min-h-44 sm:p-5">
+                <span className={`flex size-12 shrink-0 items-center justify-center rounded-2xl ${TOOL_TONES[index % TOOL_TONES.length]}`}>
+                  <tool.icon className="size-6" />
+                </span>
+                <div className="mt-5 min-w-0 flex-1">
+                  <h3 className="text-sm font-bold leading-snug sm:text-base">{tool.label}</h3>
+                  <p className="mt-1.5 line-clamp-2 text-xs leading-relaxed text-muted-foreground sm:text-sm">
+                    {tool.description}
+                  </p>
+                </div>
+                <span className="mt-4 flex items-center gap-1 text-xs font-semibold text-primary sm:text-sm">
+                  Ouvrir
+                  <ArrowRight className="size-3.5 transition-transform group-hover:translate-x-0.5" />
+                </span>
+              </CardContent>
+            </Card>
+          </Link>
         ))}
       </div>
 
-      <h2 className="mb-4 mt-10 text-lg font-semibold">Activité récente</h2>
-      <Card className="rounded-2xl border-border/70 shadow-soft">
+      <h2 className="mb-4 mt-10 text-xl font-bold">Activité récente</h2>
+      <Card>
         {recentLoading ? (
           <CardContent className="space-y-4 py-6">{[0, 1, 2].map((item) => <div key={item} className="flex items-center justify-between gap-4"><div className="space-y-2"><Skeleton className="h-4 w-36" /><Skeleton className="h-3 w-24" /></div><Skeleton className="h-6 w-20 rounded-full" /></div>)}</CardContent>
         ) : recent.length === 0 ? (

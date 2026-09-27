@@ -15,15 +15,17 @@ import { Separator } from "@/components/ui/separator";
 
 function NavLinks({ onNavigate }: { onNavigate?: () => void }) {
   return (
-    <nav className="flex flex-col gap-1">
+    <nav className="flex flex-col gap-1.5">
       {navItems.map((item) => (
         <Link
           key={item.to}
           to={item.to}
           onClick={onNavigate}
-          className="flex items-center gap-3 rounded-xl px-3 py-2.5 text-sm font-medium text-sidebar-foreground transition-colors hover:bg-sidebar-accent data-[status=active]:bg-sidebar-accent data-[status=active]:text-sidebar-accent-foreground"
+          className="group flex items-center gap-3 rounded-xl px-3 py-2.5 text-sm font-medium text-sidebar-foreground transition-[color,background-color,transform] duration-200 hover:bg-sidebar-accent motion-safe:hover:translate-x-0.5 data-[status=active]:bg-sidebar-accent data-[status=active]:font-semibold data-[status=active]:text-sidebar-accent-foreground"
         >
-          <item.icon className="size-4" />
+          <span className="flex size-8 shrink-0 items-center justify-center rounded-lg bg-background/70 transition-colors group-data-[status=active]:bg-primary group-data-[status=active]:text-primary-foreground">
+            <item.icon className="size-4" />
+          </span>
           {item.label}
         </Link>
       ))}
@@ -75,8 +77,8 @@ export function AppShell({ children }: { children: ReactNode }) {
   });
 
   return (
-    <div className="min-h-screen bg-muted/40">
-      <aside className="fixed inset-y-0 left-0 hidden w-64 flex-col justify-between border-r border-sidebar-border bg-sidebar px-4 py-6 lg:flex">
+    <div className="min-h-screen bg-muted/35">
+      <aside className="fixed inset-y-0 left-0 hidden w-64 flex-col justify-between border-r border-sidebar-border bg-sidebar px-4 py-6 shadow-soft lg:flex">
         <div>
           <div className="px-1">
             <BizAILogo />
@@ -88,7 +90,7 @@ export function AppShell({ children }: { children: ReactNode }) {
         <AccountBlock />
       </aside>
 
-      <header className="sticky top-0 z-30 flex h-16 items-center gap-3 border-b border-border/70 bg-background/90 px-5 backdrop-blur lg:hidden">
+      <header className="sticky top-0 z-30 grid h-16 grid-cols-[auto_minmax(0,1fr)_auto] items-center gap-3 border-b border-border/70 bg-background/90 px-4 shadow-soft backdrop-blur sm:px-6 lg:hidden">
         <Sheet open={open} onOpenChange={setOpen}>
           <SheetTrigger asChild>
             <Button variant="outline" size="icon" aria-label="Ouvrir le menu">
@@ -105,11 +107,12 @@ export function AppShell({ children }: { children: ReactNode }) {
             <AccountBlock />
           </SheetContent>
         </Sheet>
-        <span className="font-semibold">{currentLabel}</span>
+        <span className="truncate font-bold">{currentLabel}</span>
+        <span className="size-9" aria-hidden="true" />
       </header>
 
       <main className="lg:pl-64">
-        <div className="mx-auto w-full max-w-5xl px-5 py-8 sm:px-6 sm:py-10">
+        <div className="mx-auto w-full max-w-6xl px-4 py-6 sm:px-6 sm:py-9 xl:px-8">
           <div key={currentPath} className="animate-fade-in-up">
             {children}
           </div>
