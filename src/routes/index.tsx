@@ -487,7 +487,7 @@ function Landing() {
       <section id="faq" className="bg-dots py-14 sm:py-16">
         <div className="mx-auto w-full max-w-3xl px-5">
           <h2 data-reveal className="text-center text-3xl font-bold sm:text-4xl">Questions fréquentes</h2>
-          <Accordion data-reveal type="single" collapsible className="mt-7">
+          <Accordion data-reveal type="single" collapsible className="mt-7 rounded-3xl border border-border/70 bg-card px-5 shadow-soft sm:px-6">
             {faq.map((item) => (
               <AccordionItem key={item.q} value={item.q}>
                 <AccordionTrigger className="text-left text-base font-semibold">
