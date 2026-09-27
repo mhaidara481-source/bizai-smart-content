@@ -6,6 +6,7 @@ import { Download, ImageIcon, Loader2, RefreshCw, Sparkles } from "lucide-react"
 import { toast } from "sonner";
 
 import { PublishPanel } from "@/components/app/PublishPanel";
+import { VisualHistory } from "@/components/app/VisualHistory";
 import { Textarea } from "@/components/ui/textarea";
 import { PageHeader } from "@/components/app/PageHeader";
 import { DemoBadge, LimitReached } from "@/components/app/LimitReached";
@@ -267,6 +268,8 @@ function CreateVisual() {
           </CardContent>
         </Card>
       </div>
+
+      <VisualHistory />
     </div>
   );
 }

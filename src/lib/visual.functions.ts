@@ -32,3 +32,48 @@ export const generateVisualImage = createServerFn({ method: "POST" })
     );
     return { data: result, demo, remaining };
   });
+
+export type VisualHistoryItem = {
+  id: string;
+  url: string;
+  subject: string;
+  createdAt: string;
+  demo: boolean;
+};
+
+export const listMyVisuals = createServerFn({ method: "GET" })
+  .middleware([requireSupabaseAuth])
+  .handler(async ({ context }): Promise<VisualHistoryItem[]> => {
+    const { data: rows, error } = await context.supabase
+      .from("generations")
+      .select("id, input, output, demo, created_at")
+      .eq("user_id", context.userId)
+      .eq("tool", "visual")
+      .order("created_at", { ascending: false })
+      .limit(30);
+    if (error) throw new Error("Impossible de charger tes visuels.");
+
+    const { supabaseAdmin } = await import("@/integrations/supabase/client.server");
+    const items: VisualHistoryItem[] = [];
+    for (const row of rows ?? []) {
+      const output = (row.output ?? {}) as { url?: string; path?: string };
+      const input = (row.input ?? {}) as { subject?: string };
+      let url = output.url ?? "";
+      // Ne signer que les fichiers appartenant à l'utilisateur.
+      if (output.path && output.path.startsWith(`${context.userId}/`)) {
+        const { data: signed } = await supabaseAdmin.storage
+          .from("visuals")
+          .createSignedUrl(output.path, 60 * 60 * 24);
+        if (signed?.signedUrl) url = signed.signedUrl;
+      }
+      if (!url) continue;
+      items.push({
+        id: row.id,
+        url,
+        subject: input.subject ?? "Visuel",
+        createdAt: row.created_at,
+        demo: row.demo,
+      });
+    }
+    return items;
+  });
