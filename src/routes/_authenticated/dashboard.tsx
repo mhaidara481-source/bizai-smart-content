@@ -84,7 +84,7 @@ function Dashboard() {
             <CardTitle className="text-xs font-bold uppercase text-muted-foreground sm:text-sm">Abonnement actuel</CardTitle>
           </CardHeader>
           <CardContent>
-            {loading ? <Skeleton className="h-9 w-36" /> : <p className="animate-fade-in text-4xl font-black tracking-tight text-primary">{PLAN_LABELS[plan] ?? "Découverte"}</p>}
+            {loading ? <Skeleton className="h-9 w-36" /> : <p className="animate-fade-in break-words text-2xl font-black text-primary sm:text-3xl xl:text-4xl">{PLAN_LABELS[plan] ?? "Découverte"}</p>}
             <Button asChild variant="outline" size="sm" className="mt-4 rounded-full font-semibold border-primary/20 hover:bg-primary-soft hover:text-primary transition-all">
               <Link to="/abonnement">Gérer mon offre</Link>
             </Button>
