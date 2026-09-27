@@ -1,17 +1,21 @@
-# Densifier et animer la landing page
+# Polish de l’application connectée
 
 ## Objectif
-Rendre la page publique plus dense, vivante et intentionnelle sans modifier son contenu ni la logique de l’application.
+Donner aux pages connectées un rendu plus net et plus proche d’une application mobile moderne, sans modifier les fonctions existantes.
 
 ## Changements
-- Réduire les espacements verticaux des sections, titres, grilles et cartes, avec des valeurs adaptées au mobile, à la tablette et au bureau.
-- Ajouter un composant léger d’apparition au scroll basé sur l’observation du viewport, puis l’appliquer aux titres, textes, images et groupes de cartes.
-- Échelonner légèrement l’apparition des cartes pour éviter une animation simultanée trop mécanique.
-- Renforcer les effets au survol des cartes de fonctionnalités et de tarifs avec une élévation et une ombre discrètes.
-- Ajouter deux formes décoratives animées et non interactives dans le premier écran, avec des couleurs du design existant.
-- Désactiver les mouvements et afficher immédiatement le contenu lorsque la réduction des animations est demandée.
+- Transformer « Tes outils » du tableau de bord en grille de sept tuiles tactiles, colorées par famille, avec icônes bien visibles et accès direct.
+- Renforcer la hiérarchie du tableau de bord : accueil plus compact, indicateurs plus lisibles et activité récente mieux structurée.
+- Harmoniser les cartes, leurs bordures, ombres et espacements depuis les composants partagés pour couvrir toutes les pages connectées.
+- Rehausser les titres et sous-textes, et améliorer l’enveloppe générale ainsi que la navigation mobile sans changer la barre latérale.
+- Ajuster les grilles et les espacements pour mobile d’abord, puis tablette et ordinateur.
+
+## Détails techniques
+- Ajouter des couleurs sémantiques dédiées aux familles d’outils dans le design global, avec variantes claires et sombres.
+- Réutiliser les composants Card, Button, PageHeader et AppShell plutôt que dupliquer les styles page par page.
+- Conserver les routes, formulaires, appels IA, quotas, publications et paiements inchangés.
 
 ## Vérifications
-- Contrôler la page à des largeurs mobile, tablette portrait, tablette paysage et bureau.
-- Vérifier l’absence de débordement et le déclenchement progressif des animations au défilement.
-- Lancer la vérification TypeScript demandée et confirmer que la compilation reste valide.
+- Vérifier la compilation et les erreurs d’exécution.
+- Contrôler visuellement le tableau de bord et les pages principales sur mobile, tablette et ordinateur.
+- Confirmer l’absence de débordement et la lisibilité des textes et boutons.
