@@ -299,6 +299,8 @@ function Landing() {
 
       {/* Avantages */}
       <section className="bg-wash-faint py-14 sm:py-16">
+        <div className="mx-auto w-full max-w-6xl px-5">
+          <h2 data-reveal className="text-center text-3xl font-bold sm:text-4xl">Ce que tu y gagnes</h2>
           <div className="mt-8 grid gap-4 sm:grid-cols-2 xl:grid-cols-4">
             {benefits.map((benefit, index) => (
               <Card key={benefit.title} data-reveal data-reveal-delay={(index % 3).toString()} className="rounded-2xl border-border/70 shadow-soft transition-all duration-300 hover:-translate-y-1 hover:border-primary/25 hover:shadow-lift">
@@ -316,7 +318,7 @@ function Landing() {
       </section>
 
       {/* Comment ça marche */}
-      <section id="fonctionnement" className="border-y border-border/70 bg-muted/40 py-14 sm:py-16">
+      <section id="fonctionnement" className="border-y border-border/70 bg-wash-b py-14 sm:py-16">
         <div className="mx-auto w-full max-w-6xl px-5">
           <h2 data-reveal className="text-center text-3xl font-bold sm:text-4xl">Comment ça marche</h2>
           <p data-reveal className="mx-auto mt-3 max-w-xl text-center text-muted-foreground">
@@ -337,7 +339,7 @@ function Landing() {
       </section>
 
       {/* Fonctionnalités */}
-      <section id="fonctionnalites" className="relative overflow-hidden py-14 sm:py-16">
+      <section id="fonctionnalites" className="relative overflow-hidden bg-wash-faint py-14 sm:py-16">
         <div className="section-drift pointer-events-none absolute -right-28 top-1/3 h-24 w-72 rotate-12 rounded-[3rem] border border-primary/10 bg-primary-soft/30" />
         <div className="mx-auto w-full max-w-6xl px-5">
           <h2 data-reveal className="text-center text-3xl font-bold sm:text-4xl">Quatre outils, un seul espace</h2>
@@ -399,7 +401,7 @@ function Landing() {
       </section>
 
       {/* Profils d'utilisation */}
-      <section className="border-y border-border/70 bg-muted/40 py-14 sm:py-16">
+      <section className="border-y border-border/70 bg-wash-a py-14 sm:py-16">
         <div className="mx-auto w-full max-w-6xl px-5">
           <div data-reveal className="mx-auto max-w-2xl text-center">
             <Badge variant="secondary" className="rounded-full">Au quotidien</Badge>
@@ -427,10 +429,10 @@ function Landing() {
       </section>
 
       {/* Tarifs */}
-      <section id="tarifs" className="border-y border-border/70 bg-muted/40 py-14 sm:py-16">
+      <section id="tarifs" className="bg-gradient-hero py-14 sm:py-16">
         <div className="mx-auto w-full max-w-6xl px-5">
-          <h2 data-reveal className="text-center text-3xl font-bold sm:text-4xl">Des tarifs simples</h2>
-          <p data-reveal className="mx-auto mt-3 max-w-xl text-center text-muted-foreground">
+          <h2 data-reveal className="text-center text-3xl font-bold text-primary-foreground sm:text-4xl">Des tarifs simples</h2>
+          <p data-reveal className="mx-auto mt-3 max-w-xl text-center text-sm text-primary-foreground/80 sm:text-base">
             Choisis le volume qui correspond à ton rythme de publication.
           </p>
           <div className="mt-8 grid gap-5 md:grid-cols-2 xl:grid-cols-3">
@@ -482,7 +484,7 @@ function Landing() {
       </section>
 
       {/* FAQ */}
-      <section id="faq" className="py-14 sm:py-16">
+      <section id="faq" className="bg-dots py-14 sm:py-16">
         <div className="mx-auto w-full max-w-3xl px-5">
           <h2 data-reveal className="text-center text-3xl font-bold sm:text-4xl">Questions fréquentes</h2>
           <Accordion data-reveal type="single" collapsible className="mt-7">
