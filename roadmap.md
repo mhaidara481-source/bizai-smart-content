@@ -8,3 +8,4 @@
 - [x] Densifier la landing et ajouter des animations au scroll accessibles
 - [ ] Publication directe Instagram/Facebook (en attente des secrets META_APP_ID / META_APP_SECRET)
 - [ ] Publication TikTok (en attente des secrets TIKTOK_CLIENT_KEY / TIKTOK_CLIENT_SECRET)
+- [ ] Polish mobile de l’app authentifiée et grille d’outils moderne
