@@ -107,6 +107,11 @@
   --shadow-lift: 0 2px 4px oklch(0.21 0.03 275 / 0.04), 0 18px 40px -18px oklch(0.21 0.03 275 / 0.18);
   --font-sans: "Plus Jakarta Sans", ui-sans-serif, system-ui, sans-serif;
 
+  --wash-a: linear-gradient(155deg, oklch(0.975 0.018 300), oklch(0.962 0.03 277));
+  --wash-b: linear-gradient(155deg, oklch(0.968 0.025 277), oklch(0.978 0.016 250));
+  --faint-wash: radial-gradient(120% 70% at 50% 0%, oklch(0.955 0.035 280), oklch(1 0 0) 65%);
+  --dot-color: oklch(0.75 0.03 280 / 0.4);
+
   --tool-1: oklch(0.6 0.18 280);
   --tool-1-soft: oklch(0.96 0.02 280);
   --tool-2: oklch(0.65 0.2 350);
@@ -171,6 +176,11 @@
   --tool-6-soft: oklch(0.25 0.05 230);
   --tool-7: oklch(0.75 0.15 45);
   --tool-7-soft: oklch(0.25 0.05 45);
+
+  --wash-a: linear-gradient(155deg, oklch(0.19 0.05 300), oklch(0.16 0.05 277));
+  --wash-b: linear-gradient(155deg, oklch(0.18 0.05 277), oklch(0.15 0.04 250));
+  --faint-wash: radial-gradient(120% 70% at 50% 0%, oklch(0.22 0.05 280), oklch(0.129 0.042 264.695) 65%);
+  --dot-color: oklch(1 0 0 / 0.09);
 }
 
 @layer base {
@@ -192,6 +202,23 @@
   background-image: var(--gradient-hero);
   background-clip: text;
   color: transparent;
+}
+
+@utility bg-wash-a {
+  background-image: var(--wash-a);
+}
+
+@utility bg-wash-b {
+  background-image: var(--wash-b);
+}
+
+@utility bg-wash-faint {
+  background-image: var(--faint-wash);
+}
+
+@utility bg-dots {
+  background-image: radial-gradient(var(--dot-color) 1px, transparent 1px);
+  background-size: 22px 22px;
 }
 
 @layer base {
