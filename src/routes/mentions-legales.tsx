@@ -29,9 +29,9 @@ function MentionsLegales() {
         <h2>Éditeur du site</h2>
         <p>
           BizAI est édité par Mohamed Abdoulaye Haidara, exerçant sous le nom
-          commercial "MH Studio", entrepreneur individuel (micro-entreprise) en
-          cours d'immatriculation auprès de l'INPI (dossier n° J00279868459,
-          SIRET en attente d'attribution — mention mise à jour dès réception).
+          commercial "MH Studio", entrepreneur individuel (micro-entreprise),
+          SIREN 130 511 199, code APE 62.01Z (Programmation informatique),
+          immatriculé le 24/09/2026.
         </p>
       </section>
 
