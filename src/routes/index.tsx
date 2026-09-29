@@ -9,6 +9,7 @@ import {
   MessageSquareQuote,
   PenLine,
   Play,
+  Sparkles,
   TrendingUp,
   Wallet,
 } from "lucide-react";
