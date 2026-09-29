@@ -9,8 +9,6 @@ import {
   MessageSquareQuote,
   PenLine,
   Play,
-  Quote,
-  Sparkles,
   TrendingUp,
   Wallet,
 } from "lucide-react";
@@ -143,22 +141,19 @@ const faq = [
 
 const businessProfiles = [
   {
-    quote: "Je prépare la semaine de publications entre deux rendez-vous, sans partir d'une page blanche.",
-    name: "Sarah",
-    role: "Gérante d'un salon de coiffure",
-    initials: "SM",
+    case: "Cas d'usage : gérante d'un salon de coiffure",
+    example:
+      "Entre deux rendez-vous, elle prépare la semaine de publications en quelques minutes : BizAI propose les textes, elle ajuste et publie. Plus jamais de page blanche.",
   },
   {
-    quote: "Les réponses aux avis gardent mon ton, même quand la journée a été chargée.",
-    name: "Karim",
-    role: "Restaurateur indépendant",
-    initials: "KB",
+    case: "Cas d'usage : restaurateur indépendant",
+    example:
+      "Chaque nouvel avis Google reçoit une réponse proposée par BizAI, dans le ton du restaurant. Il relit, ajuste si besoin, et publie — même les soirs de rush.",
   },
   {
-    quote: "Le calendrier me donne enfin une vue claire de ce que je dois publier dans le mois.",
-    name: "Élodie",
-    role: "Créatrice et commerçante",
-    initials: "EL",
+    case: "Cas d'usage : créatrice et commerçante",
+    example:
+      "Elle planifie son mois de contenu d'un coup : le calendrier de BizAI lui montre quoi publier chaque semaine pour faire venir ses clientes en boutique.",
   },
 ];
 
@@ -405,22 +400,15 @@ function Landing() {
         <div className="mx-auto w-full max-w-6xl px-5">
           <div data-reveal className="mx-auto max-w-2xl text-center">
             <Badge variant="secondary" className="rounded-full">Au quotidien</Badge>
-            <h2 className="mt-4 text-3xl font-bold sm:text-4xl">Conçu pour les journées déjà bien remplies</h2>
-            <p className="mt-4 text-muted-foreground">Des situations inspirées des besoins les plus fréquents des petites entreprises.</p>
+            <h2 className="mt-4 text-3xl font-bold sm:text-4xl">Comment BizAI s'invite dans ta journée</h2>
+            <p className="mt-4 text-muted-foreground">Trois exemples concrets de ce que l'outil génère, selon ton métier. Ce sont des scénarios d'usage typiques, pas des avis clients.</p>
           </div>
           <div className="mt-8 grid gap-4 md:grid-cols-3">
             {businessProfiles.map((profile, index) => (
-              <Card key={profile.name} data-reveal data-reveal-delay={(index % 3).toString()} className="border-border/70 shadow-soft transition-all duration-300 hover:-translate-y-1 hover:border-primary/25 hover:shadow-lift">
+              <Card key={profile.case} data-reveal data-reveal-delay={(index % 3).toString()} className="border-border/70 shadow-soft transition-all duration-300 hover:-translate-y-1 hover:border-primary/25 hover:shadow-lift">
                 <CardContent className="pt-6">
-                  <Quote className="size-5 text-primary" />
-                  <p className="mt-4 text-sm leading-relaxed">« {profile.quote} »</p>
-                  <div className="mt-6 flex min-w-0 items-center gap-3">
-                    <span className="flex size-10 shrink-0 items-center justify-center rounded-full bg-primary-soft text-xs font-bold text-primary">{profile.initials}</span>
-                    <div className="min-w-0">
-                      <p className="truncate text-sm font-semibold">{profile.name}</p>
-                      <p className="truncate text-xs text-muted-foreground">{profile.role}</p>
-                    </div>
-                  </div>
+                  <p className="text-sm font-semibold text-primary">{profile.case}</p>
+                  <p className="mt-4 text-sm leading-relaxed text-muted-foreground">{profile.example}</p>
                 </CardContent>
               </Card>
             ))}
