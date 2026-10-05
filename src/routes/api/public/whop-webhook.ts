@@ -2,9 +2,8 @@ import { createFileRoute } from "@tanstack/react-router";
 
 import type { PlanId } from "@/lib/plans";
 
-// Webhook Whop — prêt à recevoir les événements, sans paiement réel branché.
-// TODO(whop): configurer WHOP_WEBHOOK_SECRET (+ WHOP_API_KEY, WHOP_PRODUCT_ID)
-// dans les secrets du projet pour activer le traitement réel.
+// Webhook Whop actif : vérifie la signature et met à jour subscriptions
+// (paiement réussi, abonnement actif, annulation, échec de paiement).
 
 type WhopEvent = {
   action?: string;
