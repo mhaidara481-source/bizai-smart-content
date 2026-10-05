@@ -125,6 +125,10 @@ export const PLAN_COMPARISON: Array<{ label: string; values: Record<string, stri
     values: { starter: "—", pro: "Inclus", business: "Inclus" },
   },
   {
+    label: "Vidéos par mois",
+    values: { starter: "3", pro: "10", business: "30" },
+  },
+  {
     label: "Utilisateurs",
     values: { starter: "1", pro: "3", business: "10" },
   },
