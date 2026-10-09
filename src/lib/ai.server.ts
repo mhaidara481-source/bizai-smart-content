@@ -107,15 +107,18 @@ function buildPrompt(input: GenerateInput): { system: string; user: string } {
   const base = `Tu es un expert en marketing digital pour petites entreprises locales. Réponds UNIQUEMENT avec un objet JSON valide, sans texte autour, sans balises de code. Le contenu rédigé doit être en ${lang}.`;
 
   switch (input.tool) {
-    case "post":
+    case "post": {
+      const year = new Date().getUTCFullYear();
       return {
-        system: base,
+        system: `${base} N'invente JAMAIS de coordonnées ou d'informations factuelles non fournies : aucun numéro de téléphone, aucune adresse, aucun prix, aucun horaire, aucun nom de site ni e-mail, et aucun placeholder du type "05 56 XX XX XX" ou "[adresse]". Si une info n'est pas donnée, reste générique (ex : "Réservez via le lien en bio", "Contactez-nous en message privé").`,
         user: `Rédige une publication ${input.platform} pour un(e) ${input.businessType}.
 Sujet : ${input.topic}
 Ton : ${input.tone}
 Format JSON attendu : {"hook": string, "body": string, "cta": string, "hashtags": string[]}
-Le hook est une accroche courte, body le texte du post adapté à ${input.platform}, cta un appel à l'action, hashtags 6 à 10 hashtags pertinents (avec le #).`,
+Le hook est une accroche courte, body le texte du post adapté à ${input.platform}, cta un appel à l'action, hashtags 6 à 10 hashtags pertinents (avec le #).
+Hashtags : n'utilise jamais d'année passée. Si tu mets une année, ce doit être ${year} ; sinon, n'en mets pas.`,
       };
+    }
     case "review":
       return {
         system: `${base} Tu réponds toujours de manière naturelle, professionnelle et courtoise, jamais agressive, ironique ou insultante, même si l'avis est hostile.`,
