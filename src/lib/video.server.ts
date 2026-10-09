@@ -15,6 +15,11 @@ const FORMAT_SETTINGS: Record<VideoFormat, { image: string; ratio: string }> = {
   horizontal: { image: "Paysage (bannière)", ratio: "1280:720" },
 };
 
+// Runway anime une seule image : on interdit toute composition en plusieurs panneaux.
+const SINGLE_SCENE_IMAGE_RULE =
+  " Une seule photo, une seule scène continue, un seul cadrage : pas de collage, pas de grille, pas de panneaux, pas de split-screen, pas de bordures.";
+
+
 type SupabaseAdmin = Awaited<
   typeof import("@/integrations/supabase/client.server")
 >["supabaseAdmin"];
@@ -102,7 +107,7 @@ export async function startVideo(
     );
   }
 
-  const prompt = `Vidéo marketing courte et professionnelle pour un(e) ${input.businessType}. ${input.subject}. Mouvement de caméra fluide, rendu cinématographique, aucun texte à l'écran.`;
+  const prompt = `Vidéo marketing courte et professionnelle pour un(e) ${input.businessType}. ${input.subject}. Mouvement de caméra fluide, rendu cinématographique, aucun texte à l'écran. Plan unique continu, pas d'écran partagé.`;
   // Pas de colonne format : on marque le prompt stocké pour l'historique.
   const storedPrompt = input.format === "vertical" ? `${prompt} [vertical]` : prompt;
   const runwayKey = process.env["RUNWAY_API_KEY"];
@@ -124,11 +129,14 @@ export async function startVideo(
     const lovableKey = process.env["LOVABLE_API_KEY"];
     if (!lovableKey) throw new Error("La génération de l'image de départ est indisponible.");
     const settings = FORMAT_SETTINGS[input.format] ?? FORMAT_SETTINGS.horizontal;
-    const b64 = await requestImage(
-      buildPrompt({ businessType: input.businessType, subject: input.subject, style: "Photo réaliste", format: settings.image }),
-      lovableKey,
-      settings.image,
-    );
+    const startImagePrompt = `${buildPrompt({
+      businessType: input.businessType,
+      subject: input.subject,
+      style: "Photo réaliste",
+      format: settings.image,
+    })}${SINGLE_SCENE_IMAGE_RULE}`;
+    const b64 = await requestImage(startImagePrompt, lovableKey, settings.image);
+
 
     const res = await fetch(`${RUNWAY_API}/image_to_video`, {
       method: "POST",
