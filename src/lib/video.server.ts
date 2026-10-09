@@ -103,12 +103,14 @@ export async function startVideo(
   }
 
   const prompt = `Vidéo marketing courte et professionnelle pour un(e) ${input.businessType}. ${input.subject}. Mouvement de caméra fluide, rendu cinématographique, aucun texte à l'écran.`;
+  // Pas de colonne format : on marque le prompt stocké pour l'historique.
+  const storedPrompt = input.format === "vertical" ? `${prompt} [vertical]` : prompt;
   const runwayKey = process.env["RUNWAY_API_KEY"];
 
   if (!runwayKey) {
     const { data: job } = await admin
       .from("video_jobs")
-      .insert({ user_id: userId, prompt, status: "succeeded", demo: true })
+      .insert({ user_id: userId, prompt: storedPrompt, status: "succeeded", demo: true })
       .select("id")
       .single();
     return { jobId: job!.id, status: "succeeded", url: null, demo: true, error: null, remaining: quota.remaining };
@@ -147,7 +149,7 @@ export async function startVideo(
 
     const { data: job, error } = await admin
       .from("video_jobs")
-      .insert({ user_id: userId, prompt, task_id: taskId, status: "pending" })
+      .insert({ user_id: userId, prompt: storedPrompt, task_id: taskId, status: "pending" })
       .select("id")
       .single();
     if (error || !job) throw new Error("La vidéo n'a pas pu être enregistrée.");
