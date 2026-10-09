@@ -8,13 +8,18 @@ const RUNWAY_API = "https://api.dev.runwayml.com/v1";
 const RUNWAY_VERSION = "2024-11-06";
 const RUNWAY_MODEL = "gen4_turbo";
 const VIDEO_DURATION = 8;
-const VIDEO_RATIO = "1280:720"; // 720p paysage
+export const VIDEO_FORMATS = ["vertical", "horizontal"] as const;
+export type VideoFormat = (typeof VIDEO_FORMATS)[number];
+const FORMAT_SETTINGS: Record<VideoFormat, { image: string; ratio: string }> = {
+  vertical: { image: "Portrait (story)", ratio: "720:1280" },
+  horizontal: { image: "Paysage (bannière)", ratio: "1280:720" },
+};
 
 type SupabaseAdmin = Awaited<
   typeof import("@/integrations/supabase/client.server")
 >["supabaseAdmin"];
 
-export type VideoInput = { businessType: string; subject: string };
+export type VideoInput = { businessType: string; subject: string; format: VideoFormat };
 
 export type VideoJobState = {
   jobId: string;
@@ -98,12 +103,14 @@ export async function startVideo(
   }
 
   const prompt = `Vidéo marketing courte et professionnelle pour un(e) ${input.businessType}. ${input.subject}. Mouvement de caméra fluide, rendu cinématographique, aucun texte à l'écran.`;
+  // Pas de colonne format : on marque le prompt stocké pour l'historique.
+  const storedPrompt = input.format === "vertical" ? `${prompt} [vertical]` : prompt;
   const runwayKey = process.env["RUNWAY_API_KEY"];
 
   if (!runwayKey) {
     const { data: job } = await admin
       .from("video_jobs")
-      .insert({ user_id: userId, prompt, status: "succeeded", demo: true })
+      .insert({ user_id: userId, prompt: storedPrompt, status: "succeeded", demo: true })
       .select("id")
       .single();
     return { jobId: job!.id, status: "succeeded", url: null, demo: true, error: null, remaining: quota.remaining };
@@ -116,10 +123,11 @@ export async function startVideo(
     // gen4_turbo part d'une image : on génère d'abord une image clé du sujet.
     const lovableKey = process.env["LOVABLE_API_KEY"];
     if (!lovableKey) throw new Error("La génération de l'image de départ est indisponible.");
+    const settings = FORMAT_SETTINGS[input.format] ?? FORMAT_SETTINGS.horizontal;
     const b64 = await requestImage(
-      buildPrompt({ ...input, style: "Photo réaliste", format: "Paysage (bannière)" }),
+      buildPrompt({ businessType: input.businessType, subject: input.subject, style: "Photo réaliste", format: settings.image }),
       lovableKey,
-      "Paysage (bannière)",
+      settings.image,
     );
 
     const res = await fetch(`${RUNWAY_API}/image_to_video`, {
@@ -129,7 +137,7 @@ export async function startVideo(
         model: RUNWAY_MODEL,
         promptImage: `data:image/png;base64,${b64}`,
         promptText: prompt.slice(0, 1000),
-        ratio: VIDEO_RATIO,
+        ratio: settings.ratio,
         duration: VIDEO_DURATION,
       }),
     });
@@ -141,7 +149,7 @@ export async function startVideo(
 
     const { data: job, error } = await admin
       .from("video_jobs")
-      .insert({ user_id: userId, prompt, task_id: taskId, status: "pending" })
+      .insert({ user_id: userId, prompt: storedPrompt, task_id: taskId, status: "pending" })
       .select("id")
       .single();
     if (error || !job) throw new Error("La vidéo n'a pas pu être enregistrée.");
@@ -221,4 +229,43 @@ export async function checkVideo(
     demo: false,
   });
   return { ...base, status: "succeeded", url: await sign(path), error: null };
+}
+
+export type VideoHistoryItem = {
+  id: string;
+  status: "pending" | "succeeded" | "failed";
+  url: string | null;
+  demo: boolean;
+  createdAt: string;
+  vertical: boolean;
+};
+
+/** Liste les 12 dernières vidéos ; relance la vérification des vidéos encore en cours. */
+export async function listVideos(admin: SupabaseAdmin, userId: string): Promise<VideoHistoryItem[]> {
+  const { data: jobs } = await admin
+    .from("video_jobs")
+    .select("id, status, path, demo, created_at, prompt")
+    .eq("user_id", userId)
+    .order("created_at", { ascending: false })
+    .limit(12);
+  return Promise.all(
+    (jobs ?? []).map(async (job) => {
+      const vertical = job.prompt.includes("[vertical]");
+      let status = job.status as VideoHistoryItem["status"];
+      let url: string | null = null;
+      if (status === "pending") {
+        try {
+          const next = await checkVideo(admin, userId, job.id);
+          status = next.status;
+          url = next.url;
+        } catch {
+          // on garde "pending", nouvelle tentative au prochain chargement
+        }
+      } else if (status === "succeeded" && job.path) {
+        const { data } = await admin.storage.from("videos").createSignedUrl(job.path, 60 * 60 * 24);
+        url = data?.signedUrl ?? null;
+      }
+      return { id: job.id, status, url, demo: job.demo, createdAt: job.created_at, vertical };
+    }),
+  );
 }

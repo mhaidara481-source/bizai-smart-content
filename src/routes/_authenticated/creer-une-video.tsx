@@ -14,7 +14,7 @@ import { Label } from "@/components/ui/label";
 import { Textarea } from "@/components/ui/textarea";
 import { Skeleton } from "@/components/ui/skeleton";
 import { Select, SelectContent, SelectItem, SelectTrigger, SelectValue } from "@/components/ui/select";
-import { checkVideoFn, getVideoQuotaFn, startVideoFn } from "@/lib/video.functions";
+import { checkVideoFn, getVideoQuotaFn, listVideosFn, startVideoFn } from "@/lib/video.functions";
 import { BUSINESS_TYPES } from "@/lib/ai-types";
 import { useProfile } from "@/hooks/useProfile";
 
@@ -40,6 +40,12 @@ const LOADING_MESSAGES = [
 ];
 
 type JobState = Awaited<ReturnType<typeof startVideoFn>>;
+type VideoFormat = "vertical" | "horizontal";
+const FORMAT_OPTIONS: { value: VideoFormat; label: string }[] = [
+  { value: "vertical", label: "Vertical (Instagram, TikTok)" },
+  { value: "horizontal", label: "Horizontal (YouTube, site web)" },
+];
+const STATUS_LABELS = { pending: "En cours", succeeded: "Prête", failed: "Échouée" } as const;
 
 function CreateVideo() {
   const { data: profile } = useProfile();
@@ -48,10 +54,15 @@ function CreateVideo() {
   const check = useServerFn(checkVideoFn);
   const fetchQuota = useServerFn(getVideoQuotaFn);
 
+  const fetchHistory = useServerFn(listVideosFn);
   const quota = useQuery({ queryKey: ["video-quota"], queryFn: () => fetchQuota() });
+  const history = useQuery({ queryKey: ["video-history"], queryFn: () => fetchHistory() });
 
   const [businessType, setBusinessType] = useState<string>(profile?.business_type ?? "Restaurant");
   const [subject, setSubject] = useState("");
+  const [format, setFormat] = useState<VideoFormat>("vertical");
+  const [jobVertical, setJobVertical] = useState(true);
+  const resumed = useRef(false);
   const [job, setJob] = useState<JobState | null>(null);
   const [limitMessage, setLimitMessage] = useState<string | null>(null);
   const [loadingStep, setLoadingStep] = useState(0);
@@ -59,10 +70,23 @@ function CreateVideo() {
 
   const isWorking = job?.status === "pending";
 
+  // Reprend la progression d'une vidéo encore en cours au retour sur la page.
+  useEffect(() => {
+    if (resumed.current || job || !history.data) return;
+    resumed.current = true;
+    const pending = history.data.find((v) => v.status === "pending");
+    if (pending) {
+      setJobVertical(pending.vertical);
+      setJob({ jobId: pending.id, status: "pending", url: null, demo: pending.demo, error: null, remaining: quota.data?.remaining ?? 0 });
+    }
+  }, [history.data, job, quota.data]);
+
   const mutation = useMutation({
-    mutationFn: () => start({ data: { businessType, subject: subject.trim() } }),
+    mutationFn: () => start({ data: { businessType, subject: subject.trim(), format } }),
     onSuccess: (res) => {
+      setJobVertical(format === "vertical");
       setJob(res);
+      void queryClient.invalidateQueries({ queryKey: ["video-history"] });
       setLimitMessage(null);
       void queryClient.invalidateQueries({ queryKey: ["video-quota"] });
       if (res.demo) toast.success("Vidéo de démonstration prête.");
@@ -87,6 +111,7 @@ function CreateVideo() {
           void queryClient.invalidateQueries();
         } else if (next.status === "failed") {
           toast.error(next.error ?? "La génération a échoué.");
+          void queryClient.invalidateQueries({ queryKey: ["video-history"] });
           void queryClient.invalidateQueries({ queryKey: ["video-quota"] });
         }
       } catch (e) {
@@ -100,6 +125,8 @@ function CreateVideo() {
   }, [job, check, queryClient]);
 
   const busy = mutation.isPending || isWorking;
+  const previewVertical = mutation.isPending ? format === "vertical" : jobVertical;
+  const ratioClass = previewVertical ? "mx-auto aspect-[9/16] max-h-[70vh]" : "aspect-video w-full";
 
   useEffect(() => {
     if (!busy) {
@@ -156,6 +183,22 @@ function CreateVideo() {
             </div>
 
             <div className="space-y-2">
+              <Label>Format</Label>
+              <Select value={format} onValueChange={(v) => setFormat(v as VideoFormat)}>
+                <SelectTrigger>
+                  <SelectValue />
+                </SelectTrigger>
+                <SelectContent>
+                  {FORMAT_OPTIONS.map((f) => (
+                    <SelectItem key={f.value} value={f.value}>
+                      {f.label}
+                    </SelectItem>
+                  ))}
+                </SelectContent>
+              </Select>
+            </div>
+
+            <div className="space-y-2">
               <Label htmlFor="subject">Décris la vidéo souhaitée</Label>
               <Textarea
                 id="subject"
@@ -200,7 +243,7 @@ function CreateVideo() {
 
             {busy && (
               <div className="space-y-4" aria-label="Génération de la vidéo en cours">
-                <Skeleton className="aspect-video w-full rounded-2xl" />
+                <Skeleton className={`${ratioClass} rounded-2xl`} />
                 <p key={loadingStep} className="text-center text-sm text-muted-foreground animate-fade-in-up">
                   {LOADING_MESSAGES[loadingStep]}
                 </p>
@@ -222,10 +265,10 @@ function CreateVideo() {
                     loop
                     muted
                     playsInline
-                    className="w-full rounded-2xl border border-border/70"
+                    className={`${ratioClass} rounded-2xl border border-border/70 bg-muted object-cover`}
                   />
                 ) : (
-                  <div className="flex aspect-video items-center justify-center rounded-2xl bg-primary-soft text-sm font-medium text-primary">
+                  <div className={`${ratioClass} flex items-center justify-center rounded-2xl bg-primary-soft text-sm font-medium text-primary`}>
                     Aperçu vidéo en mode démo
                   </div>
                 )}
@@ -247,6 +290,76 @@ function CreateVideo() {
           </CardContent>
         </Card>
       </div>
+
+      <section className="mt-10">
+        <h2 className="text-lg font-semibold tracking-tight">Mes vidéos</h2>
+        <p className="mt-1 text-sm text-muted-foreground">Tes 12 dernières vidéos.</p>
+        {history.isLoading ? (
+          <div className="mt-4 grid gap-4 sm:grid-cols-2 lg:grid-cols-3">
+            {[0, 1, 2].map((i) => (
+              <Skeleton key={i} className="aspect-video w-full rounded-2xl" />
+            ))}
+          </div>
+        ) : !history.data?.length ? (
+          <Card className="mt-4 border-border/70">
+            <CardContent className="py-10 text-center text-sm text-muted-foreground">
+              Aucune vidéo pour l'instant. Ta première vidéo apparaîtra ici.
+            </CardContent>
+          </Card>
+        ) : (
+          <div className="mt-4 grid gap-4 sm:grid-cols-2 lg:grid-cols-3">
+            {history.data.map((v) => (
+              <Card key={v.id} className="border-border/70 animate-fade-in-up">
+                <CardContent className="space-y-3 pt-6">
+                  {v.url ? (
+                    <video
+                      src={v.url}
+                      controls
+                      muted
+                      playsInline
+                      preload="metadata"
+                      className={`${v.vertical ? "mx-auto aspect-[9/16] max-h-80" : "aspect-video w-full"} rounded-xl border border-border/70 bg-muted object-cover`}
+                    />
+                  ) : (
+                    <div className="flex aspect-video w-full items-center justify-center rounded-xl bg-muted text-xs text-muted-foreground">
+                      {v.status === "pending" ? (
+                        <Loader2 className="size-4 animate-spin" />
+                      ) : v.demo ? (
+                        "Mode démo"
+                      ) : (
+                        "Aperçu indisponible"
+                      )}
+                    </div>
+                  )}
+                  <div className="flex items-center justify-between text-xs">
+                    <span className="text-muted-foreground">
+                      {new Date(v.createdAt).toLocaleDateString("fr-FR", { day: "numeric", month: "short", year: "numeric" })}
+                    </span>
+                    <span
+                      className={`rounded-full px-2 py-0.5 font-medium ${
+                        v.status === "failed"
+                          ? "bg-destructive/10 text-destructive"
+                          : v.status === "pending"
+                            ? "bg-muted text-muted-foreground"
+                            : "bg-primary-soft text-primary"
+                      }`}
+                    >
+                      {STATUS_LABELS[v.status]}
+                    </span>
+                  </div>
+                  {v.status === "succeeded" && v.url && (
+                    <Button variant="outline" size="sm" className="w-full rounded-full" asChild>
+                      <a href={v.url} download target="_blank" rel="noreferrer">
+                        <Download className="size-4" /> Télécharger
+                      </a>
+                    </Button>
+                  )}
+                </CardContent>
+              </Card>
+            ))}
+          </div>
+        )}
+      </section>
     </div>
   );
 }

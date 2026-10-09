@@ -14,7 +14,7 @@ export const getVideoQuotaFn = createServerFn({ method: "GET" })
 export const startVideoFn = createServerFn({ method: "POST" })
   .middleware([requireSupabaseAuth])
   .inputValidator((input: unknown) =>
-    z.object({ businessType: z.string().min(1).max(60), subject: z.string().min(3).max(500) }).parse(input),
+    z.object({ businessType: z.string().min(1).max(60), subject: z.string().min(3).max(500), format: z.enum(["vertical", "horizontal"]) }).parse(input),
   )
   .handler(async ({ data, context }) => {
     const { supabaseAdmin } = await import("@/integrations/supabase/client.server");
@@ -29,4 +29,12 @@ export const checkVideoFn = createServerFn({ method: "POST" })
     const { supabaseAdmin } = await import("@/integrations/supabase/client.server");
     const { checkVideo } = await import("./video.server");
     return checkVideo(supabaseAdmin, context.userId, data.jobId);
+  });
+
+export const listVideosFn = createServerFn({ method: "GET" })
+  .middleware([requireSupabaseAuth])
+  .handler(async ({ context }) => {
+    const { supabaseAdmin } = await import("@/integrations/supabase/client.server");
+    const { listVideos } = await import("./video.server");
+    return listVideos(supabaseAdmin, context.userId);
   });
